@@ -21,7 +21,7 @@ AI 必須依序完整讀取：
 
 獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad 發布管線 IFC（鎖定參考回 Rhino）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。
 
-跨產品順序：R2B／R2O 主鏈已發布；本產品目前 **只文件**。IfcOpenShell 針刺與功能碼須另批授權。
+跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過**，尚未寫產品指令。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結）。
 
 ## 分支與版本
 
