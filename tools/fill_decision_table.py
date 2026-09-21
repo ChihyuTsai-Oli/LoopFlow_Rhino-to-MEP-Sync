@@ -331,7 +331,7 @@ main a{color:var(--accent)}
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)}</title><style>{css}</style></head>
 <body><div class="layout"><nav><strong>{html.escape(title)}</strong>{nav}</nav>
-<main><div class="notice">由 Markdown 產生，不要直接編輯本檔。請改 <code>wip/docs/前期規劃/資料生態決策表.md</code> 後重跑 <code>wip/tools/fill_decision_table.py</code>。</div>
+<main><div class="notice">由 Markdown 產生，不要直接編輯本檔。請改 <code>docs/前期規劃/資料生態決策表.md</code> 後重跑 <code>tools/fill_decision_table.py</code>。</div>
 {legend}
 {''.join(body_parts)}
 </main></div></body></html>

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """相容入口：只重產決策表 HTML（不改 Markdown）。
 
-不帶參數時直接處理 `wip/docs/前期規劃/資料生態決策表.md`。
+不帶參數時直接處理 `docs/前期規劃/資料生態決策表.md`。
 要連同多數決一起重跑，請直接用 `fill_decision_table.py`。
 """
 from pathlib import Path

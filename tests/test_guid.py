@@ -31,7 +31,7 @@ class GuidTests(unittest.TestCase):
 
     def test_matches_ifcopenshell_guid_module(self):
         if not VENDOR_GUID.is_file():
-            self.skipTest("尚未重建 wip/.vendor/")
+            self.skipTest("尚未重建 .vendor/")
         spec = importlib.util.spec_from_file_location("r2m_vendor_guid", VENDOR_GUID)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)

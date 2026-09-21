@@ -1,4 +1,4 @@
-"""把 wip/src 加進 path，讓測試不需安裝套件。"""
+"""把 src 加進 path，讓測試不需安裝套件。"""
 
 import sys
 from pathlib import Path

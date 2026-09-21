@@ -6,12 +6,12 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-WIP = Path(__file__).resolve().parents[1]
-SRC = WIP / "src"
+ROOT = Path(__file__).resolve().parents[1]
+SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-VENDOR = WIP / ".vendor" / "py39"
+VENDOR = ROOT / ".vendor" / "py39"
 if str(VENDOR) not in sys.path:
     sys.path.insert(0, str(VENDOR))
 
