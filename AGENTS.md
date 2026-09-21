@@ -19,14 +19,16 @@ AI 必須依序完整讀取：
 
 ## 產品定位
 
-獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad 發布管線 IFC（鎖定參考回 Rhino）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。
+獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad 發布管線 IFC（回 Rhino 當 Worksession 外參）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。
 
-跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過**，尚未寫產品指令。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結）。
+跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，尚未寫產品指令。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結）。
+
+**C01 開工前必須先定 R2M-ED-07、R2M-ED-13、R2M-ED-26**（見決策表），否則寫不出正確的 IFC。
 
 ## 分支與版本
 
 - `main` 目前是文件骨架；尚無發布 tag。
-- 開始寫程式時從 `main` 建立 `v1-development`，每批再開 `codex/v1-<scope>`；不要把 R2M 合進 LoopFlow／R2B／R2O 的整合分支。
+- 整合分支 `v1-development` 已建立，每批從它開 `codex/v1-<scope>`；不要把 R2M 合進 LoopFlow／R2B／R2O 的整合分支。
 - 日後 tag／Release 永不移動或覆寫。
 
 ## 文件與語言

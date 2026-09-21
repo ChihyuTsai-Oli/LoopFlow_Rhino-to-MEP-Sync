@@ -55,15 +55,100 @@ def _local(ifc, relative_to, x, y, z, axis=None, ref=None):
     )
 
 
-def _body_rep(ifc, context, item):
+def _body_rep(ifc, context, item, rep_type="SweptSolid"):
     shape = ifc.create_entity(
         "IfcShapeRepresentation",
         ContextOfItems=context,
         RepresentationIdentifier="Body",
-        RepresentationType="SweptSolid",
+        RepresentationType=rep_type,
         Items=[item],
     )
     return ifc.create_entity("IfcProductDefinitionShape", Representations=[shape])
+
+
+# 立方體的十二個三角形，索引對應 _box_mesh 的八個角點順序，法線朝外。
+_BOX_TRIANGLES = (
+    (0, 2, 1), (0, 3, 2),  # 底
+    (4, 5, 6), (4, 6, 7),  # 頂
+    (0, 1, 5), (0, 5, 4),  # -Y
+    (1, 2, 6), (1, 6, 5),  # +X
+    (2, 3, 7), (2, 7, 6),  # +Y
+    (3, 0, 4), (3, 4, 7),  # -X
+)
+
+
+def _box_mesh_rep(ifc, context, x0, y0, z0, x1, y1, z1):
+    """把一個軸對齊立方體寫成 IfcTriangulatedFaceSet。
+
+    這是產品實際會用的幾何表示法：任意 Rhino 幾何先轉網面再三角化，
+    不走參數化量體。座標是世界座標，所以元件本身用原點放置。
+    """
+    corners = (
+        (x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0),
+        (x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1),
+    )
+    points = ifc.create_entity(
+        "IfcCartesianPointList3D",
+        CoordList=[tuple(float(v) for v in c) for c in corners],
+    )
+    face_set = ifc.create_entity(
+        "IfcTriangulatedFaceSet",
+        Coordinates=points,
+        Closed=True,
+        # IFC 的索引從 1 起算
+        CoordIndex=[tuple(i + 1 for i in tri) for tri in _BOX_TRIANGLES],
+    )
+    return _body_rep(ifc, context, face_set, rep_type="Tessellation")
+
+
+def write_shell_mesh_ifc(path):
+    """三角網面版建築殼，幾何與 write_shell_ifc 等價，供 BIM 端驗證用。"""
+    import ifcopenshell
+    import ifcopenshell.template
+
+    ifc = ifcopenshell.template.create(
+        filename=os.path.basename(path),
+        organization="LoopFlow",
+        creator="R2M spike",
+        project_name="R2M-B03 shell (mesh)",
+        application="LoopFlow R2M spike",
+        application_version="0.0.0",
+    )
+    owner, context, storey = _spatial_tree(ifc, ifcopenshell)
+    origin = _local(ifc, storey.ObjectPlacement, 0.0, 0.0, 0.0)
+    wall = ifc.create_entity(
+        "IfcWall",
+        GlobalId=_guid(ifcopenshell),
+        OwnerHistory=owner,
+        Name="SpikeWall",
+        ObjectPlacement=origin,
+        Representation=_box_mesh_rep(ifc, context, 0.0, 0.0, 0.0, 4.0, 0.2, 2.8),
+        PredefinedType="NOTDEFINED",
+    )
+    covering = ifc.create_entity(
+        "IfcCovering",
+        GlobalId=_guid(ifcopenshell),
+        OwnerHistory=owner,
+        Name="SpikeCeiling",
+        ObjectPlacement=_local(ifc, storey.ObjectPlacement, 0.0, 0.0, 0.0),
+        Representation=_box_mesh_rep(ifc, context, 0.0, 0.0, 2.8, 4.0, 4.0, 2.9),
+        PredefinedType="CEILING",
+    )
+    ifc.create_entity(
+        "IfcRelContainedInSpatialStructure",
+        GlobalId=_guid(ifcopenshell),
+        OwnerHistory=owner,
+        RelatingStructure=storey,
+        RelatedElements=[wall, covering],
+    )
+    ifc.write(path)
+    return {
+        "path": path,
+        "schema": ifc.schema,
+        "wall": wall.GlobalId,
+        "covering": covering.GlobalId,
+        "entity_count": len(list(ifc)),
+    }
 
 
 def _spatial_tree(ifc, ifcopenshell):
@@ -398,6 +483,28 @@ def run(doc):
         ]
         if pipe_z and ceil_z:
             report["clearance_doc_units"] = min(ceil_z) - max(pipe_z)
+    return report
+
+
+def run_mesh_fixture(doc):
+    """只產生三角網面版建築殼並讀回 Rhino 驗證，不重跑整套針刺。"""
+    import Rhino
+
+    _ensure_vendor()
+    os.makedirs(OUT_DIR, exist_ok=True)
+    metres_to_doc = 1.0 / Rhino.RhinoMath.UnitScale(
+        doc.ModelUnitSystem, Rhino.UnitSystem.Meters
+    )
+    for obj in list(doc.Objects):
+        doc.Objects.Unlock(obj.Id, True)
+        doc.Objects.Delete(obj.Id, True)
+    path = os.path.join(OUT_DIR, "R2M_spike_shell_mesh.ifc")
+    report = {
+        "units": str(doc.ModelUnitSystem),
+        "metres_to_doc": metres_to_doc,
+        "write": write_shell_mesh_ifc(path),
+    }
+    report["read_back"] = tessellate_to_rhino(doc, path, "R2M::Shell", metres_to_doc)
     return report
 
 

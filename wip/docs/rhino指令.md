@@ -4,10 +4,10 @@
 
 | 候選 | 角色 |
 |---|---|
-| `RMModels` | 排除記號 → 巢狀圖層樹 → 類別勾選 → 發布建築殼 IFC |
-| `RMInbound` | 讀入管線 IFC → 鎖定參考層 |
-| `RMOpen` | Health 摘要；開 Config／models／inbound／Docs |
+| `RMModels` | 確認樓層 → 排除記號 → 巢狀圖層樹 → 類別勾選 → 發布建築殼 IFC |
+| `RMInbound` | 在空白文件讀入管線 IFC 建網面。不寫檔、不掛載外參 |
+| `RMOpen` | Health 摘要；開 Config／models／Docs |
 
-介面英文。未存檔則停。
+介面英文。`RMModels` 未存檔則停；`RMInbound` 不要求已存檔。
 
 對照 R2B `RB*`、R2O `RO*`；本產品前綴暫用 `RM`。
