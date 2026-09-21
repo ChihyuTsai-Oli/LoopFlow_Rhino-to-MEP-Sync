@@ -1,0 +1,20 @@
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+*.egg-info/
+
+# Rhino / build
+**/*.yak
+**/*.rhp
+**/build/
+
+# OS
+**/.DS_Store
+**/Thumbs.db
+
+# Local editor
+.cursor/
+*.local.json
+.env
+.env.*
