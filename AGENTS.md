@@ -23,9 +23,9 @@ AI 必須依序完整讀取：
 
 跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，尚未寫產品指令。家中 Archicad 已能匯入針刺測檔；**測試 BIM 暫以 Archicad 為準**，Revit 尚未測。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結）。
 
-**C01 開工前必須先定 R2M-ED-07、R2M-ED-13、R2M-ED-29**（見決策表），否則寫不出正確的 IFC。
+**C01 的 ED-07、ED-13、ED-29 已採用**，可依 `資料契約.md` 開工。B03 真實 MEP fixture 仍待帶回。
 
-決策表採三家 AI（Cursor／Claude／Codex）分開填寫再比對。**三欄 16 項已填完，均非盲填**；2026-09-21 Codex 本輪只填建議，決定欄仍待覆核。尤其 ED-13 的樓層例外與 ED-21 的套件裁切條件不可只看字母。未確認採用前只跑 `--html-only`；預設裁決工具的選項計票限制見本表末節。HTML 由 `wip/tools/fill_decision_table.py` 產生，不要手動編輯。
+決策表 16 列待決已於 2026-09-21 採用（三欄字母全數一致，非盲填；使用者授權兩家以上相同即採用）。HTML 由 `wip/tools/fill_decision_table.py` 產生，不要手動編輯。改口先改已決列與契約，再 `--html-only` 重產 HTML。
 
 ## 分支與版本
 
