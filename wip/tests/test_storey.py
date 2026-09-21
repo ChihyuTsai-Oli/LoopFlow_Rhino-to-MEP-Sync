@@ -39,6 +39,22 @@ class StoreyTests(unittest.TestCase):
         dup = [Storey("A", 0.0), Storey("B", 0.0)]
         self.assertEqual(assign_storey(10, dup, 100.0).status, STATUS_DUPLICATE_FL)
 
+    def test_slab_and_foundation(self):
+        storeys = [Storey("L1", 0.0), Storey("L2", 300.0)]
+        self.assertEqual(assign_storey(0.0, storeys, 600.0).name, "L1")
+        self.assertEqual(assign_storey(299.0, storeys, 600.0).name, "L1")
+        self.assertEqual(assign_storey(-50.0, storeys, 600.0).status, STATUS_BELOW)
+
+    def test_tall_wall_uses_bottom(self):
+        storeys = [Storey("L1", 0.0), Storey("L2", 300.0)]
+        self.assertEqual(assign_storey(0.0, storeys, 600.0).name, "L1")
+
+    def test_highest_storey_uses_top_bound(self):
+        storeys = [Storey("L1", 0.0), Storey("L2", 300.0)]
+        self.assertEqual(assign_storey(300.0, storeys, 600.0).name, "L2")
+        self.assertEqual(assign_storey(599.9, storeys, 600.0).name, "L2")
+        self.assertEqual(assign_storey(600.0, storeys, 600.0).status, STATUS_ABOVE)
+
 
 if __name__ == "__main__":
     unittest.main()
