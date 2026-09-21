@@ -4,7 +4,7 @@
 
 | 候選 | 角色 |
 |---|---|
-| `RMModels` | 確認樓層 → 排除記號 → 巢狀圖層樹 → 類別勾選 → 發布建築殼 IFC |
+| `RMModels` | 確認樓層 → 排除記號 → 巢狀圖層樹 → IFC 類型 → 類別勾選 → 網格密度 → 發布建築殼 IFC |
 | `RMInbound` | 在空白文件讀入管線 IFC 建網面。不寫檔、不掛載外參 |
 | `RMOpen` | Health 摘要；開 Config／models／Docs |
 

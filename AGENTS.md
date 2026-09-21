@@ -21,9 +21,9 @@ AI 必須依序完整讀取：
 
 獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad 發布管線 IFC（回 Rhino 當 Worksession 外參）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。
 
-跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，尚未寫產品指令。家中 Archicad 已能匯入針刺測檔；**測試 BIM 暫以 Archicad 為準**，Revit 尚未測。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結）。
+跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，C01 核心已開工。家中 Archicad 已能匯入針刺測檔；**測試 BIM 暫以 Archicad 為準，且只有家中電腦有 Archicad**。公司日只做 Rhino／單元測試。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結；連結驗收放家中）。
 
-**C01 的 ED-07、ED-13、ED-29 已採用**，可依 `資料契約.md` 開工。B03 真實 MEP fixture 仍待帶回。
+**C01 的 ED-07、ED-13、ED-29 已採用。** 核心模組已開工；Rhino 指令下一刀。B03 真實 MEP 只在家中做，不擋公司日寫 C01。
 
 決策表 16 列待決已於 2026-09-21 採用（三欄字母全數一致，非盲填；使用者授權兩家以上相同即採用）。HTML 由 `wip/tools/fill_decision_table.py` 產生，不要手動編輯。改口先改已決列與契約，再 `--html-only` 重產 HTML。
 
@@ -47,7 +47,7 @@ AI 必須依序完整讀取：
 1. 確認 repo、branch、origin 與乾淨工作樹；只用 fast-forward pull。
 2. 讀取上述六份文件，從 `重構進度.md` 確認目前階段與限制。
 3. 一批只處理一個範圍。
-4. 本階段以文件為準；針刺與功能碼另批。
+4. 本階段已開始寫 `wip/src/`；一批一個範圍。不需 Rhino 的測試必須先綠。
 5. 同步更新六份正式文件中受影響者。
 6. 檢查 diff 後提交、推送。
 
