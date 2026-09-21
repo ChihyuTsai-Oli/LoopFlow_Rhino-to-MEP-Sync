@@ -25,7 +25,7 @@ AI 必須依序完整讀取：
 
 **C01 開工前必須先定 R2M-ED-07、R2M-ED-13、R2M-ED-29**（見決策表），否則寫不出正確的 IFC。
 
-決策表採三家 AI（Cursor／Claude／Codex）分開填寫再比對。Cursor 與 Claude 欄已填，**只剩 Codex**；Codex 填寫前不要自行裁決待決項，工具只跑 `--html-only`。已填的兩欄不是盲填（三欄同檔、可互見），要取得真正獨立的第三意見請依決策表「盲填作法」先遮欄。HTML 由 `wip/tools/fill_decision_table.py` 產生，不要手動編輯。
+決策表採三家 AI（Cursor／Claude／Codex）分開填寫再比對。**三欄 16 項已填完，均非盲填**；2026-09-21 Codex 本輪只填建議，決定欄仍待覆核。尤其 ED-13 的樓層例外與 ED-21 的套件裁切條件不可只看字母。未確認採用前只跑 `--html-only`；預設裁決工具的選項計票限制見本表末節。HTML 由 `wip/tools/fill_decision_table.py` 產生，不要手動編輯。
 
 ## 分支與版本
 
