@@ -21,7 +21,7 @@ AI 必須依序完整讀取：
 
 獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad 發布管線 IFC（回 Rhino 當 Worksession 外參）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。
 
-跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，尚未寫產品指令。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結）。
+跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，尚未寫產品指令。家中 Archicad 已能匯入針刺測檔；**測試 BIM 暫以 Archicad 為準**，Revit 尚未測。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結）。
 
 **C01 開工前必須先定 R2M-ED-07、R2M-ED-13、R2M-ED-29**（見決策表），否則寫不出正確的 IFC。
 
