@@ -27,6 +27,7 @@ def default_config(document_name="", product_version="0.0.0-dev"):
         "layer_selection": {},
         "layer_type_map": {},
         "mesh_density": DEFAULT_MESH_DENSITY,
+        "inbound_count_warning": None,
     }
 
 

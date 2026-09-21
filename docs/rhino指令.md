@@ -5,9 +5,9 @@
 | 候選 | 角色 |
 |---|---|
 | `RMModels` | 確認樓層 → 排除記號 → 巢狀圖層樹 → IFC 類型 → 類別勾選 → 網格密度 → 發布建築殼 IFC。開發期跑 `commands/RMModels.py` |
-| `RMInbound` | 在空白文件讀入管線 IFC 建網面。不寫檔、不掛載外參 |
-| `RMOpen` | Health 摘要；開 Config／models／Docs |
+| `RMInbound` | 確認單位 → 選 IFC → 類別統計 →（可選件數警告）→ 建鎖定網面。開發期跑 `commands/RMInbound.py` |
+| `RMOpen` | Health 摘要；開 Config／models／Docs。開發期跑 `commands/RMOpen.py` |
 
-介面英文。`RMModels` 未存檔則停；`RMInbound` 不要求已存檔。開發期一個對話框涵蓋六步；Eto 不可用時改指令列。
+介面英文。`RMModels`／`RMOpen` 未存檔則停；`RMInbound` 不要求已存檔。`RMModels` 發布前會再列出圖層→類型對照，避免同層混放牆／天花被靜默當成單一類型。
 
 對照 R2B `RB*`、R2O `RO*`；本產品前綴暫用 `RM`。

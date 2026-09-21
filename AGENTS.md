@@ -23,7 +23,7 @@ AI 必須依序完整讀取：
 
 跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，C01 核心已開工。家中 Archicad 已能匯入針刺測檔；**測試 BIM 暫以 Archicad 為準，且只有家中電腦有 Archicad**。公司日只做 Rhino／單元測試。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結；連結驗收放家中）。
 
-**C01 的 ED-07、ED-13、ED-29 已採用。** `RMModels` 已寫。B03 真實 MEP 只在家中做。
+**C01 的 ED-07、ED-13、ED-29 已採用。** `RMModels`／`RMInbound`／`RMOpen` 已寫。B03 真實 MEP 只在家中做。
 
 決策表 16 列待決已於 2026-09-21 採用（三欄字母全數一致，非盲填；使用者授權兩家以上相同即採用）。HTML 由 `tools/fill_decision_table.py` 產生，不要手動編輯。改口先改已決列與契約，再 `--html-only` 重產 HTML。
 

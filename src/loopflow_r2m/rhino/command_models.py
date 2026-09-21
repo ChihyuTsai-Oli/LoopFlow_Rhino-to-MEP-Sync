@@ -21,7 +21,7 @@ from loopflow_r2m.names import (
 from loopflow_r2m.paths import config_paths
 from loopflow_r2m.publish import publish_models
 from loopflow_r2m.rhino.collect import collect_objects, default_geom_enabled, layer_rows
-from loopflow_r2m.rhino.dialogs import show_models_dialog
+from loopflow_r2m.rhino.dialogs import confirm_yes, show_models_dialog
 from loopflow_r2m.rhino.meshutil import geometry_to_mesh, mesh_to_meters, meshing_parameters
 from loopflow_r2m.rhino.storeys import read_storeys
 from loopflow_r2m.storey import STATUS_OK, assign_storey
@@ -139,6 +139,13 @@ def _run(doc, restore, ctx):
     missing = [path_ for path_ in selected if path_ not in types]
     if missing:
         raise R2MStop("Select an IFC type for layer: %s" % missing[0])
+
+    counts = {row["path"]: row["count"] for row in layer_rows(doc, "")}
+    _print("Each listed layer becomes one IFC type. Split mixed walls and ceilings first.")
+    for path_ in selected:
+        _print("  %s (%s) → %s" % (path_, counts.get(path_, 0), types[path_]))
+    if not confirm_yes("Publish with this type map?", COMMAND):
+        raise R2MStop("Cancelled.")
 
     geom_enabled = default_geom_enabled(choice["geom"])
     density = choice["mesh_density"]

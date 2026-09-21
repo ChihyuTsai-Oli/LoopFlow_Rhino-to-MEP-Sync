@@ -19,6 +19,7 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(data["building_name"], "Tower_rev03")
         self.assertEqual(data["mesh_density"], "medium")
         self.assertIsNone(data["last_export"])
+        self.assertIsNone(data["inbound_count_warning"])
 
     def test_roundtrip(self):
         with tempfile.TemporaryDirectory() as folder:

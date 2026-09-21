@@ -261,3 +261,119 @@ def _show_cli(storey_lines, layers, saved):
     if density is None:
         return None
     return _collect_choice(exclude, layer_checks, geom, str(density).strip().lower())
+
+
+def confirm_yes(prompt, title="R2M"):
+    """是／否。取消或否回 False。"""
+    try:
+        from Eto.Forms import MessageBox, MessageBoxButtons, DialogResult
+
+        result = MessageBox.Show(prompt, title, MessageBoxButtons.YesNo)
+        return result == DialogResult.Yes
+    except Exception:
+        import Rhino
+
+        getter = Rhino.Input.Custom.GetOption()
+        getter.SetCommandPrompt(prompt + " (Yes/No)")
+        getter.AddOption("Yes")
+        getter.AddOption("No")
+        result = getter.Get()
+        if result != Rhino.Input.GetResult.Option:
+            return False
+        name = getter.Option().EnglishName
+        return name == "Yes"
+
+
+def pick_ifc_file():
+    """回傳路徑字串，取消則 None。"""
+    import Rhino.UI
+
+    dialog = Rhino.UI.OpenFileDialog()
+    dialog.Filter = "IFC files (*.ifc)|*.ifc"
+    dialog.Title = "RMInbound"
+    if not dialog.ShowOpenDialog():
+        return None
+    return dialog.FileName
+
+
+def show_open_health(lines, folders):
+    """顯示 Health；按鈕打開資料夾。取消回 False。"""
+    try:
+        return _show_open_eto(lines, folders)
+    except ImportError:
+        return _show_open_cli(lines, folders)
+
+
+def _open_path(path):
+    import os
+
+    os.startfile(str(path))
+
+
+def _show_open_eto(lines, folders):
+    import Eto.Drawing as ed
+    import Eto.Forms as ef
+    from Rhino.UI import RhinoEtoApp
+
+    dlg = ef.Dialog[bool]()
+    dlg.Title = "RMOpen"
+    dlg.Padding = ed.Padding(12)
+    dlg.ClientSize = ed.Size(520, 360)
+
+    box = ef.TextArea()
+    box.ReadOnly = True
+    box.Text = "\n".join(lines)
+    box.Height = 180
+
+    def make_open(folder):
+        def handler(sender, args):
+            if folder and __import__("pathlib").Path(folder).exists():
+                _open_path(folder)
+
+        return handler
+
+    btn_config = ef.Button(Text="Open Config")
+    btn_models = ef.Button(Text="Open Models")
+    btn_docs = ef.Button(Text="Open Docs")
+    btn_config.Click += make_open(folders.get("config"))
+    btn_models.Click += make_open(folders.get("models"))
+    btn_docs.Click += make_open(folders.get("docs"))
+    close = ef.Button(Text="Close")
+
+    def on_close(sender, args):
+        dlg.Close(True)
+
+    close.Click += on_close
+    dlg.DefaultButton = close
+    dlg.AbortButton = close
+
+    buttons = ef.DynamicLayout()
+    buttons.AddRow(btn_config, btn_models, btn_docs, None, close)
+
+    root = ef.DynamicLayout()
+    root.Spacing = ed.Size(8, 8)
+    root.AddRow(box)
+    root.AddRow(buttons)
+    dlg.Content = root
+    owner = RhinoEtoApp.MainWindow
+    result = dlg.ShowModal(owner) if owner is not None else dlg.ShowModal()
+    return bool(result)
+
+
+def _show_open_cli(lines, folders):
+    print("RMOpen:")
+    for line in lines:
+        print("  " + line)
+    choice = _ask_string("Open Config / Models / Docs / Close", "Close")
+    if choice is None:
+        return False
+    key = str(choice).strip().lower()
+    mapping = {
+        "config": folders.get("config"),
+        "models": folders.get("models"),
+        "docs": folders.get("docs"),
+    }
+    if key in mapping and mapping[key]:
+        _open_path(mapping[key])
+    return True
+

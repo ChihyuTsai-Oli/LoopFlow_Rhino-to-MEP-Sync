@@ -16,6 +16,8 @@ MODELS_IFC_NAME = "R2M.ifc"
 PENDING_IFC_NAME = "R2M.pending.ifc"
 LOG_NAME = "r2m.log"
 CONFIG_NAME = "config.json"
+INBOUND_LAYER_ROOT = "R2M_Inbound"
+INBOUND_COUNT_WARNING_KEY = "inbound_count_warning"
 
 # 匯出時明確挑選；Proxy 必須使用者自己選，不得當缺省。
 IFC_PRODUCT_TYPES = (
