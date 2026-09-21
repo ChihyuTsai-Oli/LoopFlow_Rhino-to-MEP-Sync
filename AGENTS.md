@@ -25,7 +25,7 @@ AI 必須依序完整讀取：
 
 **C01 開工前必須先定 R2M-ED-07、R2M-ED-13、R2M-ED-29**（見決策表），否則寫不出正確的 IFC。
 
-決策表採三家 AI（Cursor／Claude／Codex）分開填寫再比對。目前只有 Cursor 欄已填；另外兩家填寫前不要自行裁決待決項。HTML 由 `wip/tools/fill_decision_table.py` 產生，不要手動編輯。
+決策表採三家 AI（Cursor／Claude／Codex）分開填寫再比對。Cursor 與 Claude 欄已填，**只剩 Codex**；Codex 填寫前不要自行裁決待決項，工具只跑 `--html-only`。已填的兩欄不是盲填（三欄同檔、可互見），要取得真正獨立的第三意見請依決策表「盲填作法」先遮欄。HTML 由 `wip/tools/fill_decision_table.py` 產生，不要手動編輯。
 
 ## 分支與版本
 
