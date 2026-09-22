@@ -46,6 +46,11 @@ def _eto_label(ef, text):
     return label
 
 
+def _checkbox_on(box):
+    """Eto CheckBox.Checked 在 pythonnet 是 bool，不是物件。"""
+    return box.Checked is True
+
+
 def show_models_dialog(storey_lines, layers, saved):
     """回傳選擇 dict；取消回 None。"""
     try:
@@ -167,6 +172,11 @@ def _show_eto(storey_lines, layers, saved):
     cancel = _eto_button(ef, "Cancel")
 
     def on_ok(sender, args):
+        if not any(_checkbox_on(check) for _path, check, _drop in layer_widgets):
+            from Eto.Forms import MessageBox
+
+            MessageBox.Show("Check at least one layer.", dlg.Title)
+            return
         dlg.Close(True)
 
     def on_cancel(sender, args):
@@ -186,7 +196,7 @@ def _show_eto(storey_lines, layers, saved):
     root.AddRow(storey_box)
     root.AddRow(_eto_label(ef, "Exclude token (blank = none)"))
     root.AddRow(exclude_box)
-    root.AddRow(_eto_label(ef, "Layers — check to export; type is optional (reference = IfcBuildingElementProxy)"))
+    root.AddRow(_eto_label(ef, "Layers — check at least one to export; type is optional (reference = IfcBuildingElementProxy)"))
     root.AddRow(layer_toolbar)
     root.AddRow(layer_scroll)
     root.AddRow(_eto_label(ef, "Geometry types"))
@@ -205,8 +215,8 @@ def _show_eto(storey_lines, layers, saved):
     for path, check, drop in layer_widgets:
         index = int(drop.SelectedIndex)
         choice = type_choices[index] if 0 <= index < len(type_choices) else None
-        layer_checks.append((path, bool(check.Checked), choice))
-    geom = {key: bool(box.Checked) for key, box in geom_checks.items()}
+        layer_checks.append((path, _checkbox_on(check), choice))
+    geom = {key: _checkbox_on(box) for key, box in geom_checks.items()}
     density_index = int(density_list.SelectedIndex)
     density = (
         density_choices[density_index]
