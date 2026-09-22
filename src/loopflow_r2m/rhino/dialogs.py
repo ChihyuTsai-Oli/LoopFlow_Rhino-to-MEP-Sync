@@ -22,6 +22,20 @@ def _normalize_exclude(text):
     return str(text).strip()
 
 
+def _eto_button(ef, text):
+    """Rhino pythonnet 不接受 Button(Text=...)。"""
+    btn = ef.Button()
+    btn.Text = text
+    return btn
+
+
+def _eto_label(ef, text):
+    """Rhino pythonnet 不接受 Label(Text=...)。"""
+    label = ef.Label()
+    label.Text = text
+    return label
+
+
 def show_models_dialog(storey_lines, layers, saved):
     """回傳選擇 dict；取消回 None。"""
     try:
@@ -127,8 +141,8 @@ def _show_eto(storey_lines, layers, saved):
     density_list.DataStore = density_choices
     density_list.SelectedIndex = density_choices.index(density0)
 
-    ok = ef.Button(Text="Publish")
-    cancel = ef.Button(Text="Cancel")
+    ok = _eto_button(ef, "Publish")
+    cancel = _eto_button(ef, "Cancel")
 
     def on_ok(sender, args):
         dlg.Close(True)
@@ -146,15 +160,15 @@ def _show_eto(storey_lines, layers, saved):
 
     root = ef.DynamicLayout()
     root.Spacing = ed.Size(8, 8)
-    root.AddRow(ef.Label(Text="Storeys (FL)"))
+    root.AddRow(_eto_label(ef, "Storeys (FL)"))
     root.AddRow(storey_box)
-    root.AddRow(ef.Label(Text="Exclude token (blank = none)"))
+    root.AddRow(_eto_label(ef, "Exclude token (blank = none)"))
     root.AddRow(exclude_box)
-    root.AddRow(ef.Label(Text="Layers — check to export; pick IFC type per layer"))
+    root.AddRow(_eto_label(ef, "Layers — check to export; pick IFC type per layer"))
     root.AddRow(layer_scroll)
-    root.AddRow(ef.Label(Text="Geometry types"))
+    root.AddRow(_eto_label(ef, "Geometry types"))
     root.AddRow(geom_stack)
-    root.AddRow(ef.Label(Text="Mesh density"))
+    root.AddRow(_eto_label(ef, "Mesh density"))
     root.AddRow(density_list)
     root.AddRow(buttons)
     dlg.Content = root
@@ -356,11 +370,11 @@ def _pick_option_eto(prompt, names, title):
         return handler
 
     for name in names:
-        btn = ef.Button(Text=name)
+        btn = _eto_button(ef, name)
         btn.Click += make(name)
         buttons.append(btn)
 
-    cancel = ef.Button(Text="Cancel")
+    cancel = _eto_button(ef, "Cancel")
 
     def on_cancel(sender, args):
         dlg.Close(False)
@@ -376,7 +390,7 @@ def _pick_option_eto(prompt, names, title):
 
     root = ef.DynamicLayout()
     root.Spacing = ed.Size(8, 8)
-    root.AddRow(ef.Label(Text=prompt))
+    root.AddRow(_eto_label(ef, prompt))
     root.AddRow(row)
     dlg.Content = root
 
@@ -459,13 +473,13 @@ def _show_open_eto(lines, folders):
 
         return handler
 
-    btn_config = ef.Button(Text="Open Config")
-    btn_models = ef.Button(Text="Open Models")
-    btn_docs = ef.Button(Text="Open Docs")
+    btn_config = _eto_button(ef, "Open Config")
+    btn_models = _eto_button(ef, "Open Models")
+    btn_docs = _eto_button(ef, "Open Docs")
     btn_config.Click += make_open(folders.get("config"))
     btn_models.Click += make_open(folders.get("models"))
     btn_docs.Click += make_open(folders.get("docs"))
-    close = ef.Button(Text="Close")
+    close = _eto_button(ef, "Close")
 
     def on_close(sender, args):
         dlg.Close(True)
