@@ -1,6 +1,7 @@
 """RMStorey：登記 R2M 高程框。
 
-選全部框 → 點 1F → 輸入 1F 高程 → 點 RF，其餘由各框自身的 Z 推導。
+開頭選整棟或只做其中幾層。整棟：選全部框 → 點 1F → 輸入 1F 高程 → 點 RF。
+非整棟：選全部框 → 點基準層 → 輸入名稱與高程，其餘依 Z 連續編號。
 重跑會整批覆寫，包含手動改過的樓層名。
 """
 
@@ -10,11 +11,24 @@ from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.logutil import append_log
 from loopflow_r2m.names import STOREY_FL_KEY, STOREY_LAYER, STOREY_NAME_KEY
 from loopflow_r2m.paths import config_paths
-from loopflow_r2m.rhino.dialogs import ask_number, confirm_yes, pick_curves
+from loopflow_r2m.rhino.dialogs import (
+    ask_number,
+    ask_text,
+    confirm_yes,
+    pick_curves,
+    pick_option,
+)
 from loopflow_r2m.rhino.layerutil import ensure_layer
-from loopflow_r2m.storey import Frame, StoreyPlanError, build_storey_plan
+from loopflow_r2m.storey import (
+    Frame,
+    StoreyPlanError,
+    build_partial_storey_plan,
+    build_storey_plan,
+)
 
 COMMAND = "RMStorey"
+MODE_WHOLE = "WholeBuilding"
+MODE_PARTIAL = "PartialStoreys"
 
 # 框必須是水平平面：上下 Z 差在這個範圍內才算同一個高度。
 FLATNESS_TOLERANCE = 1e-6
@@ -73,6 +87,13 @@ def _run(doc):
     ):
         raise R2MStop("Cancelled.")
 
+    mode = pick_option(
+        "Whole building (1F and RF) or only the storeys in this model?",
+        (MODE_WHOLE, MODE_PARTIAL),
+    )
+    if mode is None:
+        raise R2MStop("Cancelled.")
+
     picked = pick_curves("Select all storey frames", True)
     if not picked:
         raise R2MStop("Cancelled.")
@@ -80,6 +101,15 @@ def _run(doc):
     frames = [Frame(oid, _frame_z(doc, oid)) for oid in picked]
     ids = [frame.id for frame in frames]
 
+    if mode == MODE_PARTIAL:
+        planned = _plan_partial(frames, ids)
+    else:
+        planned = _plan_whole(frames, ids)
+
+    return _write_plan(doc, planned)
+
+
+def _plan_whole(frames, ids):
     first = pick_curves("Select the 1F frame", False)
     if not first:
         raise R2MStop("Cancelled.")
@@ -96,10 +126,34 @@ def _run(doc):
     if roof[0] not in ids:
         raise R2MStop("The RF frame must be one of the selected frames.")
 
-    planned = build_storey_plan(
+    return build_storey_plan(
         frames, ids.index(first[0]), ids.index(roof[0]), first_fl
     )
 
+
+def _plan_partial(frames, ids):
+    picked = pick_curves("Select the reference storey frame", False)
+    if not picked:
+        raise R2MStop("Cancelled.")
+    if picked[0] not in ids:
+        raise R2MStop("The reference frame must be one of the selected frames.")
+
+    name = ask_text("Name of that storey (for example 5F)", COMMAND)
+    if name is None:
+        raise R2MStop("Cancelled.")
+    if not name:
+        raise R2MStop("Storey name cannot be blank.")
+
+    elevation = ask_number("Elevation of %s (document units)" % name, COMMAND)
+    if elevation is None:
+        raise R2MStop("Cancelled.")
+
+    return build_partial_storey_plan(
+        frames, ids.index(picked[0]), name, elevation
+    )
+
+
+def _write_plan(doc, planned):
     layer_index = ensure_layer(doc, STOREY_LAYER)
     for item in planned:
         obj = doc.Objects.FindId(item.id)

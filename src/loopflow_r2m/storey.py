@@ -1,12 +1,13 @@
 """樓層編列與物件掛層。純 Python，不 import Rhino。
 
-編列：使用者選全部高程框、指定 1F 與 RF，其餘由各框自身的 Z 推導。
+編列：整棟指定 1F 與 RF；非整棟指定一層名稱與高程，其餘依框的 Z 連續編號。
 掛層：依範圍盒底部 Z，區間下含上不含；最高層無上界。
 平面：勾選圖層上的物件必須嚴格落在該層高程框內；碰到框線擋住；完全在外則跳過。
 """
 
 from __future__ import annotations
 
+import re
 from collections import namedtuple
 
 AssignResult = namedtuple("AssignResult", "name status")
@@ -64,13 +65,7 @@ def build_storey_plan(frames, first_index, roof_index, first_fl):
     if roof_z < first_z - Z_EPSILON:
         raise StoreyPlanError("The RF frame is below the 1F frame.")
 
-    ordered = sorted(rows, key=lambda item: float(item.z))
-    for lower, upper in zip(ordered, ordered[1:]):
-        if abs(float(upper.z) - float(lower.z)) <= Z_EPSILON:
-            raise StoreyPlanError(
-                "Two storey frames share the same height: %s" % float(lower.z)
-            )
-
+    ordered = _ordered_unique_z(rows)
     first_pos = _position(ordered, rows[first_index].id)
     roof_pos = _position(ordered, rows[roof_index].id)
 
@@ -97,6 +92,89 @@ def build_storey_plan(frames, first_index, roof_index, first_fl):
         PlannedStorey(frame.id, names[pos], base + (float(frame.z) - first_z))
         for pos, frame in enumerate(ordered)
     ]
+
+
+def build_partial_storey_plan(frames, ref_index, ref_name, ref_fl):
+    """非整棟：指定一層名稱與高程，其餘依 Z 連續編號，不產生 RF／R2F。"""
+    rows = list(frames or [])
+    if not rows:
+        raise StoreyPlanError("No storey frames selected.")
+    if not 0 <= ref_index < len(rows):
+        raise StoreyPlanError("The reference frame must be one of the selected frames.")
+
+    ref_ordinal = parse_storey_ordinal(ref_name)
+    ordered = _ordered_unique_z(rows)
+    ref_pos = _position(ordered, rows[ref_index].id)
+    ref_z = float(rows[ref_index].z)
+    base = float(ref_fl)
+
+    planned = []
+    for pos, frame in enumerate(ordered):
+        ordinal = shift_storey_ordinal(ref_ordinal, pos - ref_pos)
+        planned.append(
+            PlannedStorey(
+                frame.id,
+                name_from_ordinal(ordinal),
+                base + (float(frame.z) - ref_z),
+            )
+        )
+    names = [item.name for item in planned]
+    if len(set(names)) != len(names):
+        raise StoreyPlanError(
+            "Storey naming produced duplicates: %s" % ", ".join(names)
+        )
+    return planned
+
+
+def parse_storey_ordinal(name):
+    """1F／5／B1 → 整數序號。1F=1、B1=-1。0 與 RF 不合法。"""
+    text = str(name or "").strip().upper().replace(" ", "")
+    match = re.match(r"^B(\d+)$", text)
+    if match:
+        number = int(match.group(1))
+        if number < 1:
+            raise StoreyPlanError("Storey name %s is not a floor number." % name)
+        return -number
+    match = re.match(r"^(\d+)F?$", text)
+    if match:
+        number = int(match.group(1))
+        if number < 1:
+            raise StoreyPlanError("Storey name %s is not a floor number." % name)
+        return number
+    raise StoreyPlanError(
+        "Partial storeys need a name like 5F or B1, not %s. "
+        "Use WholeBuilding if this project has 1F and RF."
+        % name
+    )
+
+
+def name_from_ordinal(ordinal):
+    if ordinal >= 1:
+        return "%sF" % ordinal
+    if ordinal <= -1:
+        return "B%s" % (-ordinal)
+    raise StoreyPlanError("Storey numbering produced floor 0.")
+
+
+def shift_storey_ordinal(base, delta):
+    """移動 delta 層，跳過 0（B1 上一層是 1F）。"""
+    step = 1 if delta > 0 else -1
+    current = int(base)
+    for _ in range(abs(int(delta))):
+        current += step
+        if current == 0:
+            current += step
+    return current
+
+
+def _ordered_unique_z(rows):
+    ordered = sorted(rows, key=lambda item: float(item.z))
+    for lower, upper in zip(ordered, ordered[1:]):
+        if abs(float(upper.z) - float(lower.z)) <= Z_EPSILON:
+            raise StoreyPlanError(
+                "Two storey frames share the same height: %s" % float(lower.z)
+            )
+    return ordered
 
 
 def _position(ordered, frame_id):

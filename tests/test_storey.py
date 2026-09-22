@@ -14,6 +14,7 @@ from loopflow_r2m.storey import (
     Storey,
     StoreyPlanError,
     assign_storey,
+    build_partial_storey_plan,
     build_storey_plan,
     classify_bbox_xy,
 )
@@ -109,6 +110,46 @@ class BuildStoreyPlanTests(unittest.TestCase):
     def test_index_outside_selection_is_blocked(self):
         with self.assertRaises(StoreyPlanError):
             self.plan([0, 300], 0, 5)
+
+
+class BuildPartialStoreyPlanTests(unittest.TestCase):
+    def plan(self, zs, ref, name, fl=1600.0):
+        frames = [Frame("f%s" % i, z) for i, z in enumerate(zs)]
+        return build_partial_storey_plan(frames, ref, name, fl)
+
+    def test_single_floor(self):
+        rows = self.plan([1600], 0, "5F", 1600.0)
+        self.assertEqual([r.name for r in rows], ["5F"])
+        self.assertEqual([r.fl for r in rows], [1600.0])
+
+    def test_two_floors_ref_lower(self):
+        rows = self.plan([1600, 1920], 0, "5F", 1600.0)
+        self.assertEqual([r.name for r in rows], ["5F", "6F"])
+        self.assertEqual([r.fl for r in rows], [1600.0, 1920.0])
+
+    def test_ref_in_the_middle(self):
+        rows = self.plan([1300, 1600, 1920], 1, "6F", 1600.0)
+        self.assertEqual([r.name for r in rows], ["5F", "6F", "7F"])
+
+    def test_bare_number_means_f(self):
+        rows = self.plan([1600, 1920], 0, "5", 1600.0)
+        self.assertEqual([r.name for r in rows], ["5F", "6F"])
+
+    def test_one_below_first_floor_is_basement(self):
+        rows = self.plan([-300, 0], 1, "1F", 0.0)
+        self.assertEqual([r.name for r in rows], ["B1", "1F"])
+
+    def test_basement_ref_then_up_to_first(self):
+        rows = self.plan([-300, 0, 300], 0, "B1", -300.0)
+        self.assertEqual([r.name for r in rows], ["B1", "1F", "2F"])
+
+    def test_rf_name_is_blocked(self):
+        with self.assertRaises(StoreyPlanError):
+            self.plan([1600], 0, "RF", 1600.0)
+
+    def test_empty_selection_is_blocked(self):
+        with self.assertRaises(StoreyPlanError):
+            build_partial_storey_plan([], 0, "5F", 0.0)
 
 
 class ClassifyBboxTests(unittest.TestCase):

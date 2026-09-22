@@ -4,7 +4,7 @@
 
 | 候選 | 角色 |
 |---|---|
-| `RMStorey` | 說明窗 → 選全部高程框 → 點 1F → 輸入 1F 高程 → 點 RF → 自動編列樓層名與高程，搬到 `R2M::Storey` |
+| `RMStorey` | 說明窗 → 整棟或只做其中幾層 → 選框並編列名稱／高程，搬到 `R2M::Storey` |
 | `RMModels` | 確認樓層 → 排除記號 → 巢狀圖層樹 → IFC 類型 → 類別勾選 → 網格密度 → 發布建築殼 IFC |
 | `RMInbound` | 確認單位 → 選 IFC → 類別統計 →（可選件數警告）→ 建鎖定網面 |
 | `RMOpen` | Health 摘要；開 Config／models／Docs |

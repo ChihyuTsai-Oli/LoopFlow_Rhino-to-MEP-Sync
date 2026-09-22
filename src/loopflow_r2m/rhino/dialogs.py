@@ -315,6 +315,28 @@ def ask_number(prompt, title="R2M"):
         raise R2MStop("%s is not a number: %s" % (prompt, text))
 
 
+def ask_text(prompt, title="R2M"):
+    """彈窗輸入字串。取消回 None。"""
+    text = _prompt_text(prompt, title)
+    if text is None:
+        return None
+    return str(text).strip()
+
+
+def pick_option(prompt, names):
+    """指令列選一個英文選項。取消回 None。"""
+    import Rhino
+
+    getter = Rhino.Input.Custom.GetOption()
+    getter.SetCommandPrompt(prompt)
+    for name in names:
+        getter.AddOption(name)
+    result = getter.Get()
+    if result != Rhino.Input.GetResult.Option:
+        return None
+    return getter.Option().EnglishName
+
+
 def _prompt_text(prompt, title):
     """優先用彈窗；環境不支援時退回指令列。"""
     try:
