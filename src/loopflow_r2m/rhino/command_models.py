@@ -239,6 +239,17 @@ def _run(doc, restore, ctx):
         _print("  %s  %s" % (item.name, per_storey.get(item.name, 0)))
     _print("Highest object Z: %s" % highest_z)
     append_log(paths["log"], "INFO", COMMAND, "highest object Z %s" % highest_z)
+    proxy_count = sum(
+        1 for item in products if item.ifc_type == "IfcBuildingElementProxy"
+    )
+    if products and proxy_count * 2 >= len(products):
+        warn = (
+            "Warning: %s of %s objects are IfcBuildingElementProxy. "
+            "Archicad may hide them. Set Wall/Slab/Covering on those layers."
+            % (proxy_count, len(products))
+        )
+        _print(warn)
+        append_log(paths["log"], "WARN", COMMAND, warn)
     append_log(
         paths["log"],
         "INFO",
@@ -253,7 +264,12 @@ def _run(doc, restore, ctx):
     )
 
     export_storeys = [
-        ExportStorey(item.name, rhino_to_meters(item.fl, scale)) for item in storeys
+        ExportStorey(
+            item.name,
+            rhino_to_meters(item.fl, scale),
+            rhino_to_meters(item.frame_z, scale),
+        )
+        for item in storeys
     ]
     meta = ExportMeta(
         filename=paths["ifc"].name,
