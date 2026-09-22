@@ -95,7 +95,8 @@ def _run(doc):
     layer_index = ensure_layer(doc, STOREY_LAYER)
     for item in planned:
         obj = doc.Objects.FindId(item.id)
-        attr = obj.Attributes
+        # 必須用副本：把活的 Attributes 實例傳回 ModifyAttributes 會清掉既有 UserText。
+        attr = obj.Attributes.Duplicate()
         attr.SetUserString(STOREY_NAME_KEY, item.name)
         attr.SetUserString(STOREY_FL_KEY, _fl_text(item.fl))
         attr.LayerIndex = layer_index
