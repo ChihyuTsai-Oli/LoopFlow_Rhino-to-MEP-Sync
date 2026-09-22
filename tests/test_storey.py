@@ -56,6 +56,18 @@ class AssignStoreyTests(unittest.TestCase):
         self.assertEqual(assign_storey(0.0, storeys).status, STATUS_OK)
         self.assertEqual(assign_storey(0.0, storeys).name, "1F")
 
+    def test_hang_uses_frame_z_not_fl(self):
+        storeys = [
+            Storey("2F", 850.0, frame_z=-53.0),
+            Storey("3F", 900.0, frame_z=-3.0),
+            Storey("4F", 950.0, frame_z=47.0),
+        ]
+        self.assertEqual(assign_storey(-53.0, storeys).name, "2F")
+        self.assertEqual(assign_storey(-10.0, storeys).name, "2F")
+        self.assertEqual(assign_storey(-3.0, storeys).name, "3F")
+        self.assertEqual(assign_storey(47.0, storeys).name, "4F")
+        self.assertEqual(assign_storey(-54.0, storeys).status, STATUS_BELOW)
+
 
 class BuildStoreyPlanTests(unittest.TestCase):
     def plan(self, zs, first, roof, first_fl=0.0):

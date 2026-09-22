@@ -58,9 +58,8 @@ def read_storeys(doc):
                 "Storey frame %s is not a usable planar outline. Run RMStorey."
                 % name
             )
-        found.append(
-            (Storey(name, fl, polygon), float(geom.GetBoundingBox(True).Min.Z))
-        )
+        frame_z = float(geom.GetBoundingBox(True).Min.Z)
+        found.append((Storey(name, fl, polygon, frame_z=frame_z), frame_z))
     if not found:
         raise R2MStop(
             "No storey frames on layer %s. Run RMStorey." % STOREY_LAYER

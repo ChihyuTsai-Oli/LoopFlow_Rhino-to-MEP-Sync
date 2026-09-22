@@ -118,8 +118,8 @@ def _run(doc, restore, ctx):
 
     storeys = read_storeys(doc)
     lines = [
-        "%s  FL=%s" % (item.name, item.fl)
-        for item in sorted(storeys, key=lambda row: row.fl)
+        "%s  FL=%s  (frame Z=%s)" % (item.name, item.fl, item.frame_z)
+        for item in sorted(storeys, key=lambda row: row.frame_z)
     ]
     lines.append("Top storey has no upper bound.")
     lines.append(
@@ -222,18 +222,22 @@ def _run(doc, restore, ctx):
                 faces=faces,
             )
         )
+    _print("Skipped outside storey frames: %s" % skipped_outside)
+    _print("Skipped below lowest storey: %s" % skipped_below)
     if problems:
         raise R2MStop("Cannot publish: " + "; ".join(problems[:8]))
     if not products:
-        raise R2MStop("No meshable objects strictly inside a storey frame.")
+        raise R2MStop(
+            "No meshable objects strictly inside a storey frame. "
+            "Skipped below lowest storey: %s; skipped outside frames: %s."
+            % (skipped_below, skipped_outside)
+        )
 
     # 最高層無上界，所以改用這份摘要讓使用者看出有沒有物件飄到天上。
     _print("Objects per storey:")
-    for item in sorted(storeys, key=lambda row: row.fl):
+    for item in sorted(storeys, key=lambda row: row.frame_z):
         _print("  %s  %s" % (item.name, per_storey.get(item.name, 0)))
     _print("Highest object Z: %s" % highest_z)
-    _print("Skipped outside storey frames: %s" % skipped_outside)
-    _print("Skipped below lowest storey: %s" % skipped_below)
     append_log(paths["log"], "INFO", COMMAND, "highest object Z %s" % highest_z)
     append_log(
         paths["log"],

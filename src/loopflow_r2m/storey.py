@@ -1,7 +1,8 @@
 """樓層編列與物件掛層。純 Python，不 import Rhino。
 
 編列：整棟指定 1F 與 RF；非整棟指定一層名稱與高程，其餘依框的 Z 連續編號。
-掛層：依範圍盒底部 Z，區間下含上不含；最高層無上界。
+掛層：依範圍盒底部 Z 對框的幾何高度，區間下含上不含；最高層無上界。
+R2M_FL 是寫進 IFC 的結構面標高，可與模型 Z 不同。
 平面：勾選圖層上的物件必須嚴格落在該層高程框內；碰到框線擋住；完全在外則跳過。
 """
 
@@ -13,11 +14,12 @@ from collections import namedtuple
 AssignResult = namedtuple("AssignResult", "name status")
 
 
-class Storey(namedtuple("_Storey", "name fl polygon")):
-    """polygon 是平面頂點 (x, y)；測試可省略。"""
+class Storey(namedtuple("_Storey", "name fl polygon frame_z")):
+    """polygon 是平面頂點 (x, y)。frame_z 是框的幾何高度；測試可省略，預設等於 fl。"""
 
-    def __new__(cls, name, fl, polygon=()):
-        return super(Storey, cls).__new__(cls, name, fl, tuple(polygon))
+    def __new__(cls, name, fl, polygon=(), frame_z=None):
+        hang = float(fl) if frame_z is None else float(frame_z)
+        return super(Storey, cls).__new__(cls, name, fl, tuple(polygon), hang)
 
 # 一個框一個樓層：id 是呼叫端自己的識別（Rhino 端傳 Guid），z 是框的高度。
 Frame = namedtuple("Frame", "id z")
@@ -187,26 +189,27 @@ def _position(ordered, frame_id):
 def assign_storey(bottom_z, storeys):
     """回傳 AssignResult。status 不是 ok 時不得靜默猜測，也不得移動幾何。
 
-    storeys：可迭代的 Storey（name、fl，文件單位）。
-    最高層無上界；比它高的物件一律掛它。低於最低層回 below，由發布端跳過，不掛層。
+    區間用框的幾何 Z（frame_z），不是 R2M_FL。FL 可能是建築標高
+    （例如 850），而模型與框在另一個 Z（例如 -53）。
+    最高層無上界；比它高的物件一律掛它。低於最低層框 Z 回 below，由發布端跳過。
     """
     rows = list(storeys or [])
     if not rows:
         return AssignResult(None, STATUS_NO_STOREYS)
 
-    ordered = sorted(rows, key=lambda item: item.fl)
-    fls = [item.fl for item in ordered]
-    if len(set(fls)) != len(fls):
+    ordered = sorted(rows, key=lambda item: item.frame_z)
+    hang_zs = [item.frame_z for item in ordered]
+    if len(set(hang_zs)) != len(hang_zs):
         return AssignResult(None, STATUS_DUPLICATE_FL)
 
     z = float(bottom_z)
-    if z < ordered[0].fl:
+    if z < ordered[0].frame_z:
         return AssignResult(None, STATUS_BELOW)
 
     for index, storey in enumerate(ordered):
         if index + 1 == len(ordered):
             return AssignResult(storey.name, STATUS_OK)
-        if storey.fl <= z < ordered[index + 1].fl:
+        if storey.frame_z <= z < ordered[index + 1].frame_z:
             return AssignResult(storey.name, STATUS_OK)
     return AssignResult(None, STATUS_BELOW)
 
