@@ -15,6 +15,11 @@ VENDOR = ROOT / ".vendor" / "py39"
 if str(VENDOR) not in sys.path:
     sys.path.insert(0, str(VENDOR))
 
+# ScriptEditor 會快取已 import 的套件；每次跑都丟掉，才會讀到磁碟上的新碼。
+for _name in list(sys.modules):
+    if _name == "loopflow_r2m" or _name.startswith("loopflow_r2m."):
+        del sys.modules[_name]
+
 import scriptcontext as sc
 
 from loopflow_r2m.rhino.command_models import run_rmmodels

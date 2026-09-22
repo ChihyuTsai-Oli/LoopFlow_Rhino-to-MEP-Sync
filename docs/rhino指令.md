@@ -11,7 +11,7 @@
 
 介面英文。`RMModels`／`RMOpen` 未存檔則停；`RMStorey`／`RMInbound` 不要求已存檔（未存檔只是不寫 log）。`RMModels` 只發布嚴格落在該層高程框內的勾選圖層物件；碰到框線則停。發布前會再列出圖層→類型對照。未選類型的勾選圖層寫成參考用 `IfcBuildingElementProxy`。
 
-對照 R2B `RB*`、R2O `RO*`；本產品前綴暫用 `RM`。正式 yak 裝好前，**不要**在指令列打 `RMOpen` 這三個名字（尚未註冊）。
+對照 R2B `RB*`、R2O `RO*`；本產品前綴暫用 `RM`。正式 yak 裝好前，**不要**在指令列打 `RMOpen` 這三個名字（尚未註冊）。開發期從 ScriptEditor 跑時，每次會丟掉已載入的 `loopflow_r2m`，不必為了換程式碼而重開 Rhino。
 
 ## 可複製貼上（開發期）
 
