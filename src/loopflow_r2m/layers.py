@@ -1,6 +1,6 @@
 """圖層路徑與排除記號。"""
 
-from .names import DEFAULT_EXCLUDE_TOKEN, STOREY_LAYER
+from .names import DEFAULT_EXCLUDE_TOKEN, LAYER_ROOT, STOREY_LAYER
 
 
 def layer_is_excluded(layer_path, exclude_token=DEFAULT_EXCLUDE_TOKEN):
@@ -12,6 +12,12 @@ def layer_is_excluded(layer_path, exclude_token=DEFAULT_EXCLUDE_TOKEN):
 
 
 def is_storey_layer_path(layer_path):
-    """圖層 `R2M_Storey` 或其巢狀路徑。"""
+    """圖層 `R2M::Storey` 或其巢狀路徑。"""
     path = str(layer_path)
     return path == STOREY_LAYER or path.endswith("::" + STOREY_LAYER)
+
+
+def is_r2m_system_layer_path(layer_path):
+    """R2M 自己建的圖層樹（`R2M` 及其所有子層），整棵都不進匯出清單。"""
+    parts = str(layer_path).split("::")
+    return LAYER_ROOT in parts

@@ -16,7 +16,6 @@ from loopflow_r2m.names import (
     DEFAULT_EXCLUDE_TOKEN,
     DEFAULT_MESH_DENSITY,
     PRODUCT_VERSION,
-    STOREY_FL_TOP_KEY,
 )
 from loopflow_r2m.paths import config_paths
 from loopflow_r2m.publish import publish_models
@@ -35,7 +34,8 @@ class _Restore(object):
     def __init__(self, doc):
         self.doc = doc
         self.modified = bool(doc.Modified)
-        self.selected = [obj.Id for obj in doc.Objects if obj.IsSelected]
+        # IsSelected 是方法不是屬性；漏括號會恆為真，等於把全文件記成已選取。
+        self.selected = [obj.Id for obj in doc.Objects if obj.IsSelected(False) > 0]
         self.hidden = []
         self.locked = []
 
@@ -108,9 +108,12 @@ def _run(doc, restore, ctx):
     else:
         config = default_config(document_name, PRODUCT_VERSION)
 
-    storeys, top_bound = read_storeys(doc)
-    lines = ["%s  FL=%s" % (item.name, item.fl) for item in storeys]
-    lines.append("%s=%s" % (STOREY_FL_TOP_KEY, top_bound))
+    storeys = read_storeys(doc)
+    lines = [
+        "%s  FL=%s" % (item.name, item.fl)
+        for item in sorted(storeys, key=lambda row: row.fl)
+    ]
+    lines.append("Top storey has no upper bound.")
     _print("Storeys:")
     for line in lines:
         _print("  " + line)
@@ -157,16 +160,21 @@ def _run(doc, restore, ctx):
     mp = meshing_parameters(density, scale)
     products = []
     problems = []
+    per_storey = {}
+    highest_z = None
     for obj in objects:
         mesh = geometry_to_mesh(obj.Geometry, mp)
         if mesh is None:
             problems.append("%s: no mesh" % obj.Id)
             continue
         bbox = mesh.GetBoundingBox(True)
-        hit = assign_storey(bbox.Min.Z, storeys, top_bound)
+        hit = assign_storey(bbox.Min.Z, storeys)
         if hit.status != STATUS_OK:
             problems.append("%s: storey %s" % (obj.Id, hit.status))
             continue
+        per_storey[hit.name] = per_storey.get(hit.name, 0) + 1
+        if highest_z is None or bbox.Max.Z > highest_z:
+            highest_z = bbox.Max.Z
         layer = doc.Layers[obj.Attributes.LayerIndex]
         vertices, faces = mesh_to_meters(mesh, scale)
         products.append(
@@ -183,6 +191,13 @@ def _run(doc, restore, ctx):
         raise R2MStop("Cannot publish: " + "; ".join(problems[:8]))
     if not products:
         raise R2MStop("No meshable objects.")
+
+    # 最高層無上界，所以改用這份摘要讓使用者看出有沒有物件飄到天上。
+    _print("Objects per storey:")
+    for item in sorted(storeys, key=lambda row: row.fl):
+        _print("  %s  %s" % (item.name, per_storey.get(item.name, 0)))
+    _print("Highest object Z: %s" % highest_z)
+    append_log(paths["log"], "INFO", COMMAND, "highest object Z %s" % highest_z)
 
     export_storeys = [
         ExportStorey(item.name, rhino_to_meters(item.fl, scale)) for item in storeys

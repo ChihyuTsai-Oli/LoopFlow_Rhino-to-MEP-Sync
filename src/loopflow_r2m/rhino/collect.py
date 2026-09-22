@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from loopflow_r2m.exceptions import R2MStop
-from loopflow_r2m.layers import is_storey_layer_path, layer_is_excluded
+from loopflow_r2m.layers import is_r2m_system_layer_path, layer_is_excluded
 from loopflow_r2m.names import GEOM_CLASSES
 
 
@@ -41,7 +41,7 @@ def layer_rows(doc, exclude_token):
         if layer.IsDeleted:
             continue
         path = layer.FullPath
-        if is_storey_layer_path(path) or layer_is_excluded(path, exclude_token):
+        if is_r2m_system_layer_path(path) or layer_is_excluded(path, exclude_token):
             continue
         rows.append({"path": path, "count": counts.get(path, 0)})
     return rows

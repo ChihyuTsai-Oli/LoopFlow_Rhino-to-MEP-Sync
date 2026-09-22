@@ -2,7 +2,11 @@ import unittest
 
 from tests import SRC  # noqa: F401
 
-from loopflow_r2m.layers import is_storey_layer_path, layer_is_excluded
+from loopflow_r2m.layers import (
+    is_r2m_system_layer_path,
+    is_storey_layer_path,
+    layer_is_excluded,
+)
 
 
 class LayerTests(unittest.TestCase):
@@ -22,10 +26,18 @@ class LayerTests(unittest.TestCase):
         self.assertFalse(layer_is_excluded("Project//Finish", "  "))
 
     def test_storey_layer_path(self):
-        self.assertTrue(is_storey_layer_path("R2M_Storey"))
-        self.assertTrue(is_storey_layer_path("Default::R2M_Storey"))
-        self.assertFalse(is_storey_layer_path("R2M_Storey_Extra"))
+        self.assertTrue(is_storey_layer_path("R2M::Storey"))
+        self.assertTrue(is_storey_layer_path("Default::R2M::Storey"))
+        self.assertFalse(is_storey_layer_path("R2M::Storey_Extra"))
+        self.assertFalse(is_storey_layer_path("R2M"))
         self.assertFalse(is_storey_layer_path("Wall"))
+
+    def test_r2m_tree_never_exports(self):
+        self.assertTrue(is_r2m_system_layer_path("R2M"))
+        self.assertTrue(is_r2m_system_layer_path("R2M::Storey"))
+        self.assertTrue(is_r2m_system_layer_path("R2M::Storey::Old"))
+        self.assertFalse(is_r2m_system_layer_path("R2M_Inbound"))
+        self.assertFalse(is_r2m_system_layer_path("Wall"))
 
 
 if __name__ == "__main__":

@@ -1,16 +1,14 @@
-"""讀 R2M 高程框。"""
+"""讀 R2M 高程框。高程由 RMStorey 寫入，這裡只讀與驗算。"""
 
 from __future__ import annotations
 
 from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.layers import is_storey_layer_path
-from loopflow_r2m.names import (
-    STOREY_FL_KEY,
-    STOREY_FL_TOP_KEY,
-    STOREY_LAYER,
-    STOREY_NAME_KEY,
-)
+from loopflow_r2m.names import STOREY_FL_KEY, STOREY_LAYER, STOREY_NAME_KEY
 from loopflow_r2m.storey import Storey
+
+# 高程與框的 Z 是同一個文件單位；只擋明顯被手改的值，不追浮點尾數。
+FL_CONSISTENCY_TOLERANCE = 1e-4
 
 
 def _user_text(obj, key):
@@ -31,7 +29,10 @@ def _parse_number(text, label):
 
 
 def read_storeys(doc):
-    """回傳 (storeys, top_bound)。缺少或衝突則 R2MStop。"""
+    """回傳 storeys。缺少、衝突或高程被手改則 R2MStop。
+
+    最高層無上界，所以不回傳上界值。
+    """
     found = []
     for obj in doc.Objects:
         if obj.IsReference:
@@ -48,28 +49,32 @@ def read_storeys(doc):
         fl = _parse_number(_user_text(obj, STOREY_FL_KEY), STOREY_FL_KEY)
         if not name or fl is None:
             raise R2MStop(
-                "Storey frames need %s and %s." % (STOREY_NAME_KEY, STOREY_FL_KEY)
+                "Storey frames need %s and %s. Run RMStorey."
+                % (STOREY_NAME_KEY, STOREY_FL_KEY)
             )
-        top = _parse_number(_user_text(obj, STOREY_FL_TOP_KEY), STOREY_FL_TOP_KEY)
-        found.append((Storey(name, fl), top))
+        found.append((Storey(name, fl), float(geom.GetBoundingBox(True).Min.Z)))
     if not found:
-        raise R2MStop("No storey frames on layer %s." % STOREY_LAYER)
+        raise R2MStop(
+            "No storey frames on layer %s. Run RMStorey." % STOREY_LAYER
+        )
     names = [item[0].name for item in found]
     if len(set(names)) != len(names):
         raise R2MStop("Duplicate storey names.")
     fls = [item[0].fl for item in found]
     if len(set(fls)) != len(fls):
         raise R2MStop("Duplicate storey FL values.")
-    storeys = [item[0] for item in found]
-    highest = max(storeys, key=lambda item: item.fl)
-    top_bound = None
-    for storey, top in found:
-        if storey.name == highest.name:
-            top_bound = top
-    if top_bound is None:
-        raise R2MStop(
-            "Highest storey needs %s as the top bound." % STOREY_FL_TOP_KEY
-        )
-    if top_bound <= highest.fl:
-        raise R2MStop("%s must be above the highest FL." % STOREY_FL_TOP_KEY)
-    return storeys, top_bound
+    _check_against_frame_height(found)
+    return [item[0] for item in found]
+
+
+def _check_against_frame_height(found):
+    """高程差必須等於框的 Z 差，否則是有人手動改過 UserText。"""
+    base_storey, base_z = found[0]
+    for storey, z in found[1:]:
+        expected = base_storey.fl + (z - base_z)
+        if abs(storey.fl - expected) > FL_CONSISTENCY_TOLERANCE:
+            raise R2MStop(
+                "Storey %s has %s=%s but its frame sits at %s. "
+                "%s is written by RMStorey; run RMStorey again."
+                % (storey.name, STOREY_FL_KEY, storey.fl, expected, STOREY_FL_KEY)
+            )

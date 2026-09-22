@@ -1,9 +1,9 @@
 """R2M 已決的機器名稱。指令名仍未凍結；這些是資料契約裡的圖層／欄位名。"""
 
-STOREY_LAYER = "R2M_Storey"
+LAYER_ROOT = "R2M"
+STOREY_LAYER = LAYER_ROOT + "::Storey"
 STOREY_NAME_KEY = "R2M_StoreyName"
 STOREY_FL_KEY = "R2M_FL"
-STOREY_FL_TOP_KEY = "R2M_FL_Top"
 DEFAULT_EXCLUDE_TOKEN = "//"
 PRODUCER = "LoopFlow R2M"
 PRODUCT_VERSION = "0.0.0-dev"

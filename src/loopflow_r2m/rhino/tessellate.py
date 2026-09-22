@@ -4,42 +4,8 @@ from __future__ import annotations
 
 from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.ifc_read import inbound_layer_color, inbound_layer_path, inbound_object_name
+from loopflow_r2m.rhino.layerutil import ensure_layer
 from loopflow_r2m.vendor import ensure_vendor
-
-
-def _ensure_layer(doc, full_path, rgb):
-    from Rhino.DocObjects import Layer
-    import System.Drawing
-
-    existing = doc.Layers.FindByFullPath(full_path, -1)
-    if existing >= 0:
-        layer = doc.Layers[existing]
-        layer.Color = System.Drawing.Color.FromArgb(int(rgb[0]), int(rgb[1]), int(rgb[2]))
-        doc.Layers.Modify(layer, existing, True)
-        return existing
-    parts = full_path.split("::")
-    parent_index = -1
-    built = []
-    index = -1
-    for part in parts:
-        built.append(part)
-        path = "::".join(built)
-        found = doc.Layers.FindByFullPath(path, -1)
-        if found >= 0:
-            parent_index = found
-            index = found
-            continue
-        lyr = Layer()
-        lyr.Name = part
-        if parent_index >= 0:
-            lyr.ParentLayerId = doc.Layers[parent_index].Id
-        if path == full_path:
-            lyr.Color = System.Drawing.Color.FromArgb(
-                int(rgb[0]), int(rgb[1]), int(rgb[2])
-            )
-        index = doc.Layers.Add(lyr)
-        parent_index = index
-    return index
 
 
 def tessellate_inbound(doc, ifc_path, metres_to_doc):
@@ -82,7 +48,7 @@ def tessellate_inbound(doc, ifc_path, metres_to_doc):
                 raise ValueError("empty mesh")
             ifc_type = shape.type
             guid = shape.guid
-            layer_index = _ensure_layer(
+            layer_index = ensure_layer(
                 doc, inbound_layer_path(ifc_type), inbound_layer_color(ifc_type)
             )
             attr = Rhino.DocObjects.ObjectAttributes()

@@ -179,7 +179,8 @@ def _show_eto(storey_lines, layers, saved):
     return _collect_choice(exclude_box.Text, layer_checks, geom, density)
 
 
-def _ask_string(prompt, default=""):
+def ask_string(prompt, default=""):
+    """指令列輸入字串。取消回 None。"""
     import Rhino
 
     getter = Rhino.Input.Custom.GetString()
@@ -200,7 +201,7 @@ def _show_cli(storey_lines, layers, saved):
     for line in storey_lines:
         print("  " + line)
 
-    exclude = _ask_string(
+    exclude = ask_string(
         "Exclude token (blank = none)",
         saved.get("exclude_token", DEFAULT_EXCLUDE_TOKEN) or "",
     )
@@ -218,7 +219,7 @@ def _show_cli(storey_lines, layers, saved):
                 default_idx.append(str(index))
         elif row["count"] > 0:
             default_idx.append(str(index))
-    picked = _ask_string("Layer numbers (comma-separated)", ",".join(default_idx))
+    picked = ask_string("Layer numbers (comma-separated)", ",".join(default_idx))
     if picked is None:
         return None
     selected_index = set()
@@ -237,7 +238,7 @@ def _show_cli(storey_lines, layers, saved):
             layer_checks.append((row["path"], False, None))
             continue
         default_type = saved_types.get(row["path"], "")
-        choice = _ask_string(
+        choice = ask_string(
             "IFC type for %s (%s)" % (row["path"], ", ".join(IFC_PRODUCT_TYPES)),
             default_type,
         )
@@ -249,12 +250,12 @@ def _show_cli(storey_lines, layers, saved):
     geom = {}
     for key, label, default in GEOM_CLASSES:
         current = saved_geom.get(key, default)
-        answer = _ask_string("Include %s? Yes/No" % label, "Yes" if current else "No")
+        answer = ask_string("Include %s? Yes/No" % label, "Yes" if current else "No")
         if answer is None:
             return None
         geom[key] = str(answer).strip().lower() in ("y", "yes", "1", "true")
 
-    density = _ask_string(
+    density = ask_string(
         "Mesh density (coarse/medium/fine)",
         saved.get("mesh_density", DEFAULT_MESH_DENSITY),
     )
@@ -282,6 +283,47 @@ def confirm_yes(prompt, title="R2M"):
             return False
         name = getter.Option().EnglishName
         return name == "Yes"
+
+
+def pick_curves(prompt, multiple):
+    """選曲線。回傳 Guid tuple；取消或空選回 None。"""
+    import Rhino
+
+    getter = Rhino.Input.Custom.GetObject()
+    getter.SetCommandPrompt(prompt)
+    getter.GeometryFilter = Rhino.DocObjects.ObjectType.Curve
+    getter.EnablePreSelect(multiple, True)
+    getter.SubObjectSelect = False
+    if multiple:
+        result = getter.GetMultiple(1, 0)
+    else:
+        result = getter.Get()
+    if result != Rhino.Input.GetResult.Object:
+        return None
+    ids = tuple(getter.Object(i).ObjectId for i in range(getter.ObjectCount))
+    return ids or None
+
+
+def ask_number(prompt, title="R2M"):
+    """彈窗輸入數字。取消回 None；非數字則 R2MStop。"""
+    text = _prompt_text(prompt, title)
+    if text is None:
+        return None
+    try:
+        return float(str(text).strip().replace(",", "."))
+    except ValueError:
+        raise R2MStop("%s is not a number: %s" % (prompt, text))
+
+
+def _prompt_text(prompt, title):
+    """優先用彈窗；環境不支援時退回指令列。"""
+    try:
+        import Rhino.UI
+
+        ok, value = Rhino.UI.Dialogs.ShowEditBox(title, prompt, "", False)
+    except Exception:
+        return ask_string(prompt)
+    return value if ok else None
 
 
 def pick_ifc_file():
@@ -364,7 +406,7 @@ def _show_open_cli(lines, folders):
     print("RMOpen:")
     for line in lines:
         print("  " + line)
-    choice = _ask_string("Open Config / Models / Docs / Close", "Close")
+    choice = ask_string("Open Config / Models / Docs / Close", "Close")
     if choice is None:
         return False
     key = str(choice).strip().lower()
