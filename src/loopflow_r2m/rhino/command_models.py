@@ -5,18 +5,22 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from os.path import basename
 
-from loopflow_r2m.config import ConfigError, default_config, load_config, save_config
+from loopflow_r2m.config import (
+    ConfigError,
+    default_config,
+    has_saved_panel,
+    load_config,
+    panel_for,
+    save_config,
+    set_panel,
+)
 from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.guid import compress_guid
 from loopflow_r2m.ifc_validate import ValidateError
 from loopflow_r2m.ifc_write import ExportMeta, ExportProduct, ExportStorey
 from loopflow_r2m.layers import layer_is_excluded
 from loopflow_r2m.logutil import append_log
-from loopflow_r2m.names import (
-    DEFAULT_EXCLUDE_TOKEN,
-    DEFAULT_MESH_DENSITY,
-    PRODUCT_VERSION,
-)
+from loopflow_r2m.names import PRODUCT_VERSION
 from loopflow_r2m.paths import config_paths
 from loopflow_r2m.publish import publish_models
 from loopflow_r2m.rhino.collect import collect_objects, default_geom_enabled, layer_rows
@@ -36,6 +40,19 @@ from loopflow_r2m.units import rhino_to_meters
 
 
 COMMAND = "RMModels"
+
+
+def _persist_panel(paths, config, document_name, choice, log_msg):
+    """寫這個 3dm 的面板。占用時警告，不擋發布。"""
+    set_panel(config, document_name, choice)
+    try:
+        save_config(paths["config"], config)
+        append_log(paths["log"], "INFO", COMMAND, log_msg)
+        return True
+    except ConfigError as exc:
+        append_log(paths["log"], "WARN", COMMAND, str(exc))
+        _print("Could not write config.json: %s" % exc)
+        return False
 
 
 class _Restore(object):
@@ -112,7 +129,6 @@ def _run(doc, restore, ctx):
     document_name = basename(path)
     if paths["config"].is_file():
         config = load_config(paths["config"])
-        config["document_name"] = document_name
     else:
         config = default_config(document_name, PRODUCT_VERSION)
 
@@ -130,17 +146,34 @@ def _run(doc, restore, ctx):
     for line in lines:
         _print("  " + line)
 
-    saved_sel = config.get("layer_selection") or {}
-    dialog_saved = {
-        "exclude_token": saved_sel.get("exclude_token", DEFAULT_EXCLUDE_TOKEN),
-        "layer_paths": saved_sel.get("layer_paths") or [],
-        "layer_type_map": config.get("layer_type_map") or {},
-        "geom": saved_sel.get("geom") or {},
-        "mesh_density": config.get("mesh_density", DEFAULT_MESH_DENSITY),
-    }
-    choice = show_models_dialog(lines, layer_rows(doc, ""), dialog_saved)
+    dialog_saved = panel_for(config, document_name)
+
+    def on_save(choice_):
+        if not _persist_panel(paths, config, document_name, choice_, "panel saved"):
+            raise ConfigError("config.json 無法寫入（檔案可能被占用）")
+
+    def on_load():
+        if paths["config"].is_file():
+            try:
+                fresh = load_config(paths["config"])
+            except ConfigError:
+                return None
+            if not has_saved_panel(fresh, document_name):
+                return None
+            return panel_for(fresh, document_name)
+        if not has_saved_panel(config, document_name):
+            return None
+        return panel_for(config, document_name)
+
+    choice = show_models_dialog(
+        lines, layer_rows(doc, ""), dialog_saved, on_save, on_load
+    )
     if choice is None:
         raise R2MStop("Cancelled.")
+
+    _persist_panel(
+        paths, config, document_name, choice, "panel written before publish"
+    )
 
     exclude_token = choice["exclude_token"]
     selected = [
@@ -158,7 +191,7 @@ def _run(doc, restore, ctx):
     counts = {row["path"]: row["count"] for row in layer_rows(doc, "")}
     _print(
         "Each listed layer becomes one IFC type. "
-        "Blank type is IfcBuildingElementProxy (reference)."
+        "Default type is IfcBuildingElementProxy."
     )
     for path_ in selected:
         _print("  %s (%s) → %s" % (path_, counts.get(path_, 0), types[path_]))
@@ -283,13 +316,13 @@ def _run(doc, restore, ctx):
     )
 
     config["product_version"] = PRODUCT_VERSION
-    config["layer_selection"] = {
-        "exclude_token": exclude_token,
-        "layer_paths": selected,
-        "geom": geom_enabled,
-    }
-    config["layer_type_map"] = {path_: types[path_] for path_ in selected}
-    config["mesh_density"] = density
+    persist_choice = dict(choice)
+    persist_choice["exclude_token"] = exclude_token
+    persist_choice["layer_paths"] = selected
+    persist_choice["layer_type_map"] = types
+    persist_choice["geom"] = geom_enabled
+    persist_choice["mesh_density"] = density
+    set_panel(config, document_name, persist_choice)
     config["last_export"] = {
         "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "ifc_path": "models/" + paths["ifc"].name,

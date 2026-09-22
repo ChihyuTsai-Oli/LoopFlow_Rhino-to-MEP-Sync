@@ -19,7 +19,8 @@ CONFIG_NAME = "config.json"
 INBOUND_LAYER_ROOT = "R2M_Inbound"
 INBOUND_COUNT_WARNING_KEY = "inbound_count_warning"
 
-# 匯出時明確挑選；Proxy 必須使用者自己選，不得當缺省。
+# 未選＝IfcBuildingElementProxy（參考）。下拉預設即此項，不另放空白佔位。
+DEFAULT_IFC_TYPE = "IfcBuildingElementProxy"
 IFC_PRODUCT_TYPES = (
     "IfcWall",
     "IfcCovering",
@@ -35,8 +36,15 @@ IFC_PRODUCT_TYPES = (
     "IfcRamp",
     "IfcPlate",
     "IfcMember",
-    "IfcBuildingElementProxy",
+    DEFAULT_IFC_TYPE,
 )
+
+
+def ifc_type_choices():
+    """下拉順序：預設 Proxy 在最前，其餘維持契約表順序。"""
+    rest = [name for name in IFC_PRODUCT_TYPES if name != DEFAULT_IFC_TYPE]
+    return (DEFAULT_IFC_TYPE,) + tuple(rest)
+
 
 # 相對公差無單位；最小邊長以公尺計，寫入 Rhino 時再換成文件單位。
 MESH_RELATIVE_TOLERANCE = {"coarse": 0.8, "medium": 0.4, "fine": 0.15}

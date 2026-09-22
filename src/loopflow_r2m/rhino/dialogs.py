@@ -5,10 +5,12 @@ from __future__ import annotations
 from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.names import (
     DEFAULT_EXCLUDE_TOKEN,
+    DEFAULT_IFC_TYPE,
     DEFAULT_MESH_DENSITY,
     GEOM_CLASSES,
     IFC_PRODUCT_TYPES,
     MESH_DENSITIES,
+    ifc_type_choices,
 )
 
 
@@ -17,13 +19,19 @@ def _placeholder():
 
 
 def _resolve_layer_type(choice):
-    """未選或參考項視為 IfcBuildingElementProxy。"""
+    """未選或舊的參考項視為 IfcBuildingElementProxy。"""
     text = "" if choice is None else str(choice).strip()
     if not text or text == _placeholder():
-        return "IfcBuildingElementProxy"
+        return DEFAULT_IFC_TYPE
     if text not in IFC_PRODUCT_TYPES:
         raise R2MStop("Unknown IFC type for layer: %s" % text)
     return text
+
+
+def _type_index(type_choices, previous):
+    if previous in type_choices:
+        return type_choices.index(previous)
+    return type_choices.index(DEFAULT_IFC_TYPE)
 
 
 def _normalize_exclude(text):
@@ -51,24 +59,22 @@ def _checkbox_on(box):
     return box.Checked is True
 
 
-def show_models_dialog(storey_lines, layers, saved):
-    """回傳選擇 dict；取消回 None。"""
+def show_models_dialog(storey_lines, layers, saved, on_save=None, on_load=None):
+    """回傳選擇 dict；取消回 None。Save／Load 不關對話框。"""
     try:
-        return _show_eto(storey_lines, layers, saved)
+        return _show_eto(storey_lines, layers, saved, on_save, on_load)
     except ImportError:
         return _show_cli(storey_lines, layers, saved)
 
 
-def _collect_choice(exclude_text, layer_checks, geom, density):
+def _snapshot_choice(exclude_text, layer_checks, geom, density):
+    """可含零個勾選；未勾圖層的下拉類型也一併記住。"""
     selected = []
     types = {}
     for path, checked, choice in layer_checks:
-        if not checked:
-            continue
-        selected.append(path)
         types[path] = _resolve_layer_type(choice)
-    if not selected:
-        raise R2MStop("No layers selected.")
+        if checked:
+            selected.append(path)
     if density not in MESH_DENSITIES:
         density = DEFAULT_MESH_DENSITY
     return {
@@ -80,19 +86,57 @@ def _collect_choice(exclude_text, layer_checks, geom, density):
     }
 
 
-def _show_eto(storey_lines, layers, saved):
+def _collect_choice(exclude_text, layer_checks, geom, density):
+    result = _snapshot_choice(exclude_text, layer_checks, geom, density)
+    if not result["layer_paths"]:
+        raise R2MStop("No layers selected.")
+    result["layer_type_map"] = {
+        path: result["layer_type_map"][path] for path in result["layer_paths"]
+    }
+    return result
+
+
+def _read_layer_checks(layer_widgets, type_choices):
+    layer_checks = []
+    for path, check, drop in layer_widgets:
+        index = int(drop.SelectedIndex)
+        choice = type_choices[index] if 0 <= index < len(type_choices) else None
+        layer_checks.append((path, _checkbox_on(check), choice))
+    return layer_checks
+
+
+def _apply_panel(
+    saved,
+    exclude_box,
+    layer_widgets,
+    type_choices,
+    geom_checks,
+    density_list,
+    density_choices,
+):
+    saved = saved or {}
+    exclude_box.Text = "" if saved.get("exclude_token") is None else str(saved.get("exclude_token"))
+    saved_types = dict(saved.get("layer_type_map") or {})
+    saved_layers = list(saved.get("layer_paths") or [])
+    for path, check, drop in layer_widgets:
+        check.Checked = path in saved_layers
+        drop.SelectedIndex = _type_index(type_choices, saved_types.get(path))
+    saved_geom = saved.get("geom") or {}
+    for key, _label, default in GEOM_CLASSES:
+        if key in geom_checks:
+            geom_checks[key].Checked = bool(saved_geom.get(key, default))
+    density0 = saved.get("mesh_density", DEFAULT_MESH_DENSITY)
+    if density0 not in MESH_DENSITIES:
+        density0 = DEFAULT_MESH_DENSITY
+    density_list.SelectedIndex = density_choices.index(density0)
+
+
+def _show_eto(storey_lines, layers, saved, on_save=None, on_load=None):
     import Eto.Drawing as ed
     import Eto.Forms as ef
     from Rhino.UI import RhinoEtoApp
 
     saved = saved or {}
-    saved_types = dict(saved.get("layer_type_map") or {})
-    saved_layers = list(saved.get("layer_paths") or [])
-    saved_geom = saved.get("geom") or {}
-    exclude0 = saved.get("exclude_token", DEFAULT_EXCLUDE_TOKEN)
-    density0 = saved.get("mesh_density", DEFAULT_MESH_DENSITY)
-    if density0 not in MESH_DENSITIES:
-        density0 = DEFAULT_MESH_DENSITY
 
     dlg = ef.Dialog[bool]()
     dlg.Title = "RMModels"
@@ -105,9 +149,8 @@ def _show_eto(storey_lines, layers, saved):
     storey_box.Height = 110
 
     exclude_box = ef.TextBox()
-    exclude_box.Text = "" if exclude0 is None else str(exclude0)
 
-    type_choices = [_placeholder()] + list(IFC_PRODUCT_TYPES)
+    type_choices = list(ifc_type_choices())
     layer_widgets = []
     layer_stack = ef.DynamicLayout()
     layer_stack.Spacing = ed.Size(4, 4)
@@ -115,11 +158,8 @@ def _show_eto(storey_lines, layers, saved):
         path = row["path"]
         check = ef.CheckBox()
         check.Text = "%s  (%s)" % (path, row["count"])
-        check.Checked = path in saved_layers
         drop = ef.DropDown()
         drop.DataStore = type_choices
-        previous = saved_types.get(path)
-        drop.SelectedIndex = type_choices.index(previous) if previous in type_choices else 0
         line = ef.DynamicLayout()
         line.DefaultSpacing = ed.Size(8, 0)
         line.AddRow(check, drop)
@@ -153,7 +193,6 @@ def _show_eto(storey_lines, layers, saved):
     for key, label, default in GEOM_CLASSES:
         box = ef.CheckBox()
         box.Text = label
-        box.Checked = bool(saved_geom.get(key, default))
         geom_checks[key] = box
         row_items.append(box)
         if len(row_items) == 4:
@@ -166,10 +205,32 @@ def _show_eto(storey_lines, layers, saved):
     density_list = ef.RadioButtonList()
     density_list.Orientation = ef.Orientation.Horizontal
     density_list.DataStore = density_choices
-    density_list.SelectedIndex = density_choices.index(density0)
+
+    _apply_panel(
+        saved,
+        exclude_box,
+        layer_widgets,
+        type_choices,
+        geom_checks,
+        density_list,
+        density_choices,
+    )
 
     ok = _eto_button(ef, "Publish")
     cancel = _eto_button(ef, "Cancel")
+    save_btn = _eto_button(ef, "Save Config")
+    load_btn = _eto_button(ef, "Load Config")
+
+    def _current_snapshot():
+        layer_checks = _read_layer_checks(layer_widgets, type_choices)
+        geom = {key: _checkbox_on(box) for key, box in geom_checks.items()}
+        density_index = int(density_list.SelectedIndex)
+        density = (
+            density_choices[density_index]
+            if 0 <= density_index < len(density_choices)
+            else DEFAULT_MESH_DENSITY
+        )
+        return _snapshot_choice(exclude_box.Text, layer_checks, geom, density)
 
     def on_ok(sender, args):
         if not any(_checkbox_on(check) for _path, check, _drop in layer_widgets):
@@ -182,13 +243,48 @@ def _show_eto(storey_lines, layers, saved):
     def on_cancel(sender, args):
         dlg.Close(False)
 
+    def on_save_click(sender, args):
+        from Eto.Forms import MessageBox
+
+        if on_save is None:
+            MessageBox.Show("Save Config is not available.", dlg.Title)
+            return
+        try:
+            on_save(_current_snapshot())
+        except Exception as exc:
+            MessageBox.Show(str(exc), dlg.Title)
+            return
+        MessageBox.Show("Saved.", dlg.Title)
+
+    def on_load_click(sender, args):
+        from Eto.Forms import MessageBox
+
+        if on_load is None:
+            MessageBox.Show("No saved panel for this file.", dlg.Title)
+            return
+        loaded = on_load()
+        if not loaded:
+            MessageBox.Show("No saved panel for this file.", dlg.Title)
+            return
+        _apply_panel(
+            loaded,
+            exclude_box,
+            layer_widgets,
+            type_choices,
+            geom_checks,
+            density_list,
+            density_choices,
+        )
+
     ok.Click += on_ok
     cancel.Click += on_cancel
+    save_btn.Click += on_save_click
+    load_btn.Click += on_load_click
     dlg.DefaultButton = ok
     dlg.AbortButton = cancel
 
     buttons = ef.DynamicLayout()
-    buttons.AddRow(None, cancel, ok)
+    buttons.AddRow(None, save_btn, load_btn, cancel, ok)
 
     root = ef.DynamicLayout()
     root.Spacing = ed.Size(8, 8)
@@ -196,7 +292,7 @@ def _show_eto(storey_lines, layers, saved):
     root.AddRow(storey_box)
     root.AddRow(_eto_label(ef, "Exclude token (blank = none)"))
     root.AddRow(exclude_box)
-    root.AddRow(_eto_label(ef, "Layers — check at least one to export; type is optional (reference = IfcBuildingElementProxy)"))
+    root.AddRow(_eto_label(ef, "Layers — check at least one to export; type defaults to IfcBuildingElementProxy"))
     root.AddRow(layer_toolbar)
     root.AddRow(layer_scroll)
     root.AddRow(_eto_label(ef, "Geometry types"))
@@ -210,20 +306,7 @@ def _show_eto(storey_lines, layers, saved):
     result = dlg.ShowModal(owner) if owner is not None else dlg.ShowModal()
     if not result:
         return None
-
-    layer_checks = []
-    for path, check, drop in layer_widgets:
-        index = int(drop.SelectedIndex)
-        choice = type_choices[index] if 0 <= index < len(type_choices) else None
-        layer_checks.append((path, _checkbox_on(check), choice))
-    geom = {key: _checkbox_on(box) for key, box in geom_checks.items()}
-    density_index = int(density_list.SelectedIndex)
-    density = (
-        density_choices[density_index]
-        if 0 <= density_index < len(density_choices)
-        else DEFAULT_MESH_DENSITY
-    )
-    return _collect_choice(exclude_box.Text, layer_checks, geom, density)
+    return _current_snapshot()
 
 
 def ask_string(prompt, default=""):
@@ -288,10 +371,10 @@ def _show_cli(storey_lines, layers, saved):
         if index not in selected_index:
             layer_checks.append((row["path"], False, None))
             continue
-        default_type = saved_types.get(row["path"], "")
+        default_type = saved_types.get(row["path"], DEFAULT_IFC_TYPE)
         choice = ask_string(
-            "IFC type for %s (blank = reference; %s)"
-            % (row["path"], ", ".join(IFC_PRODUCT_TYPES)),
+            "IFC type for %s (blank = %s; %s)"
+            % (row["path"], DEFAULT_IFC_TYPE, ", ".join(IFC_PRODUCT_TYPES)),
             default_type,
         )
         if choice is None:
