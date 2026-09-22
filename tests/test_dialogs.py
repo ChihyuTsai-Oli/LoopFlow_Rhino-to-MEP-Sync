@@ -3,7 +3,11 @@ import unittest
 from tests import SRC  # noqa: F401
 
 from loopflow_r2m.exceptions import R2MStop
-from loopflow_r2m.names import DEFAULT_IFC_TYPE, ifc_type_choices
+from loopflow_r2m.names import (
+    DEFAULT_IFC_TYPE,
+    LEGACY_DEFAULT_IFC_TYPE,
+    ifc_type_choices,
+)
 from loopflow_r2m.rhino.dialogs import (
     _collect_choice,
     _placeholder,
@@ -14,13 +18,18 @@ from loopflow_r2m.rhino.dialogs import (
 
 
 class ResolveLayerTypeTests(unittest.TestCase):
-    def test_blank_and_placeholder_are_proxy(self):
+    def test_blank_and_placeholder_are_plate(self):
+        self.assertEqual(DEFAULT_IFC_TYPE, "IfcPlate")
         self.assertEqual(_resolve_layer_type(None), DEFAULT_IFC_TYPE)
         self.assertEqual(_resolve_layer_type(""), DEFAULT_IFC_TYPE)
         self.assertEqual(_resolve_layer_type(_placeholder()), DEFAULT_IFC_TYPE)
 
-    def test_explicit_wall(self):
+    def test_explicit_wall_and_covering_kept(self):
         self.assertEqual(_resolve_layer_type("IfcWall"), "IfcWall")
+        self.assertEqual(_resolve_layer_type("IfcCovering"), "IfcCovering")
+
+    def test_explicit_proxy_kept(self):
+        self.assertEqual(_resolve_layer_type(LEGACY_DEFAULT_IFC_TYPE), LEGACY_DEFAULT_IFC_TYPE)
 
     def test_unknown_type_stops(self):
         with self.assertRaises(R2MStop):
@@ -28,17 +37,21 @@ class ResolveLayerTypeTests(unittest.TestCase):
 
 
 class TypeChoiceTests(unittest.TestCase):
-    def test_dropdown_starts_with_proxy(self):
+    def test_dropdown_starts_with_plate(self):
         choices = ifc_type_choices()
         self.assertEqual(choices[0], DEFAULT_IFC_TYPE)
+        self.assertEqual(choices[0], "IfcPlate")
         self.assertNotIn("(reference)", choices)
+        self.assertIn(LEGACY_DEFAULT_IFC_TYPE, choices)
         self.assertEqual(_type_index(choices, None), 0)
         self.assertEqual(_type_index(choices, _placeholder()), 0)
+        self.assertEqual(_type_index(choices, LEGACY_DEFAULT_IFC_TYPE), 0)
         self.assertEqual(_type_index(choices, "IfcWall"), choices.index("IfcWall"))
+        self.assertEqual(_type_index(choices, "IfcCovering"), choices.index("IfcCovering"))
 
 
 class CollectChoiceTests(unittest.TestCase):
-    def test_checked_blank_type_is_proxy(self):
+    def test_checked_blank_type_is_plate(self):
         result = _collect_choice(
             "",
             [("Wall", True, _placeholder())],
@@ -56,6 +69,15 @@ class CollectChoiceTests(unittest.TestCase):
             "medium",
         )
         self.assertEqual(result["layer_type_map"]["Wall"], "IfcWall")
+
+    def test_checked_proxy_keeps_type(self):
+        result = _collect_choice(
+            "",
+            [("Misc", True, LEGACY_DEFAULT_IFC_TYPE)],
+            {"brep": True},
+            "medium",
+        )
+        self.assertEqual(result["layer_type_map"]["Misc"], LEGACY_DEFAULT_IFC_TYPE)
 
     def test_unchecked_not_exported(self):
         with self.assertRaises(R2MStop):

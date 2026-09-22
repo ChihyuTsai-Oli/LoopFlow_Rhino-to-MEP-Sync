@@ -20,7 +20,7 @@ from loopflow_r2m.ifc_validate import ValidateError
 from loopflow_r2m.ifc_write import ExportMeta, ExportProduct, ExportStorey
 from loopflow_r2m.layers import layer_is_excluded
 from loopflow_r2m.logutil import append_log
-from loopflow_r2m.names import PRODUCT_VERSION
+from loopflow_r2m.names import PRODUCT_VERSION, DEFAULT_IFC_TYPE
 from loopflow_r2m.paths import config_paths
 from loopflow_r2m.publish import publish_models
 from loopflow_r2m.rhino.collect import collect_objects, default_geom_enabled, layer_rows
@@ -186,12 +186,12 @@ def _run(doc, restore, ctx):
     types = dict(choice["layer_type_map"])
     for path_ in selected:
         if path_ not in types:
-            types[path_] = "IfcBuildingElementProxy"
+            types[path_] = DEFAULT_IFC_TYPE
 
     counts = {row["path"]: row["count"] for row in layer_rows(doc, "")}
     _print(
         "Each listed layer becomes one IFC type. "
-        "Default type is IfcBuildingElementProxy."
+        "Default type is IfcPlate. Ceilings: IfcCovering."
     )
     for path_ in selected:
         _print("  %s (%s) → %s" % (path_, counts.get(path_, 0), types[path_]))

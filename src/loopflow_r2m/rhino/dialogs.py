@@ -9,6 +9,7 @@ from loopflow_r2m.names import (
     DEFAULT_MESH_DENSITY,
     GEOM_CLASSES,
     IFC_PRODUCT_TYPES,
+    LEGACY_DEFAULT_IFC_TYPE,
     MESH_DENSITIES,
     ifc_type_choices,
 )
@@ -18,8 +19,14 @@ def _placeholder():
     return "(reference)"
 
 
+def _is_unset_type(choice):
+    """空白、舊佔位、舊預設 Proxy 都當成未選（開面板時改顯示 Plate）。"""
+    text = "" if choice is None else str(choice).strip()
+    return (not text) or text == _placeholder() or text == LEGACY_DEFAULT_IFC_TYPE
+
+
 def _resolve_layer_type(choice):
-    """未選或舊的參考項視為 IfcBuildingElementProxy。"""
+    """未選或舊佔位視為 IfcPlate。下拉明示的 Proxy 仍寫 Proxy。"""
     text = "" if choice is None else str(choice).strip()
     if not text or text == _placeholder():
         return DEFAULT_IFC_TYPE
@@ -29,8 +36,9 @@ def _resolve_layer_type(choice):
 
 
 def _type_index(type_choices, previous):
-    if previous in type_choices:
-        return type_choices.index(previous)
+    effective = DEFAULT_IFC_TYPE if _is_unset_type(previous) else previous
+    if effective in type_choices:
+        return type_choices.index(effective)
     return type_choices.index(DEFAULT_IFC_TYPE)
 
 
@@ -292,7 +300,7 @@ def _show_eto(storey_lines, layers, saved, on_save=None, on_load=None):
     root.AddRow(storey_box)
     root.AddRow(_eto_label(ef, "Exclude token (blank = none)"))
     root.AddRow(exclude_box)
-    root.AddRow(_eto_label(ef, "Layers — check at least one to export; type defaults to IfcBuildingElementProxy"))
+    root.AddRow(_eto_label(ef, "Layers — check at least one to export; type defaults to IfcPlate (ceilings: IfcCovering)"))
     root.AddRow(layer_toolbar)
     root.AddRow(layer_scroll)
     root.AddRow(_eto_label(ef, "Geometry types"))
@@ -372,8 +380,10 @@ def _show_cli(storey_lines, layers, saved):
             layer_checks.append((row["path"], False, None))
             continue
         default_type = saved_types.get(row["path"], DEFAULT_IFC_TYPE)
+        if _is_unset_type(default_type):
+            default_type = DEFAULT_IFC_TYPE
         choice = ask_string(
-            "IFC type for %s (blank = %s; %s)"
+            "IFC type for %s (blank = %s; ceilings = IfcCovering; %s)"
             % (row["path"], DEFAULT_IFC_TYPE, ", ".join(IFC_PRODUCT_TYPES)),
             default_type,
         )

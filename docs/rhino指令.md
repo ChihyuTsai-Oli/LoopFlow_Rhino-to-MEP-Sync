@@ -5,11 +5,11 @@
 | 候選 | 角色 |
 |---|---|
 | `RMStorey` | 說明窗 → 選框 → 彈窗選整棟或只做其中幾層 → 編列名稱／高程，搬到 `R2M::Storey` |
-| `RMModels` | 確認樓層 → 排除記號 → 最末端圖層（全選／還原上次）→ IFC 類型（未選＝參考）→ 類別勾選 → 網格密度 → 發布建築殼 IFC |
+| `RMModels` | 確認樓層 → 排除記號 → 最末端圖層（全選／還原上次）→ IFC 類型（未選＝IfcPlate；天花＝IfcCovering）→ 類別勾選 → 網格密度 → 發布建築殼 IFC |
 | `RMInbound` | 確認單位 → 選 IFC → 類別統計 →（可選件數警告）→ 建鎖定網面 |
 | `RMOpen` | Health 摘要；開 Config／models／Docs |
 
-介面英文。`RMModels`／`RMOpen` 未存檔則停；`RMStorey`／`RMInbound` 不要求已存檔（未存檔只是不寫 log）。`RMModels` 只發布嚴格落在該層高程框內的勾選圖層物件；碰到框線則停。發布前會再列出圖層→類型對照。未選類型的勾選圖層寫成參考用 `IfcBuildingElementProxy`。
+介面英文。`RMModels`／`RMOpen` 未存檔則停；`RMStorey`／`RMInbound` 不要求已存檔（未存檔只是不寫 log）。`RMModels` 只發布嚴格落在該層高程框內的勾選圖層物件；碰到框線則停。發布前會再列出圖層→類型對照。未選類型的勾選圖層寫成 `IfcPlate`；天花請選 `IfcCovering`。
 
 對照 R2B `RB*`、R2O `RO*`；本產品前綴暫用 `RM`。正式 yak 裝好前，**不要**在指令列打 `RMOpen` 這三個名字（尚未註冊）。開發期從 ScriptEditor 跑時，每次會丟掉已載入的 `loopflow_r2m`，不必為了換程式碼而重開 Rhino。
 

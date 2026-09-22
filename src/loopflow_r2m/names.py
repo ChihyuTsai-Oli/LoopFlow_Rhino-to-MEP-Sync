@@ -19,8 +19,10 @@ CONFIG_NAME = "config.json"
 INBOUND_LAYER_ROOT = "R2M_Inbound"
 INBOUND_COUNT_WARNING_KEY = "inbound_count_warning"
 
-# 未選＝IfcBuildingElementProxy（參考）。下拉預設即此項，不另放空白佔位。
-DEFAULT_IFC_TYPE = "IfcBuildingElementProxy"
+# 未選＝IfcPlate（泛用板件，Archicad 較可能顯示）。天花請明示 IfcCovering。
+# 不下 IfcCeiling（IFC4 無此產品類）。舊預設 Proxy 讀回來當未選。
+DEFAULT_IFC_TYPE = "IfcPlate"
+LEGACY_DEFAULT_IFC_TYPE = "IfcBuildingElementProxy"
 IFC_PRODUCT_TYPES = (
     "IfcWall",
     "IfcCovering",
@@ -36,12 +38,12 @@ IFC_PRODUCT_TYPES = (
     "IfcRamp",
     "IfcPlate",
     "IfcMember",
-    DEFAULT_IFC_TYPE,
+    LEGACY_DEFAULT_IFC_TYPE,
 )
 
 
 def ifc_type_choices():
-    """下拉順序：預設 Proxy 在最前，其餘維持契約表順序。"""
+    """下拉順序：預設 Plate 在最前，其餘維持契約表順序。"""
     rest = [name for name in IFC_PRODUCT_TYPES if name != DEFAULT_IFC_TYPE]
     return (DEFAULT_IFC_TYPE,) + tuple(rest)
 
