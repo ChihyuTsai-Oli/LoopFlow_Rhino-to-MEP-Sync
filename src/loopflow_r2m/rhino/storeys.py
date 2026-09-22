@@ -52,7 +52,15 @@ def read_storeys(doc):
                 "Storey frames need %s and %s. Run RMStorey."
                 % (STOREY_NAME_KEY, STOREY_FL_KEY)
             )
-        found.append((Storey(name, fl), float(geom.GetBoundingBox(True).Min.Z)))
+        polygon = _xy_polygon(geom)
+        if len(polygon) < 3:
+            raise R2MStop(
+                "Storey frame %s is not a usable planar outline. Run RMStorey."
+                % name
+            )
+        found.append(
+            (Storey(name, fl, polygon), float(geom.GetBoundingBox(True).Min.Z))
+        )
     if not found:
         raise R2MStop(
             "No storey frames on layer %s. Run RMStorey." % STOREY_LAYER
@@ -78,3 +86,73 @@ def _check_against_frame_height(found):
                 "%s is written by RMStorey; run RMStorey again."
                 % (storey.name, STOREY_FL_KEY, storey.fl, expected, STOREY_FL_KEY)
             )
+
+
+def _xy_polygon(geom):
+    """高程框的世界 XY 頂點。至少三點才算可用。"""
+    pts = _polyline_xy(geom)
+    if len(pts) < 3:
+        pts = _segment_xy(geom)
+    if len(pts) < 3:
+        pts = _sampled_xy(geom)
+    return _unique_xy(pts)
+
+
+def _polyline_xy(geom):
+    try:
+        result = geom.TryGetPolyline()
+    except TypeError:
+        return ()
+    polyline = _unpack_polyline(result)
+    if polyline is None:
+        return ()
+    return tuple((pt.X, pt.Y) for pt in polyline)
+
+
+def _unpack_polyline(result):
+    if result is None or result is False:
+        return None
+    if result is True:
+        return None
+    if hasattr(result, "Count"):
+        return result
+    if isinstance(result, tuple) and len(result) == 2:
+        ok, polyline = result
+        return polyline if ok else None
+    return None
+
+
+def _segment_xy(geom):
+    try:
+        segs = geom.DuplicateSegments()
+    except Exception:
+        return ()
+    if not segs:
+        return ()
+    return tuple((seg.PointAtStart.X, seg.PointAtStart.Y) for seg in segs)
+
+
+def _sampled_xy(geom):
+    try:
+        ts = geom.DivideByCount(32, True)
+    except Exception:
+        return ()
+    if not ts:
+        return ()
+    return tuple((geom.PointAt(t).X, geom.PointAt(t).Y) for t in ts)
+
+
+def _unique_xy(pts):
+    if not pts:
+        return ()
+    cleaned = [pts[0]]
+    for pt in pts[1:]:
+        prev = cleaned[-1]
+        if abs(pt[0] - prev[0]) > 1e-9 or abs(pt[1] - prev[1]) > 1e-9:
+            cleaned.append(pt)
+    if len(cleaned) >= 2:
+        first = cleaned[0]
+        last = cleaned[-1]
+        if abs(first[0] - last[0]) <= 1e-9 and abs(first[1] - last[1]) <= 1e-9:
+            cleaned.pop()
+    return tuple(cleaned)

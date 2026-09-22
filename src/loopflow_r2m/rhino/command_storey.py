@@ -10,7 +10,7 @@ from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.logutil import append_log
 from loopflow_r2m.names import STOREY_FL_KEY, STOREY_LAYER, STOREY_NAME_KEY
 from loopflow_r2m.paths import config_paths
-from loopflow_r2m.rhino.dialogs import ask_number, pick_curves
+from loopflow_r2m.rhino.dialogs import ask_number, confirm_yes, pick_curves
 from loopflow_r2m.rhino.layerutil import ensure_layer
 from loopflow_r2m.storey import Frame, StoreyPlanError, build_storey_plan
 
@@ -65,6 +65,14 @@ def _frame_z(doc, object_id):
 
 
 def _run(doc):
+    if not confirm_yes(
+        "Storey frames must be closed, flat, and strictly larger than "
+        "the objects you will publish. Objects that touch a frame will "
+        "stop RMModels. Continue?",
+        COMMAND,
+    ):
+        raise R2MStop("Cancelled.")
+
     picked = pick_curves("Select all storey frames", True)
     if not picked:
         raise R2MStop("Cancelled.")

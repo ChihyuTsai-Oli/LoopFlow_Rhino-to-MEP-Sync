@@ -77,7 +77,7 @@ def _show_eto(storey_lines, layers, saved):
     storey_box = ef.TextArea()
     storey_box.ReadOnly = True
     storey_box.Text = "\n".join(storey_lines)
-    storey_box.Height = 80
+    storey_box.Height = 110
 
     exclude_box = ef.TextBox()
     exclude_box.Text = "" if exclude0 is None else str(exclude0)

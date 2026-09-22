@@ -23,7 +23,14 @@ from loopflow_r2m.rhino.collect import collect_objects, default_geom_enabled, la
 from loopflow_r2m.rhino.dialogs import confirm_yes, show_models_dialog
 from loopflow_r2m.rhino.meshutil import geometry_to_mesh, mesh_to_meters, meshing_parameters
 from loopflow_r2m.rhino.storeys import read_storeys
-from loopflow_r2m.storey import STATUS_OK, assign_storey
+from loopflow_r2m.storey import (
+    STATUS_OK,
+    XY_INSIDE,
+    XY_OUTSIDE,
+    XY_TOUCH,
+    assign_storey,
+    classify_bbox_xy,
+)
 from loopflow_r2m.units import rhino_to_meters
 
 
@@ -114,6 +121,10 @@ def _run(doc, restore, ctx):
         for item in sorted(storeys, key=lambda row: row.fl)
     ]
     lines.append("Top storey has no upper bound.")
+    lines.append(
+        "Only objects strictly inside a storey frame are published. "
+        "Touching a frame stops the command."
+    )
     _print("Storeys:")
     for line in lines:
         _print("  " + line)
@@ -162,6 +173,8 @@ def _run(doc, restore, ctx):
     problems = []
     per_storey = {}
     highest_z = None
+    skipped_outside = 0
+    frames = {item.name: item for item in storeys}
     for obj in objects:
         mesh = geometry_to_mesh(obj.Geometry, mp)
         if mesh is None:
@@ -171,6 +184,20 @@ def _run(doc, restore, ctx):
         hit = assign_storey(bbox.Min.Z, storeys)
         if hit.status != STATUS_OK:
             problems.append("%s: storey %s" % (obj.Id, hit.status))
+            continue
+        frame = frames[hit.name]
+        relation = classify_bbox_xy(
+            (bbox.Min.X, bbox.Min.Y, bbox.Max.X, bbox.Max.Y),
+            frame.polygon,
+        )
+        if relation == XY_OUTSIDE:
+            skipped_outside += 1
+            continue
+        if relation == XY_TOUCH:
+            problems.append("%s: touches storey frame %s" % (obj.Id, hit.name))
+            continue
+        if relation != XY_INSIDE:
+            problems.append("%s: storey frame %s" % (obj.Id, relation))
             continue
         per_storey[hit.name] = per_storey.get(hit.name, 0) + 1
         if highest_z is None or bbox.Max.Z > highest_z:
@@ -190,14 +217,21 @@ def _run(doc, restore, ctx):
     if problems:
         raise R2MStop("Cannot publish: " + "; ".join(problems[:8]))
     if not products:
-        raise R2MStop("No meshable objects.")
+        raise R2MStop("No meshable objects strictly inside a storey frame.")
 
     # 最高層無上界，所以改用這份摘要讓使用者看出有沒有物件飄到天上。
     _print("Objects per storey:")
     for item in sorted(storeys, key=lambda row: row.fl):
         _print("  %s  %s" % (item.name, per_storey.get(item.name, 0)))
     _print("Highest object Z: %s" % highest_z)
+    _print("Skipped outside storey frames: %s" % skipped_outside)
     append_log(paths["log"], "INFO", COMMAND, "highest object Z %s" % highest_z)
+    append_log(
+        paths["log"],
+        "INFO",
+        COMMAND,
+        "skipped outside storey frames %s" % skipped_outside,
+    )
 
     export_storeys = [
         ExportStorey(item.name, rhino_to_meters(item.fl, scale)) for item in storeys
@@ -231,9 +265,12 @@ def _run(doc, restore, ctx):
     msg = "published %s objects, %s storeys" % (len(products), len(storeys))
     if skipped_block:
         msg += "; skipped %s blocks" % skipped_block
+    if skipped_outside:
+        msg += "; skipped %s outside frames" % skipped_outside
     append_log(paths["log"], "INFO", COMMAND, msg)
     _print("RMModels: " + msg)
     report["ok"] = True
     report["path"] = str(paths["ifc"])
     report["skipped_block"] = skipped_block
+    report["skipped_outside"] = skipped_outside
     return report

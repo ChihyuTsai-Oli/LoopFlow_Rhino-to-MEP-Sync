@@ -7,11 +7,15 @@ from loopflow_r2m.storey import (
     STATUS_DUPLICATE_FL,
     STATUS_NO_STOREYS,
     STATUS_OK,
+    XY_INSIDE,
+    XY_OUTSIDE,
+    XY_TOUCH,
     Frame,
     Storey,
     StoreyPlanError,
     assign_storey,
     build_storey_plan,
+    classify_bbox_xy,
 )
 
 
@@ -105,6 +109,41 @@ class BuildStoreyPlanTests(unittest.TestCase):
     def test_index_outside_selection_is_blocked(self):
         with self.assertRaises(StoreyPlanError):
             self.plan([0, 300], 0, 5)
+
+
+class ClassifyBboxTests(unittest.TestCase):
+    SQUARE = ((0, 0), (10, 0), (10, 10), (0, 10))
+
+    def test_strictly_inside(self):
+        self.assertEqual(classify_bbox_xy((2, 2, 8, 8), self.SQUARE), XY_INSIDE)
+
+    def test_fully_outside(self):
+        self.assertEqual(classify_bbox_xy((20, 20, 22, 22), self.SQUARE), XY_OUTSIDE)
+        self.assertEqual(classify_bbox_xy((1000, 0, 1100, 10), self.SQUARE), XY_OUTSIDE)
+
+    def test_touching_edge_is_blocked(self):
+        self.assertEqual(classify_bbox_xy((0, 2, 8, 8), self.SQUARE), XY_TOUCH)
+        self.assertEqual(classify_bbox_xy((1, 1, 10, 9), self.SQUARE), XY_TOUCH)
+
+    def test_straddling_is_blocked(self):
+        self.assertEqual(classify_bbox_xy((8, 2, 12, 8), self.SQUARE), XY_TOUCH)
+
+    def test_bbox_containing_frame_is_blocked(self):
+        self.assertEqual(classify_bbox_xy((-1, -1, 11, 11), self.SQUARE), XY_TOUCH)
+
+    def test_concave_notch_is_touch(self):
+        # C 形：範圍盒四角都在框內，但跨過凹口。
+        concave = (
+            (0, 0),
+            (8, 0),
+            (8, 2),
+            (2, 2),
+            (2, 8),
+            (8, 8),
+            (8, 10),
+            (0, 10),
+        )
+        self.assertEqual(classify_bbox_xy((1, 1, 7, 9), concave), XY_TOUCH)
 
 
 if __name__ == "__main__":
