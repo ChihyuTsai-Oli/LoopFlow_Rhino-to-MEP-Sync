@@ -1,7 +1,7 @@
 """RMStorey：登記 R2M 高程框。
 
-開頭選整棟或只做其中幾層。整棟：選全部框 → 點 1F → 輸入 1F 高程 → 點 RF。
-非整棟：選全部框 → 點基準層 → 輸入名稱與高程，其餘依 Z 連續編號。
+先選全部框，再彈窗選整棟或只做其中幾層。整棟：點 1F → 輸入 1F 高程 → 點 RF。
+非整棟：點基準層 → 輸入名稱與高程，其餘依 Z 連續編號。
 重跑會整批覆寫，包含手動改過的樓層名。
 """
 
@@ -87,19 +87,26 @@ def _run(doc):
     ):
         raise R2MStop("Cancelled.")
 
-    mode = pick_option(
-        "Whole building (1F and RF) or only the storeys in this model?",
-        (MODE_WHOLE, MODE_PARTIAL),
-    )
-    if mode is None:
-        raise R2MStop("Cancelled.")
-
+    # 先選框：預選的曲線可以直接 Enter。模式改彈窗，避免指令列 Enter 被當成取消。
     picked = pick_curves("Select all storey frames", True)
     if not picked:
         raise R2MStop("Cancelled.")
 
     frames = [Frame(oid, _frame_z(doc, oid)) for oid in picked]
     ids = [frame.id for frame in frames]
+    _reject_duplicate_z(frames)
+    _print(
+        "Picked %s frames at Z: %s"
+        % (len(frames), ", ".join(_fl_text(frame.z) for frame in sorted(frames, key=lambda item: item.z)))
+    )
+
+    mode = pick_option(
+        "Whole building (1F and RF) or only the storeys in this model?",
+        (MODE_WHOLE, MODE_PARTIAL),
+        COMMAND,
+    )
+    if mode is None:
+        raise R2MStop("Cancelled.")
 
     if mode == MODE_PARTIAL:
         planned = _plan_partial(frames, ids)
@@ -107,6 +114,17 @@ def _run(doc):
         planned = _plan_whole(frames, ids)
 
     return _write_plan(doc, planned)
+
+
+def _reject_duplicate_z(frames):
+    ordered = sorted(frames, key=lambda item: item.z)
+    for lower, upper in zip(ordered, ordered[1:]):
+        if abs(upper.z - lower.z) <= FLATNESS_TOLERANCE:
+            raise R2MStop(
+                "Two storey frames share the same height: %s. "
+                "Move each frame to that storey's FL before running RMStorey."
+                % _fl_text(lower.z)
+            )
 
 
 def _plan_whole(frames, ids):

@@ -323,12 +323,75 @@ def ask_text(prompt, title="R2M"):
     return str(text).strip()
 
 
-def pick_option(prompt, names):
-    """指令列選一個英文選項。取消回 None。"""
+def pick_option(prompt, names, title="R2M"):
+    """選一個英文選項。取消回 None。
+
+    優先彈窗。指令列 GetOption 在 ScriptEditor 裡按 Enter 會被當成取消，
+    選完框後一按 Enter 指令就停。
+    """
+    names = tuple(names)
+    try:
+        return _pick_option_eto(prompt, names, title)
+    except Exception:
+        return _pick_option_cli(prompt, names)
+
+
+def _pick_option_eto(prompt, names, title):
+    import Eto.Drawing as ed
+    import Eto.Forms as ef
+    from Rhino.UI import RhinoEtoApp
+
+    chosen = []
+    dlg = ef.Dialog[bool]()
+    dlg.Title = title
+    dlg.Padding = ed.Padding(12)
+
+    buttons = []
+
+    def make(name):
+        def handler(sender, args):
+            chosen.append(name)
+            dlg.Close(True)
+
+        return handler
+
+    for name in names:
+        btn = ef.Button(Text=name)
+        btn.Click += make(name)
+        buttons.append(btn)
+
+    cancel = ef.Button(Text="Cancel")
+
+    def on_cancel(sender, args):
+        dlg.Close(False)
+
+    cancel.Click += on_cancel
+    dlg.AbortButton = cancel
+    if buttons:
+        dlg.DefaultButton = buttons[0]
+
+    row = ef.DynamicLayout()
+    row.Spacing = ed.Size(8, 0)
+    row.AddRow(*(buttons + [None, cancel]))
+
+    root = ef.DynamicLayout()
+    root.Spacing = ed.Size(8, 8)
+    root.AddRow(ef.Label(Text=prompt))
+    root.AddRow(row)
+    dlg.Content = root
+
+    owner = RhinoEtoApp.MainWindow
+    result = dlg.ShowModal(owner) if owner is not None else dlg.ShowModal()
+    if not result or not chosen:
+        return None
+    return chosen[0]
+
+
+def _pick_option_cli(prompt, names):
     import Rhino
 
     getter = Rhino.Input.Custom.GetOption()
-    getter.SetCommandPrompt(prompt)
+    getter.SetCommandPrompt(prompt + " (click an option)")
     for name in names:
         getter.AddOption(name)
     result = getter.Get()
