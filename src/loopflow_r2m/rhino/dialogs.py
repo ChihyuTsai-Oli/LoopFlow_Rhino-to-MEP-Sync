@@ -13,7 +13,17 @@ from loopflow_r2m.names import (
 
 
 def _placeholder():
-    return "(select type)"
+    return "(reference)"
+
+
+def _resolve_layer_type(choice):
+    """未選或參考項視為 IfcBuildingElementProxy。"""
+    text = "" if choice is None else str(choice).strip()
+    if not text or text == _placeholder():
+        return "IfcBuildingElementProxy"
+    if text not in IFC_PRODUCT_TYPES:
+        raise R2MStop("Unknown IFC type for layer: %s" % text)
+    return text
 
 
 def _normalize_exclude(text):
@@ -51,11 +61,7 @@ def _collect_choice(exclude_text, layer_checks, geom, density):
         if not checked:
             continue
         selected.append(path)
-        if not choice or choice == _placeholder():
-            raise R2MStop("Select an IFC type for layer: %s" % path)
-        if choice not in IFC_PRODUCT_TYPES:
-            raise R2MStop("Unknown IFC type for layer: %s" % path)
-        types[path] = str(choice)
+        types[path] = _resolve_layer_type(choice)
     if not selected:
         raise R2MStop("No layers selected.")
     if density not in MESH_DENSITIES:
@@ -104,7 +110,7 @@ def _show_eto(storey_lines, layers, saved):
         path = row["path"]
         check = ef.CheckBox()
         check.Text = "%s  (%s)" % (path, row["count"])
-        check.Checked = path in saved_layers if saved_layers else row["count"] > 0
+        check.Checked = path in saved_layers
         drop = ef.DropDown()
         drop.DataStore = type_choices
         previous = saved_types.get(path)
@@ -118,6 +124,22 @@ def _show_eto(storey_lines, layers, saved):
     layer_scroll = ef.Scrollable()
     layer_scroll.Content = layer_stack
     layer_scroll.Height = 280
+
+    def on_select_all(sender, args):
+        for _path, check, _drop in layer_widgets:
+            check.Checked = True
+
+    def on_select_none(sender, args):
+        for _path, check, _drop in layer_widgets:
+            check.Checked = False
+
+    select_all = _eto_button(ef, "Select All")
+    select_none = _eto_button(ef, "Select None")
+    select_all.Click += on_select_all
+    select_none.Click += on_select_none
+    layer_toolbar = ef.DynamicLayout()
+    layer_toolbar.Spacing = ed.Size(8, 0)
+    layer_toolbar.AddRow(select_all, select_none, None)
 
     geom_checks = {}
     geom_stack = ef.DynamicLayout()
@@ -164,7 +186,8 @@ def _show_eto(storey_lines, layers, saved):
     root.AddRow(storey_box)
     root.AddRow(_eto_label(ef, "Exclude token (blank = none)"))
     root.AddRow(exclude_box)
-    root.AddRow(_eto_label(ef, "Layers — check to export; pick IFC type per layer"))
+    root.AddRow(_eto_label(ef, "Layers — check to export; type is optional (reference = IfcBuildingElementProxy)"))
+    root.AddRow(layer_toolbar)
     root.AddRow(layer_scroll)
     root.AddRow(_eto_label(ef, "Geometry types"))
     root.AddRow(geom_stack)
@@ -228,22 +251,26 @@ def _show_cli(storey_lines, layers, saved):
     saved_layers = list(saved.get("layer_paths") or [])
     default_idx = []
     for index, row in enumerate(layers, start=1):
-        if saved_layers:
-            if row["path"] in saved_layers:
-                default_idx.append(str(index))
-        elif row["count"] > 0:
+        if row["path"] in saved_layers:
             default_idx.append(str(index))
-    picked = ask_string("Layer numbers (comma-separated)", ",".join(default_idx))
+    picked = ask_string(
+        "Layer numbers (comma-separated, All, or None)",
+        ",".join(default_idx),
+    )
     if picked is None:
         return None
+    picked_text = str(picked).strip().lower()
     selected_index = set()
-    for part in str(picked).replace(" ", "").split(","):
-        if not part:
-            continue
-        try:
-            selected_index.add(int(part))
-        except ValueError:
-            raise R2MStop("Layer numbers must be integers.")
+    if picked_text == "all":
+        selected_index = set(range(1, len(layers) + 1))
+    elif picked_text not in ("", "none"):
+        for part in str(picked).replace(" ", "").split(","):
+            if not part:
+                continue
+            try:
+                selected_index.add(int(part))
+            except ValueError:
+                raise R2MStop("Layer numbers must be integers, All, or None.")
 
     saved_types = dict(saved.get("layer_type_map") or {})
     layer_checks = []
@@ -253,7 +280,8 @@ def _show_cli(storey_lines, layers, saved):
             continue
         default_type = saved_types.get(row["path"], "")
         choice = ask_string(
-            "IFC type for %s (%s)" % (row["path"], ", ".join(IFC_PRODUCT_TYPES)),
+            "IFC type for %s (blank = reference; %s)"
+            % (row["path"], ", ".join(IFC_PRODUCT_TYPES)),
             default_type,
         )
         if choice is None:

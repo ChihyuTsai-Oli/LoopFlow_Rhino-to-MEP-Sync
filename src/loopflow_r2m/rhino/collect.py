@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 from loopflow_r2m.exceptions import R2MStop
-from loopflow_r2m.layers import is_r2m_system_layer_path, layer_is_excluded
+from loopflow_r2m.layers import (
+    filter_leaf_layer_rows,
+    is_r2m_system_layer_path,
+    layer_is_excluded,
+)
 from loopflow_r2m.names import GEOM_CLASSES
 
 
@@ -26,7 +30,7 @@ def _object_class_key(obj):
 
 
 def layer_rows(doc, exclude_token):
-    """列出可匯出圖層與目前件數（不含外參、不含排除記號）。"""
+    """列出可匯出的最末端圖層與目前件數（不含外參、不含排除記號、不含父層）。"""
     counts = {}
     for obj in doc.Objects:
         if obj.IsReference:
@@ -44,7 +48,7 @@ def layer_rows(doc, exclude_token):
         if is_r2m_system_layer_path(path) or layer_is_excluded(path, exclude_token):
             continue
         rows.append({"path": path, "count": counts.get(path, 0)})
-    return rows
+    return filter_leaf_layer_rows(rows)
 
 
 def collect_objects(doc, selected_paths, geom_enabled):

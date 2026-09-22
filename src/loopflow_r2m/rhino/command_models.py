@@ -149,13 +149,16 @@ def _run(doc, restore, ctx):
     ]
     if not selected:
         raise R2MStop("No layers left after exclude token.")
-    types = choice["layer_type_map"]
-    missing = [path_ for path_ in selected if path_ not in types]
-    if missing:
-        raise R2MStop("Select an IFC type for layer: %s" % missing[0])
+    types = dict(choice["layer_type_map"])
+    for path_ in selected:
+        if path_ not in types:
+            types[path_] = "IfcBuildingElementProxy"
 
     counts = {row["path"]: row["count"] for row in layer_rows(doc, "")}
-    _print("Each listed layer becomes one IFC type. Split mixed walls and ceilings first.")
+    _print(
+        "Each listed layer becomes one IFC type. "
+        "Blank type is IfcBuildingElementProxy (reference)."
+    )
     for path_ in selected:
         _print("  %s (%s) → %s" % (path_, counts.get(path_, 0), types[path_]))
     if not confirm_yes("Publish with this type map?", COMMAND):

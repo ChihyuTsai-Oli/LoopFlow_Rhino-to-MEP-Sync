@@ -3,6 +3,8 @@ import unittest
 from tests import SRC  # noqa: F401
 
 from loopflow_r2m.layers import (
+    filter_leaf_layer_rows,
+    is_leaf_layer_path,
     is_r2m_system_layer_path,
     is_storey_layer_path,
     layer_is_excluded,
@@ -38,6 +40,22 @@ class LayerTests(unittest.TestCase):
         self.assertTrue(is_r2m_system_layer_path("R2M::Storey::Old"))
         self.assertFalse(is_r2m_system_layer_path("R2M_Inbound"))
         self.assertFalse(is_r2m_system_layer_path("Wall"))
+
+    def test_leaf_layer_paths(self):
+        paths = ["M2D", "M2D::Plan", "M2D::Plan::MP_2_A-WALL", "M2D::Plan::MP_2_CEILING"]
+        self.assertFalse(is_leaf_layer_path("M2D", paths))
+        self.assertFalse(is_leaf_layer_path("M2D::Plan", paths))
+        self.assertTrue(is_leaf_layer_path("M2D::Plan::MP_2_A-WALL", paths))
+        self.assertTrue(is_leaf_layer_path("Layout", ["Layout", "M2D"]))
+
+    def test_filter_leaf_rows_drops_parents(self):
+        rows = [
+            {"path": "M2D", "count": 1},
+            {"path": "M2D::Plan", "count": 0},
+            {"path": "M2D::Plan::WALL", "count": 4},
+        ]
+        leaves = filter_leaf_layer_rows(rows)
+        self.assertEqual([row["path"] for row in leaves], ["M2D::Plan::WALL"])
 
 
 if __name__ == "__main__":
