@@ -24,6 +24,7 @@ from loopflow_r2m.rhino.dialogs import confirm_yes, show_models_dialog
 from loopflow_r2m.rhino.meshutil import geometry_to_mesh, mesh_to_meters, meshing_parameters
 from loopflow_r2m.rhino.storeys import read_storeys
 from loopflow_r2m.storey import (
+    STATUS_BELOW,
     STATUS_OK,
     XY_INSIDE,
     XY_OUTSIDE,
@@ -177,6 +178,7 @@ def _run(doc, restore, ctx):
     per_storey = {}
     highest_z = None
     skipped_outside = 0
+    skipped_below = 0
     frames = {item.name: item for item in storeys}
     for obj in objects:
         mesh = geometry_to_mesh(obj.Geometry, mp)
@@ -185,6 +187,9 @@ def _run(doc, restore, ctx):
             continue
         bbox = mesh.GetBoundingBox(True)
         hit = assign_storey(bbox.Min.Z, storeys)
+        if hit.status == STATUS_BELOW:
+            skipped_below += 1
+            continue
         if hit.status != STATUS_OK:
             problems.append("%s: storey %s" % (obj.Id, hit.status))
             continue
@@ -228,12 +233,19 @@ def _run(doc, restore, ctx):
         _print("  %s  %s" % (item.name, per_storey.get(item.name, 0)))
     _print("Highest object Z: %s" % highest_z)
     _print("Skipped outside storey frames: %s" % skipped_outside)
+    _print("Skipped below lowest storey: %s" % skipped_below)
     append_log(paths["log"], "INFO", COMMAND, "highest object Z %s" % highest_z)
     append_log(
         paths["log"],
         "INFO",
         COMMAND,
         "skipped outside storey frames %s" % skipped_outside,
+    )
+    append_log(
+        paths["log"],
+        "INFO",
+        COMMAND,
+        "skipped below lowest storey %s" % skipped_below,
     )
 
     export_storeys = [
@@ -270,6 +282,8 @@ def _run(doc, restore, ctx):
         msg += "; skipped %s blocks" % skipped_block
     if skipped_outside:
         msg += "; skipped %s outside frames" % skipped_outside
+    if skipped_below:
+        msg += "; skipped %s below lowest storey" % skipped_below
     append_log(paths["log"], "INFO", COMMAND, msg)
     _print("RMModels: " + msg)
     report["ok"] = True

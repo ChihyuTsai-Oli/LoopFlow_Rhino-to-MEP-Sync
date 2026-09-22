@@ -188,7 +188,7 @@ def assign_storey(bottom_z, storeys):
     """回傳 AssignResult。status 不是 ok 時不得靜默猜測，也不得移動幾何。
 
     storeys：可迭代的 Storey（name、fl，文件單位）。
-    最高層無上界；比它高的物件一律掛它。低於最低層則擋住。
+    最高層無上界；比它高的物件一律掛它。低於最低層回 below，由發布端跳過，不掛層。
     """
     rows = list(storeys or [])
     if not rows:
