@@ -7,7 +7,7 @@
 | `RMStorey` | 說明窗 → 選框 → 彈窗選整棟或只做其中幾層 → 編列名稱／高程，搬到 `R2M::Storey` |
 | `RMModels` | 確認樓層 → 排除記號 → 最末端圖層（全選／還原上次）→ IFC 類型（未選＝IfcPlate；天花＝IfcCovering）→ 類別勾選 → 網格密度 → 發布建築殼 IFC |
 | `RMInbound` | 確認單位 → 選 IFC → 類別統計 →（可選件數警告）→ 建鎖定網面 |
-| `RMOpen` | Health 摘要；開 Config／models／Docs |
+| `RMOpen` | Health 摘要；開 Config／models。Open Docs 目前開本機 `docs/`，公開使用說明完成後改開 GitHub |
 
 介面英文。`RMModels`／`RMOpen` 未存檔則停；`RMStorey`／`RMInbound` 不要求已存檔（未存檔只是不寫 log）。`RMModels` 只發布嚴格落在該層高程框內的勾選圖層物件；碰到框線則停。發布前會再列出圖層→類型對照。未選類型的勾選圖層寫成 `IfcPlate`；天花請選 `IfcCovering`。
 

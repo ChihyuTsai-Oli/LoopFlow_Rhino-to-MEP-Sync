@@ -55,6 +55,22 @@ def _eto_button(ef, text):
     return btn
 
 
+def _eto_button_bar(ef, ed, *items):
+    """按鈕列高度跟文字走，對齊 RMStorey。"""
+    row = ef.DynamicLayout()
+    row.Spacing = ed.Size(8, 0)
+    row.AddRow(*items)
+    return row
+
+
+def _eto_add(layout, control, xscale, yscale):
+    """DynamicLayout.Add(control, xscale, yscale)。舊 Eto 沒有第三參數時退回 AddRow。"""
+    try:
+        layout.Add(control, xscale, yscale)
+    except TypeError:
+        layout.AddRow(control)
+
+
 def _eto_label(ef, text):
     """Rhino pythonnet 不接受 Label(Text=...)。"""
     label = ef.Label()
@@ -291,8 +307,7 @@ def _show_eto(storey_lines, layers, saved, on_save=None, on_load=None):
     dlg.DefaultButton = ok
     dlg.AbortButton = cancel
 
-    buttons = ef.DynamicLayout()
-    buttons.AddRow(None, save_btn, load_btn, cancel, ok)
+    buttons = _eto_button_bar(ef, ed, None, save_btn, load_btn, cancel, ok)
 
     root = ef.DynamicLayout()
     root.Spacing = ed.Size(8, 8)
@@ -302,12 +317,12 @@ def _show_eto(storey_lines, layers, saved, on_save=None, on_load=None):
     root.AddRow(exclude_box)
     root.AddRow(_eto_label(ef, "Layers — check at least one to export; type defaults to IfcPlate (ceilings: IfcCovering)"))
     root.AddRow(layer_toolbar)
-    root.AddRow(layer_scroll)
+    _eto_add(root, layer_scroll, True, True)
     root.AddRow(_eto_label(ef, "Geometry types"))
     root.AddRow(geom_stack)
     root.AddRow(_eto_label(ef, "Mesh density"))
     root.AddRow(density_list)
-    root.AddRow(buttons)
+    _eto_add(root, buttons, True, False)
     dlg.Content = root
 
     owner = RhinoEtoApp.MainWindow
@@ -515,14 +530,12 @@ def _pick_option_eto(prompt, names, title):
     if buttons:
         dlg.DefaultButton = buttons[0]
 
-    row = ef.DynamicLayout()
-    row.Spacing = ed.Size(8, 0)
-    row.AddRow(*(buttons + [None, cancel]))
+    row = _eto_button_bar(ef, ed, *(buttons + [None, cancel]))
 
     root = ef.DynamicLayout()
     root.Spacing = ed.Size(8, 8)
     root.AddRow(_eto_label(ef, prompt))
-    root.AddRow(row)
+    _eto_add(root, row, True, False)
     dlg.Content = root
 
     owner = RhinoEtoApp.MainWindow
@@ -619,13 +632,12 @@ def _show_open_eto(lines, folders):
     dlg.DefaultButton = close
     dlg.AbortButton = close
 
-    buttons = ef.DynamicLayout()
-    buttons.AddRow(btn_config, btn_models, btn_docs, None, close)
+    buttons = _eto_button_bar(ef, ed, btn_config, btn_models, btn_docs, None, close)
 
     root = ef.DynamicLayout()
     root.Spacing = ed.Size(8, 8)
-    root.AddRow(box)
-    root.AddRow(buttons)
+    _eto_add(root, box, True, True)
+    _eto_add(root, buttons, True, False)
     dlg.Content = root
     owner = RhinoEtoApp.MainWindow
     result = dlg.ShowModal(owner) if owner is not None else dlg.ShowModal()
