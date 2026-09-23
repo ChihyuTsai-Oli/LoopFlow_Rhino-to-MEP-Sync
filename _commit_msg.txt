@@ -1,3 +1,0 @@
-docs: 開發內容移回 wip，根 docs 只留公開說明
-
-對齊 R2B。Open Docs 開 repo 根 docs/。ScriptEditor 路徑含 wip\\commands。
