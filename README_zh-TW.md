@@ -42,6 +42,6 @@ Rhino 對話框為英文；本說明為正體中文。
 
 逐步與按鈕見 [使用說明總覽](./docs/USER_GUIDE_zh-TW.md) 與 [指令逐項說明](./docs/COMMANDS_zh-TW.md)。
 
-## 授權
+## 授權與出處
 
-MIT。見 [LICENSE](./LICENSE)。
+MIT。見 [LICENSE](./LICENSE)。圖示出處見 [CREDITS](./CREDITS.md)。

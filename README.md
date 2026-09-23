@@ -42,6 +42,6 @@ Save the `.3dm` first (Inbound may use an unsaved blank file). The folder that h
 
 See the [overview](./docs/USER_GUIDE.md) and [commands](./docs/COMMANDS.md) for the buttons and stops.
 
-## License
+## License and credits
 
-MIT. See [LICENSE](./LICENSE).
+Released under the [MIT License](./LICENSE). See [CREDITS](./CREDITS.md).
