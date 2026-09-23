@@ -7,7 +7,7 @@
 | `RMStorey` | 說明窗 → 選框 → 彈窗選整棟或只做其中幾層 → 編列名稱／高程，搬到 `R2M::Storey` |
 | `RMModels` | 確認樓層 → 排除記號 → 最末端圖層（全選／還原上次）→ IFC 類型（未選＝IfcPlate；天花＝IfcCovering）→ 類別勾選 → 網格密度 → 發布建築殼 IFC |
 | `RMInbound` | 確認單位 → 選 IFC → 類別統計 →（可選件數警告）→ 建鎖定網面 |
-| `RMOpen` | Health 摘要；開 Config／models。Open Docs 目前開本機 `docs/`（入口 `docs/README.md`）；合入後有穩定 GitHub 頁再改開該 URL |
+| `RMOpen` | Health 摘要；開 Config／models。Open Docs 目前開 repo 根 `docs/`（入口 `docs/README.md`）；合入後有穩定 GitHub 頁再改開該 URL |
 
 介面英文。`RMModels`／`RMOpen` 未存檔則停；`RMStorey`／`RMInbound` 不要求已存檔（未存檔只是不寫 log）。`RMModels` 只發布嚴格落在該層高程框內的勾選圖層物件；碰到框線則停。發布前會再列出圖層→類型對照。未選類型的勾選圖層寫成 `IfcPlate`；天花請選 `IfcCovering`。
 
@@ -20,23 +20,23 @@
 **RMOpen**（先存檔）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMOpen.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMOpen.py"
 ```
 
 **RMStorey**（先自己畫好各樓層的水平封閉曲線，含 RF）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMStorey.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMStorey.py"
 ```
 
 **RMModels**（先存檔，且已跑過 `RMStorey`）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMModels.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMModels.py"
 ```
 
-**RMInbound**（空白檔即可；測檔選 `fixtures\spike\R2M_spike_pipe.ifc`）
+**RMInbound**（空白檔即可；測檔選 `wip\fixtures\spike\R2M_spike_pipe.ifc`）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMInbound.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMInbound.py"
 ```

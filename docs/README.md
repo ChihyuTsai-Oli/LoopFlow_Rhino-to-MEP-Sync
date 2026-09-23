@@ -9,7 +9,7 @@ This page is the **documentation entry** that Rhino `RMOpen` → **Open Docs** s
 | One-minute overview | [Open](./USER_GUIDE.md) |
 | Rhino / BIM commands | [Open](./COMMANDS.md) |
 
-The six files in this folder named in Traditional Chinese (`實作總覽.md` and the rest) are **implementation specs**, not this user guide.
+The six Traditional Chinese files that used to sit in this folder (`實作總覽.md` and the rest) are **implementation specs** in `wip/docs/`, not this user guide.
 
 ---
 
@@ -24,4 +24,4 @@ The six files in this folder named in Traditional Chinese (`實作總覽.md` and
 | 一分鐘總覽 | [開啟](./USER_GUIDE_zh-TW.md) |
 | Rhino／BIM 指令 | [開啟](./COMMANDS_zh-TW.md) |
 
-同資料夾裡以繁體中文命名的六份檔（`實作總覽.md` 等）是**實作規格**，不是這份使用說明。
+實作規格在 `wip/docs/`（`實作總覽.md` 等），不是這份使用說明。

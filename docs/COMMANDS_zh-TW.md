@@ -32,7 +32,7 @@
 **指令**：`RMOpen`（先存檔）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMOpen.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMOpen.py"
 ```
 
 跳出英文 Health 視窗。摘要列出設定根路徑，以及上次成功寫出的時間。未存檔會被擋住。
@@ -50,7 +50,7 @@
 **指令**：`RMStorey`（不要求已存檔；未存檔只是不寫 log）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMStorey.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMStorey.py"
 ```
 
 Models 之前必須先有 **R2M 高程框**。沒有就擋住，不發布。
@@ -108,7 +108,7 @@ Models 之前必須先有 **R2M 高程框**。沒有就擋住，不發布。
 **指令**：`RMModels`（先存檔，且已跑過 `RMStorey`）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMModels.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMModels.py"
 ```
 
 英文對話框一次問完：
@@ -164,7 +164,7 @@ BIM 端沒有 LoopFlow。建築殼是**參考**，不是給對方接手編輯的
 **指令**：`RMInbound`（空白檔即可，不要求已存檔）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMInbound.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMInbound.py"
 ```
 
 BIM 只出 **3D 管線**（衝突段或勾選系統；不要整棟、不要 2D）。含保溫／外包絡較好。沒有指定的庫元件——幾段跨越天花高度的 3D 風管或水管即可。

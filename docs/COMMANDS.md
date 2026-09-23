@@ -32,7 +32,7 @@ Each ScriptEditor run drops the already-loaded module, so re-running in the same
 **Command:** `RMOpen` (save first)
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMOpen.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMOpen.py"
 ```
 
 An English Health window lists the config root and last-good timestamps. An unsaved file is blocked.
@@ -50,7 +50,7 @@ Buttons:
 **Command:** `RMStorey` (a saved file is not required; without one there is simply no log)
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMStorey.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMStorey.py"
 ```
 
 Models will not publish until **R2M storey frames** exist.
@@ -108,7 +108,7 @@ Both modes move frames to layer `R2M::Storey` and write UserText `R2M_StoreyName
 **Command:** `RMModels` (save first; `RMStorey` must already have run)
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMModels.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMModels.py"
 ```
 
 One English dialog:
@@ -164,7 +164,7 @@ Ceilings should be `IfcCovering` in Rhino. Unchanged dropdowns write `IfcPlate`.
 **Command:** `RMInbound` (a blank file is enough; a saved file is not required)
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\commands\RMInbound.py"
+! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMInbound.py"
 ```
 
 BIM should export **3D pipes only** (clash segments or checked systems; not the whole building, not 2D). Insulation / outer envelope is useful. No specific library parts — a few 3D ducts or pipes that cross the ceiling are enough.

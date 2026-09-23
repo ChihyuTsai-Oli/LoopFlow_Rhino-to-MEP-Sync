@@ -12,8 +12,9 @@ from loopflow_r2m.rhino.dialogs import show_open_health
 
 
 COMMAND = "RMOpen"
-# 目前 Open Docs 開本機 docs/（入口 docs/README.md）。合入後有穩定 GitHub 頁再改開該 URL。
-REPO_DOCS = Path(__file__).resolve().parents[3] / "docs"
+# Open Docs 開 repo 根公開 docs/（入口 docs/README.md）。合入後有穩定 GitHub 頁再改開該 URL。
+# __file__ = wip/src/loopflow_r2m/rhino/command_open.py → parents[4] = repo 根
+REPO_DOCS = Path(__file__).resolve().parents[4] / "docs"
 
 
 def _print(message):

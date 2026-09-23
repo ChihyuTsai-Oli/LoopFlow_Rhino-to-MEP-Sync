@@ -21,3 +21,4 @@
 
 # IfcOpenShell spike cache（輪子與解壓後的 pyd，不進 Git）
 .vendor/
+wip/.vendor/
