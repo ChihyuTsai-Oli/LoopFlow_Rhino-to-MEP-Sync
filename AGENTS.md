@@ -29,8 +29,8 @@ AI 必須依序完整讀取：
 
 ## 分支與版本
 
-- `main` 目前是文件骨架；尚無發布 tag。
-- 整合分支 `v1-development` 已建立，每批從它開 `codex/v1-<scope>`；不要把 R2M 合進 LoopFlow／R2B／R2O 的整合分支。
+- `main` 與 `v1-development` 已對齊目前開發（2026-09-23 短分支 `codex/v1-inbound-z-bonsai` fast-forward 合入）。**尚無發布 tag**，指令名未凍。
+- 每批從 `v1-development` 開 `codex/v1-<scope>`，合入後再依授權合入 `main`；不要把 R2M 合進 LoopFlow／R2B／R2O 的整合分支。
 - 日後 tag／Release 永不移動或覆寫。
 
 ## 文件與語言
