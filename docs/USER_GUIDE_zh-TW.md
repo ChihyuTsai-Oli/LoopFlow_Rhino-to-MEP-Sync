@@ -10,8 +10,8 @@
 
 1. **先把 `.3dm` 存檔。** 未存檔就不能發布。設定與交換檔都放在這份檔案旁邊。
 2. **先登記樓層，再發布建築殼。** `RMStorey` 把高程框編成樓層；`RMModels` 寫出 `models/R2M.ifc`。
-3. **BIM 當新檔開啟這份 IFC**（Archicad：檔案 → 開啟；不要 Merge），在裡面畫 3D 管線。
-4. **管線 IFC 回到 Rhino。** `RMInbound` 只在目前文件建鎖定網面；另存與掛 Worksession 都手動。
+3. **BIM 當新檔開啟這份 IFC**（Archicad：檔案 → 開啟；不要 Merge。Bonsai／Revit 選單尚未測），在裡面畫 3D 管線。BIM 裡的高度跟著高程框填的 FL。
+4. **管線 IFC 回到 Rhino。** `RMInbound` 會把高度扣回 Rhino 模型（不是停在建築標高數字上）。另存與掛 Worksession 都手動。
 5. **看著外參改原天花／牆／板，再跑 Models。**
 
 沒有相機、燈光、即時連線。系統不會自己往下一通道繼續跑。
@@ -35,8 +35,8 @@ _LoopFlow_Config/loopflow_R2M/
 | 你要做的事 | Rhino | BIM |
 |---|---|---|
 | 登記樓層 | `RMStorey` | — |
-| 建築殼 | `RMModels` | **開啟 IFC 當新檔**（Archicad 已測）。Revit 預期用「連結 IFC」，尚未測 |
-| 管線外參 | `RMInbound` → 手動另存 → 手動掛 Worksession | 內建匯出 **IFC4**、只出 3D 管線。真實管線匯出尚未測 |
+| 建築殼 | `RMModels` | **開啟 IFC 當新檔**（Archicad 已測）。Revit 預期用「連結 IFC」，尚未測。Bonsai 用它開啟產品 IFC，選單尚未測 |
+| 管線外參 | `RMInbound` → 手動另存 → 手動掛 Worksession | 內建／Bonsai 匯出 **IFC4**、只出 3D 管線。真實管線匯出尚未測。回來時高度會對回 Rhino 模型 |
 | 看設定與說明 | `RMOpen` | — |
 
 BIM 端沒有 LoopFlow 按鈕。

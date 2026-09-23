@@ -4,7 +4,7 @@
 
 > **Development draft.** Command names, screen names, and install method are not frozen. There is no Package Manager package or toolbar yet. Do not treat this page as a published install guide.
 
-Rhino publishes an architectural-shell IFC for Revit / Archicad. Those tools publish MEP IFC back as **locked Worksession reference geometry** in Rhino. Design changes stay in Rhino. Exchange format is **IFC only**. There is no LoopFlow plug-in on the BIM side.
+Rhino publishes an architectural-shell IFC for Revit / Archicad / Blender Bonsai. Those tools publish MEP IFC back as **locked Worksession reference geometry** in Rhino. Design changes stay in Rhino. Exchange format is **IFC only**. There is no LoopFlow plug-in on the BIM side.
 
 [▶ Documentation](./docs/README.md) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
 
@@ -20,9 +20,9 @@ No camera, lights, or live link. Do not use inbound geometry for drawings or as 
 ## Requirements
 
 - **Rhino 8** (Windows)
-- **Archicad** or **Revit** (3D BIM is required)
+- **Archicad**, **Revit**, or **Blender Bonsai** (3D BIM is required)
 
-Testing currently uses Archicad. Opening the IFC as a new file (File → Open) has passed for whole-building and partial-storey files. Revit is untested. Exporting a real pipe IFC from Archicad is also untested.
+Testing currently uses Archicad. Opening the IFC as a new file (File → Open) has passed for whole-building and partial-storey files. Revit and Bonsai are untested. Exporting a real pipe IFC is also untested.
 
 Rhino dialogs are English. Traditional Chinese is the source of truth for this draft.
 

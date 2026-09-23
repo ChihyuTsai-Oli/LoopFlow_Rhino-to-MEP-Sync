@@ -5,11 +5,12 @@ from __future__ import annotations
 from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.ifc_read import inbound_layer_color, inbound_layer_path, inbound_object_name
 from loopflow_r2m.rhino.layerutil import ensure_layer
+from loopflow_r2m.units import inbound_vertex_z
 from loopflow_r2m.vendor import ensure_vendor
 
 
-def tessellate_inbound(doc, ifc_path, metres_to_doc):
-    """回傳 {success, failed, added}。不可初始化幾何迭代則停。"""
+def tessellate_inbound(doc, ifc_path, metres_to_doc, elevation_shift):
+    """回傳 {success, failed, added}。不可初始化幾何迭代則停。Z 扣掉 elevation_shift。"""
     import ifcopenshell
     import ifcopenshell.geom
     import Rhino
@@ -37,7 +38,7 @@ def tessellate_inbound(doc, ifc_path, metres_to_doc):
                 mesh.Vertices.Add(
                     verts[i] * metres_to_doc,
                     verts[i + 1] * metres_to_doc,
-                    verts[i + 2] * metres_to_doc,
+                    inbound_vertex_z(verts[i + 2], metres_to_doc, elevation_shift),
                 )
             for i in range(0, len(faces), 3):
                 mesh.Faces.AddFace(

@@ -4,7 +4,7 @@
 
 > **開發草稿。** 指令名稱、畫面名與安裝方式尚未凍結。還沒有 Package Manager 套件或工具列。請不要把本頁當成已發布產品的安裝說明。
 
-Rhino 發布建築殼 IFC 給 Revit／Archicad；BIM 端把管線 IFC 送回 Rhino，當**鎖定的 Worksession 外參**。設計判斷只在 Rhino。交換只使用 IFC。BIM 端沒有 LoopFlow 外掛。
+Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把管線 IFC 送回 Rhino，當**鎖定的 Worksession 外參**。設計判斷只在 Rhino。交換只使用 IFC。BIM 端沒有 LoopFlow 外掛。
 
 [▶ 使用說明](./docs/README.md) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
 
@@ -20,9 +20,9 @@ Rhino 發布建築殼 IFC 給 Revit／Archicad；BIM 端把管線 IFC 送回 Rhi
 ## 系統需求
 
 - **Rhino 8**（Windows）
-- **Archicad** 或 **Revit**（必須是 3D BIM）。沒有 3D 就不做
+- **Archicad**、**Revit** 或 **Blender Bonsai**（必須是 3D BIM）。沒有 3D 就不做
 
-測試暫以 Archicad 為準。Archicad 用「檔案 → 開啟」把 IFC 當新檔，整棟與單層已通過。Revit 尚未測。從 Archicad 匯出真實管線 IFC 尚未測過。
+測試暫以 Archicad 為準。Archicad 用「檔案 → 開啟」把 IFC 當新檔，整棟與單層已通過。Revit 與 Bonsai 尚未測。從 BIM 匯出真實管線 IFC 尚未測過。
 
 Rhino 對話框為英文；本說明為正體中文。
 

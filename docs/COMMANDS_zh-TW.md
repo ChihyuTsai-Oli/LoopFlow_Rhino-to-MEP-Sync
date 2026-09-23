@@ -176,10 +176,14 @@ BIM 只出 **3D 管線**（衝突段或勾選系統；不要整棟、不要 2D�
 3. 用 Archicad **內建** IFC 匯出：**IFC4**；只出 3D 管線；不要整棟建築、不要 2D、座標不要另做偏移。標高與樓層維持原樣。
 4. 檔名標來源（Archicad）與日期。
 
+**從 Bonsai 畫管（尚未測；選單名稱未記錄）**
+
+用 Bonsai 開啟產品建築殼 IFC，畫幾段跨越天花的 3D 管，內建匯出 **IFC4**（只 3D、不要整棟／2D、座標不偏移）。再依下面 Rhino 步驟。
+
 **Rhino**
 
 1. 開一個**空白 `.3dm`**，單位設成與工作檔相同。
-2. 貼上上面的 `RMInbound` 那一行，選剛匯出的 IFC。指令會先顯示目前文件單位請你確認；再把可建幾何建成鎖定網面。物件名稱寫成 `IfcType:GlobalId`，依 IFC 類型分層。
+2. 貼上上面的 `RMInbound` 那一行，選剛匯出的 IFC。確認文件單位。空白檔還會請你選工作檔旁的 `config.json`（`RMModels` 寫入的 `elevation_shift`）。管線高度會扣回 Rhino 模型，對上天花，而不是停在建築標高數字上。
 3. **手動**另存成 `.3dm`（建議工作檔旁 `_LoopFlow_Config/loopflow_R2M/inbound/`，固定檔名）。
 4. 回工作檔**手動**用 Worksession 掛上該 `.3dm`。
 

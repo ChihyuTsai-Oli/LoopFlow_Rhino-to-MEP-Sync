@@ -18,6 +18,7 @@ LOG_NAME = "r2m.log"
 CONFIG_NAME = "config.json"
 INBOUND_LAYER_ROOT = "R2M_Inbound"
 INBOUND_COUNT_WARNING_KEY = "inbound_count_warning"
+ELEVATION_SHIFT_KEY = "elevation_shift"
 
 # 未選＝IfcPlate（泛用板件，Archicad 較可能顯示）。天花請明示 IfcCovering。
 # 不下 IfcCeiling（IFC4 無此產品類）。舊預設 Proxy 讀回來當未選。

@@ -20,7 +20,7 @@ from loopflow_r2m.ifc_validate import ValidateError
 from loopflow_r2m.ifc_write import ExportMeta, ExportProduct, ExportStorey
 from loopflow_r2m.layers import layer_is_excluded
 from loopflow_r2m.logutil import append_log
-from loopflow_r2m.names import PRODUCT_VERSION, DEFAULT_IFC_TYPE
+from loopflow_r2m.names import PRODUCT_VERSION, DEFAULT_IFC_TYPE, ELEVATION_SHIFT_KEY
 from loopflow_r2m.paths import config_paths
 from loopflow_r2m.publish import publish_models
 from loopflow_r2m.rhino.collect import collect_objects, default_geom_enabled, layer_rows
@@ -33,8 +33,10 @@ from loopflow_r2m.storey import (
     XY_INSIDE,
     XY_OUTSIDE,
     XY_TOUCH,
+    StoreyPlanError,
     assign_storey,
     classify_bbox_xy,
+    elevation_shift,
 )
 from loopflow_r2m.units import rhino_to_meters
 
@@ -133,6 +135,11 @@ def _run(doc, restore, ctx):
         config = default_config(document_name, PRODUCT_VERSION)
 
     storeys = read_storeys(doc)
+    try:
+        shift = elevation_shift(storeys)
+    except StoreyPlanError as exc:
+        raise R2MStop(str(exc)) from exc
+    _print("Elevation shift (FL minus frame Z): %s" % shift)
     lines = [
         "%s  FL=%s  (frame Z=%s)" % (item.name, item.fl, item.frame_z)
         for item in sorted(storeys, key=lambda row: row.frame_z)
@@ -323,6 +330,7 @@ def _run(doc, restore, ctx):
     persist_choice["geom"] = geom_enabled
     persist_choice["mesh_density"] = density
     set_panel(config, document_name, persist_choice)
+    config[ELEVATION_SHIFT_KEY] = shift
     config["last_export"] = {
         "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "ifc_path": "models/" + paths["ifc"].name,
@@ -330,7 +338,11 @@ def _run(doc, restore, ctx):
         "storey_count": len(storeys),
     }
     save_config(paths["config"], config)
-    msg = "published %s objects, %s storeys" % (len(products), len(storeys))
+    msg = "published %s objects, %s storeys, elevation_shift %s" % (
+        len(products),
+        len(storeys),
+        shift,
+    )
     if skipped_block:
         msg += "; skipped %s blocks" % skipped_block
     if skipped_outside:

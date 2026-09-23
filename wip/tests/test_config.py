@@ -29,6 +29,7 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(data["panels"], {})
         self.assertIsNone(data["last_export"])
         self.assertIsNone(data["inbound_count_warning"])
+        self.assertIsNone(data["elevation_shift"])
 
     def test_roundtrip(self):
         with tempfile.TemporaryDirectory() as folder:

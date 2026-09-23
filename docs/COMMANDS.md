@@ -176,10 +176,14 @@ BIM should export **3D pipes only** (clash segments or checked systems; not the 
 3. Use Archicad’s **built-in** IFC export: **IFC4**; 3D pipes only; no whole building, no 2D, no extra coordinate offset. Keep storeys as they are.
 4. Name the file with the source (Archicad) and the date.
 
+**Drawing pipes in Bonsai (untested; menu labels not recorded)**
+
+Open the product shell IFC in Bonsai, draw a few 3D pipes that cross the ceiling, and export **IFC4** with the built-in exporter (3D only; no whole building, no 2D, no extra offset). Then follow the Rhino steps below.
+
 **Rhino**
 
 1. Open a **blank `.3dm`** with the same units as the working file.
-2. Paste the `RMInbound` line above and pick the IFC. Confirm the document units, then locked meshes are built. Object names are `IfcType:GlobalId`, split by IFC type on layers.
+2. Paste the `RMInbound` line above and pick the IFC. Confirm the document units. A blank file will also ask for the working file’s `config.json` (`elevation_shift` written by `RMModels`). Pipe Z is shifted back onto the Rhino model, aligned with the ceiling, not left at the building-elevation numbers.
 3. **Save** the `.3dm` yourself (suggested: `_LoopFlow_Config/loopflow_R2M/inbound/` next to the working file; keep a stable name).
 4. Back in the working file, **attach** that `.3dm` as a Worksession yourself.
 

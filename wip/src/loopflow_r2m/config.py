@@ -41,6 +41,7 @@ def default_config(document_name="", product_version="0.0.0-dev"):
         "panels": {},
         "mesh_density": DEFAULT_MESH_DENSITY,
         "inbound_count_warning": None,
+        "elevation_shift": None,
     }
 
 

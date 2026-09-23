@@ -36,12 +36,30 @@ XY_TOUCH = "touch"
 
 # 同一個 Z 視為同一層；單位是 Rhino 文件單位。
 Z_EPSILON = 1e-6
+# FL 與框 Z 的差值各層必須相同（Inbound 校正用）。
+SHIFT_TOLERANCE = 1e-4
 # 平面嚴格在內：貼齊邊視為碰觸。
 XY_EPSILON = 1e-9
 
 
 class StoreyPlanError(Exception):
     """編列不成立。message 是英文，直接給使用者看。"""
+
+
+def elevation_shift(storeys):
+    """各層 FL 減框 Z。必須相同，否則擋住。回傳文件單位。"""
+    rows = list(storeys)
+    if not rows:
+        raise StoreyPlanError("No storeys; cannot compute elevation shift.")
+    shifts = [float(item.fl) - float(item.frame_z) for item in rows]
+    base = shifts[0]
+    for item, shift in zip(rows, shifts):
+        if abs(shift - base) > SHIFT_TOLERANCE:
+            raise StoreyPlanError(
+                "Storey %s elevation shift %s does not match %s."
+                % (item.name, shift, base)
+            )
+    return base
 
 
 def build_storey_plan(frames, first_index, roof_index, first_fl):

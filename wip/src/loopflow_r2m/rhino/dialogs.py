@@ -581,6 +581,18 @@ def pick_ifc_file():
     return dialog.FileName
 
 
+def pick_config_file():
+    """回傳 config.json 路徑，取消則 None。"""
+    import Rhino.UI
+
+    dialog = Rhino.UI.OpenFileDialog()
+    dialog.Filter = "R2M config (config.json)|config.json|JSON files (*.json)|*.json"
+    dialog.Title = "Pick working-file config.json (elevation shift)"
+    if not dialog.ShowOpenDialog():
+        return None
+    return dialog.FileName
+
+
 def show_open_health(lines, folders):
     """顯示 Health；按鈕打開資料夾。取消回 False。"""
     try:

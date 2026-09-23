@@ -10,8 +10,8 @@
 
 1. **Save the `.3dm` first.** Unpublished files cannot publish. Settings and exchange files sit next to that file.
 2. **Register storeys, then publish the shell.** `RMStorey` names the frames; `RMModels` writes `models/R2M.ifc`.
-3. **Open that IFC as a new file in BIM** (Archicad: File → Open; do not Merge) and draw 3D pipes there.
-4. **Bring the pipe IFC back.** `RMInbound` only builds locked meshes in the current document; you save and attach the Worksession yourself.
+3. **Open that IFC as a new file in BIM** (Archicad: File → Open; do not Merge. Bonsai / Revit menus untested) and draw 3D pipes there. Heights in BIM follow the FL numbers you typed on the storey frames.
+4. **Bring the pipe IFC back.** `RMInbound` shifts Z back onto the Rhino model (not the building-elevation numbers). You save and attach the Worksession yourself.
 5. **Edit the original ceiling / wall / slab against the reference, then run Models again.**
 
 No camera, lights, or live link. The tool does not continue to the next channel on its own.
@@ -35,8 +35,8 @@ Move the whole project folder when you change computers. The Worksession `.rws` 
 | You want to | Rhino | BIM |
 |---|---|---|
 | Register storeys | `RMStorey` | — |
-| Architectural shell | `RMModels` | **Open the IFC as a new file** (Archicad, tested). Revit is expected to **Link IFC**; untested |
-| Pipe reference | `RMInbound` → save by hand → attach Worksession by hand | Built-in **IFC4** export, 3D pipes only. Real pipe export is untested |
+| Architectural shell | `RMModels` | **Open the IFC as a new file** (Archicad, tested). Revit is expected to **Link IFC**; untested. Bonsai opens the product IFC; menus untested |
+| Pipe reference | `RMInbound` → save by hand → attach Worksession by hand | Built-in / Bonsai **IFC4** export, 3D pipes only. Real pipe export is untested. Inbound puts Z back on the Rhino model |
 | Settings and docs | `RMOpen` | — |
 
 BIM has no LoopFlow buttons.

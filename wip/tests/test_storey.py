@@ -17,6 +17,7 @@ from loopflow_r2m.storey import (
     build_partial_storey_plan,
     build_storey_plan,
     classify_bbox_xy,
+    elevation_shift,
 )
 
 
@@ -197,6 +198,32 @@ class ClassifyBboxTests(unittest.TestCase):
             (0, 10),
         )
         self.assertEqual(classify_bbox_xy((1, 1, 7, 9), concave), XY_TOUCH)
+
+
+class ElevationShiftTests(unittest.TestCase):
+    def test_constant_shift(self):
+        storeys = [
+            Storey("2F", 850.0, frame_z=-53.0),
+            Storey("3F", 900.0, frame_z=-3.0),
+            Storey("4F", 950.0, frame_z=47.0),
+        ]
+        self.assertAlmostEqual(elevation_shift(storeys), 903.0)
+
+    def test_zero_when_fl_equals_frame(self):
+        storeys = [Storey("1F", 0.0, frame_z=0.0), Storey("2F", 300.0, frame_z=300.0)]
+        self.assertEqual(elevation_shift(storeys), 0.0)
+
+    def test_empty_raises(self):
+        with self.assertRaises(StoreyPlanError):
+            elevation_shift([])
+
+    def test_mismatch_raises(self):
+        storeys = [
+            Storey("1F", 0.0, frame_z=0.0),
+            Storey("2F", 400.0, frame_z=300.0),
+        ]
+        with self.assertRaises(StoreyPlanError):
+            elevation_shift(storeys)
 
 
 if __name__ == "__main__":
