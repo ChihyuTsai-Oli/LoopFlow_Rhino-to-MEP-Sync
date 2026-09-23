@@ -12,7 +12,7 @@ from loopflow_r2m.rhino.dialogs import show_open_health
 
 
 COMMAND = "RMOpen"
-# 目前 Open Docs 開本機實作文件夾。公開 GitHub 使用說明完成後改開該頁。
+# 目前 Open Docs 開本機 docs/（入口 docs/README.md）。合入後有穩定 GitHub 頁再改開該 URL。
 REPO_DOCS = Path(__file__).resolve().parents[3] / "docs"
 
 
