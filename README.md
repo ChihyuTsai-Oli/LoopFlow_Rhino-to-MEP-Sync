@@ -22,7 +22,7 @@ No camera, lights, or live link. Do not use inbound geometry for drawings or as 
 - **Rhino 8** (Windows)
 - **Archicad**, **Revit**, or **Blender Bonsai** (3D BIM is required)
 
-Testing currently uses Archicad. Opening the IFC as a new file (File → Open) has passed for whole-building and partial-storey files. Revit and Bonsai are untested. Exporting a real pipe IFC is also untested.
+Exchange format is **IFC only**. Testing uses Archicad. Opening the IFC as a new file (File → Open) has passed for whole-building and partial-storey files. Revit is untested. **Bonsai is not tested** — it is listed only as another IFC working environment, like Revit and Archicad. Exporting a real pipe IFC is also untested.
 
 Rhino dialogs are English. Traditional Chinese is the source of truth for this draft.
 

@@ -176,10 +176,6 @@ BIM should export **3D pipes only** (clash segments or checked systems; not the 
 3. Use Archicad’s **built-in** IFC export: **IFC4**; 3D pipes only; no whole building, no 2D, no extra coordinate offset. Keep storeys as they are.
 4. Name the file with the source (Archicad) and the date.
 
-**Drawing pipes in Bonsai (untested; menu labels not recorded)**
-
-Open the product shell IFC in Bonsai, draw a few 3D pipes that cross the ceiling, and export **IFC4** with the built-in exporter (3D only; no whole building, no 2D, no extra offset). Then follow the Rhino steps below.
-
 **Rhino**
 
 1. Open a **blank `.3dm`** with the same units as the working file.

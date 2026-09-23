@@ -19,7 +19,7 @@ AI 必須依序完整讀取：
 
 ## 產品定位
 
-獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad／Blender Bonsai 發布管線 IFC（回 Rhino 當 Worksession 外參）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。
+獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad／Blender Bonsai 用 IFC 作業（管線 IFC 回 Rhino 當 Worksession 外參）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。**不測 Bonsai**（只在說明裡列為作業環境）。
 
 跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，C01 核心已開工。家中 Archicad 已能匯入針刺測檔；**測試 BIM 暫以 Archicad 為準，且只有家中電腦有 Archicad**。公司日只做 Rhino／單元測試。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結；連結驗收放家中）。
 

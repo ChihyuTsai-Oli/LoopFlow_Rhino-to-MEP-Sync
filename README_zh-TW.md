@@ -22,7 +22,7 @@ Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把管�
 - **Rhino 8**（Windows）
 - **Archicad**、**Revit** 或 **Blender Bonsai**（必須是 3D BIM）。沒有 3D 就不做
 
-測試暫以 Archicad 為準。Archicad 用「檔案 → 開啟」把 IFC 當新檔，整棟與單層已通過。Revit 與 Bonsai 尚未測。從 BIM 匯出真實管線 IFC 尚未測過。
+交換只使用 **IFC**。測試暫以 Archicad 為準。Archicad 用「檔案 → 開啟」把 IFC 當新檔，整棟與單層已通過。Revit 尚未測。**不測 Bonsai**——只在說明裡把它與 Revit、Archicad 並列為 IFC 作業環境。從 BIM 匯出真實管線 IFC 尚未測過。
 
 Rhino 對話框為英文；本說明為正體中文。
 
