@@ -1,10 +1,11 @@
 """產生開發期 LoopFlow_R2M.rui（按鈕跑 ScriptEditor 入口）。
 
-圖示為原創線稿，不是 Noun Project。正式 yak 之後把 <script> 改成 ! _RMOpen 等註冊指令。
-重跑本檔會覆寫 rui；GUID 由名稱穩定產生，不要手改 rui 裡的 guid。
+圖示從同資料夾的五個 SVG 寫入：`LoopFlow_R2M.svg` 是工具列分頁圖，其餘四個是按鈕。
+成功寫出 rui 後會刪掉這五個 SVG。重跑前再放回。GUID 由名稱穩定產生。
 """
 from __future__ import annotations
 
+import re
 import uuid
 from pathlib import Path
 from xml.sax.saxutils import escape
@@ -12,58 +13,51 @@ from xml.sax.saxutils import escape
 NS = uuid.UUID("7c2e1a90-4b6f-4d11-9e3a-0f8c2b5d7a11")
 REPO_ROOT = Path(__file__).resolve().parents[2]
 COMMANDS = REPO_ROOT / "wip" / "commands"
-OUT = REPO_ROOT / "wip" / "docs" / "toolbar" / "LoopFlow_R2M.rui"
+TOOLBAR = REPO_ROOT / "wip" / "docs" / "toolbar"
+OUT = TOOLBAR / "LoopFlow_R2M.rui"
 SCRIPT_ROOT = r"E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands"
+
+BUTTONS = (
+    ("open", "Open", "Config folder and last publish", "RMOpen.py", "R2M_Open.svg"),
+    ("storey", "Storey", "Register storey frames and FL", "RMStorey.py", "R2M_Storey.svg"),
+    ("models", "Models", "Publish architectural-shell IFC", "RMModels.py", "R2M_Models.svg"),
+    ("inbound", "Inbound", "Import BIM geometry with height correction", "RMInbound.py", "R2M_Inbound.svg"),
+)
+BAR_SVG = "LoopFlow_R2M.svg"
+SVG_FILES = (BAR_SVG,) + tuple(item[-1] for item in BUTTONS)
+_SVG_ROOT = re.compile(r"<svg\b.*</svg>", re.DOTALL | re.IGNORECASE)
 
 
 def gid(name: str) -> str:
     return str(uuid.uuid5(NS, name))
 
 
-BUTTONS = (
-    ("open", "Open", "Config folder and last publish", "RMOpen.py"),
-    ("storey", "Storey", "Register storey frames and FL", "RMStorey.py"),
-    ("models", "Models", "Publish architectural-shell IFC", "RMModels.py"),
-    ("inbound", "Inbound", "Import BIM geometry with height correction", "RMInbound.py"),
-)
-
-ICONS = {
-    "open": (
-        '<rect x="6" y="18" width="36" height="22" rx="2"/>'
-        '<path d="M6 18 V14 H18 L22 18 H42"/>'
-    ),
-    "storey": (
-        '<rect x="8" y="8" width="32" height="10"/>'
-        '<rect x="8" y="19" width="32" height="10"/>'
-        '<rect x="8" y="30" width="32" height="10"/>'
-    ),
-    "models": (
-        '<path d="M10 18 L24 8 L38 18 V40 H10 Z"/>'
-        '<rect x="20" y="26" width="8" height="14"/>'
-    ),
-    "inbound": (
-        '<path d="M24 6 V26"/>'
-        '<path d="M16 18 L24 28 L32 18"/>'
-        '<rect x="10" y="28" width="28" height="12"/>'
-    ),
-}
+def load_svg(name: str) -> str:
+    path = TOOLBAR / name
+    if not path.is_file():
+        raise SystemExit(f"找不到 {path}。請把五個 SVG 放回 toolbar 資料夾再跑。")
+    text = path.read_text(encoding="utf-8")
+    match = _SVG_ROOT.search(text)
+    if not match:
+        raise SystemExit(f"{path} 沒有 <svg> 根節點")
+    return match.group(0)
 
 
-def svg(inner: str, stroke: str) -> str:
+def wrap_icon(inner_svg: str) -> str:
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" version="1.1" '
-        f'viewBox="0 0 48 48" fill="none" stroke="{stroke}" stroke-width="2" '
-        f'stroke-linejoin="round" stroke-linecap="round">{inner}</svg>'
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" version="1.1" '
+        'viewBox="0pt 0pt 48pt 48pt" fill-dark="#FFF" stroke-dark="none">'
+        f"{inner_svg}"
+        "</svg>"
     )
 
 
-def icon_xml(key: str) -> str:
+def icon_xml(key: str, svg_name: str) -> str:
     guid = gid(f"icon.{key}")
-    inner = ICONS[key]
+    wrapped = wrap_icon(load_svg(svg_name))
     return (
         f'    <icon guid="{guid}" name="{guid}.svg">\n'
-        f"      <light>\n        {svg(inner, '#000000')}\n      </light>\n"
-        f"      <dark>\n        {svg(inner, '#e5e5e5')}\n      </dark>\n"
+        f"      <light>\n        {wrapped}\n      </light>\n"
         f"    </icon>"
     )
 
@@ -96,7 +90,7 @@ def main() -> int:
     ui = gid("ui")
     group = gid("group")
     bar = gid("bar")
-    bar_bitmap = gid("icon.open")
+    bar_bitmap = gid("icon.bar")
     items = []
     spacer_n = 0
     order = ["open", "storey", "models", "inbound"]
@@ -114,9 +108,12 @@ def main() -> int:
 
     macros = "\n".join(
         macro_xml(key, title, help_text, script)
-        for key, title, help_text, script in BUTTONS
+        for key, title, help_text, script, _svg in BUTTONS
     )
-    icons = "\n".join(icon_xml(key) for key, *_rest in BUTTONS)
+    icons = "\n".join(
+        [icon_xml("bar", BAR_SVG)]
+        + [icon_xml(key, svg_name) for key, _t, _h, _s, svg_name in BUTTONS]
+    )
 
     xml = f"""<?xml version="1.0" encoding="utf-8"?>
 <RhinoUI major_ver="5" minor_ver="0" guid="{ui}">
@@ -154,12 +151,16 @@ def main() -> int:
   </bitmaps>
 </RhinoUI>
 """
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(xml, encoding="utf-8-sig", newline="\n")
-    missing = [name for _k, _t, _h, name in BUTTONS if not (COMMANDS / name).is_file()]
+    missing = [name for _k, _t, _h, name, _svg in BUTTONS if not (COMMANDS / name).is_file()]
     if missing:
         raise SystemExit("missing command scripts: " + ", ".join(missing))
-    print(f"wrote {OUT} ({OUT.stat().st_size} bytes)")
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(xml, encoding="utf-8-sig", newline="\n")
+    for name in SVG_FILES:
+        path = TOOLBAR / name
+        if path.is_file():
+            path.unlink()
+    print(f"wrote {OUT} ({OUT.stat().st_size} bytes); removed {len(SVG_FILES)} svg files")
     return 0
 
 

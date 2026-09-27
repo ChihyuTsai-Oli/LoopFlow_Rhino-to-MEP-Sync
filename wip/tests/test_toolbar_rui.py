@@ -52,9 +52,35 @@ class ToolbarRuiTests(unittest.TestCase):
         self.assertNotIn("_RMOpen", scripts)
         self.assertIn("RMOpen.py", scripts)
 
+    def test_user_icons_embedded(self):
+        xml = ET.tostring(self.root.find("icons"), encoding="unicode")
+        self.assertEqual(len(list(self.root.find("icons"))), 5)
+        self.assertIn("1769.854,1409.23", xml)
+        self.assertIn("M15,7L4,7C3.451,7", xml)
+        self.assertIn("M17.858,89.747", xml)
+        self.assertIn("M2.292,2.112L4.535,2.112", xml)
+        self.assertIn("M5.612,5.687L1.215,5.687", xml)
+        bar = self.root.find("tool_bars").find("tool_bar")
+        self.assertTrue((bar.get("bitmap_id") or "").strip())
+
     def test_group_title(self):
         text = self.root.find("tool_bar_groups").find("tool_bar_group").find("text")
         self.assertEqual(text.find("locale_1033").text, "LoopFlow R2M")
+
+    def test_source_svgs_not_kept(self):
+        folder = RUI.parent
+        leftover = [
+            name
+            for name in (
+                "LoopFlow_R2M.svg",
+                "R2M_Open.svg",
+                "R2M_Storey.svg",
+                "R2M_Models.svg",
+                "R2M_Inbound.svg",
+            )
+            if (folder / name).exists()
+        ]
+        self.assertEqual(leftover, [])
 
 
 if __name__ == "__main__":

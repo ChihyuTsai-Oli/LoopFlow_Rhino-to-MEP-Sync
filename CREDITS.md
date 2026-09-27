@@ -2,4 +2,4 @@
 
 ## Toolbar Icons
 
-`wip/docs/toolbar/LoopFlow_R2M.rui` 裡的四顆圖示是本產品原創線稿（Open／Storey／Models／Inbound），不是 Noun Project。由 `wip/tools/build_toolbar_rui.py` 寫入。
+`LoopFlow_R2M.rui` 的分頁圖與四顆按鈕圖由使用者提供的 Affinity SVG 寫入（原檔建完即刪）。不是 Noun Project。
