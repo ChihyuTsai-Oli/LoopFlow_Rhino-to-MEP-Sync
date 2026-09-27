@@ -8,7 +8,7 @@ from pathlib import Path
 
 from tests import SRC  # noqa: F401
 
-from loopflow_r2m.paths import public_docs_dir
+from loopflow_r2m.paths import PUBLIC_DOCS_URL
 from loopflow_r2m.vendor import vendor_dir
 
 PACKAGING = Path(__file__).resolve().parents[1] / "packaging"
@@ -18,6 +18,7 @@ if str(PACKAGING) not in sys.path:
 from command_locate import (  # noqa: E402
     COMMANDS,
     PLUGIN_ID,
+    YAK_PACKAGE,
     from_dev_repo,
     from_package_dir,
     resolve_r2m_src,
@@ -52,6 +53,7 @@ class LocateTests(unittest.TestCase):
         self.assertIn(PLUGIN_ID, text)
         self.assertIn("run_rmopen", text)
         self.assertIn("#! python 3", text)
+        self.assertIn(YAK_PACKAGE, text)
 
 
 class VendorTests(unittest.TestCase):
@@ -62,24 +64,12 @@ class VendorTests(unittest.TestCase):
 
 
 class PublicDocsTests(unittest.TestCase):
-    def test_repo_docs_from_command_open_layout(self):
-        repo = Path(__file__).resolve().parents[2]
-        anchor = repo / "wip" / "src" / "loopflow_r2m" / "rhino" / "command_open.py"
-        self.assertTrue(anchor.is_file())
-        docs = public_docs_dir(anchor)
-        self.assertEqual(docs, repo / "docs")
-        self.assertTrue((docs / "README.md").is_file())
-
-    def test_yak_docs_next_to_lib(self):
-        with tempfile.TemporaryDirectory() as raw:
-            pkg = Path(raw)
-            anchor = pkg / "lib" / "loopflow_r2m" / "rhino" / "command_open.py"
-            anchor.parent.mkdir(parents=True)
-            anchor.write_text("", encoding="utf-8")
-            docs = pkg / "docs"
-            docs.mkdir()
-            (docs / "README.md").write_text("ok", encoding="utf-8")
-            self.assertEqual(public_docs_dir(anchor), docs)
+    def test_open_docs_is_github_repo(self):
+        self.assertEqual(
+            PUBLIC_DOCS_URL,
+            "https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync",
+        )
+        self.assertTrue(PUBLIC_DOCS_URL.startswith("https://"))
 
 
 if __name__ == "__main__":

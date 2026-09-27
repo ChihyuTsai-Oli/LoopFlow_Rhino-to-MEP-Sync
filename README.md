@@ -4,9 +4,11 @@
 
 Rhino publishes an architectural-shell IFC for Revit, Archicad, and Blender Bonsai. BIM sends MEP geometry back as IFC, which Rhino attaches as a Worksession reference. **Design stays in Rhino.** Exchange is IFC only. There is no LoopFlow plug-in on the BIM side.
 
-[▶ Documentation](./docs/README.md) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
+Rhino installs as a single `.yak`.
 
-Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no Package Manager package yet. For now, open the development toolbar `wip/docs/toolbar/LoopFlow_R2M.rui` (buttons run those command names). Dialogs are in English; Traditional Chinese is the source of truth for this guide.
+[▶ Documentation](./docs/README.md) · [▶ Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
+
+Dialogs are in English; Traditional Chinese is the source of truth for this guide.
 
 ## Features
 
@@ -27,13 +29,19 @@ Exchange is **IFC only**. Archicad: File → Open as a new file (do not Merge). 
 
 Receiving the shell and bringing walls back (including height correction) has passed in Archicad and Revit. Real ducts and pipes have not been tested.
 
-## How to run for now
+## Quick start
 
-Open the development toolbar, or paste a command name from [Commands](./docs/COMMANDS.md) into the Rhino **command prompt**. Save the `.3dm` first (Inbound may use a blank new file). The folder that holds the `.3dm` is the work folder. Settings and IFC live next to it in `_LoopFlow_Config/loopflow_R2M/`.
+### Installation
+
+1. Open Rhino 8 and run `PackageManager`.
+2. Search for **`loopflow Rhino to MEP Sync`** and install.
+3. Or download `loopflow-rhino-to-mep-sync-1.0.0-rh8_0-win.yak` from [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) and install from file.
+4. **Quit Rhino completely and reopen it.**
+5. Use the **LoopFlow R2M** toolbar. If it does not appear: **Tools → Options → Plug-ins**, enable **LoopFlow_R2M**. If it still does not show, type `RMOpen` once.
+
+Commands: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. Save the `.3dm` first (Inbound may use a blank new file). The folder that holds the `.3dm` is the work folder. Settings and IFC live next to it in `_LoopFlow_Config/loopflow_R2M/`.
 
 A whole-building file and a partial-storey file in the same folder share one `config.json`. To inbound against the partial file, run `RMModels` on that file first so the correction value matches it.
-
-## Quick start
 
 1. Draw storey frames and run `RMStorey`.
 2. Run `RMModels` to write `models/R2M.ifc`. If you need both a whole-building and a partial copy, rename immediately after publish.

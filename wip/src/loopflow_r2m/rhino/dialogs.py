@@ -594,17 +594,27 @@ def pick_config_file():
 
 
 def show_open_health(lines, folders):
-    """顯示 Health；按鈕打開資料夾。取消回 False。"""
+    """顯示 Health；Config／Models 開資料夾，Docs 開 GitHub。取消回 False。"""
     try:
         return _show_open_eto(lines, folders)
     except ImportError:
         return _show_open_cli(lines, folders)
 
 
-def _open_path(path):
+def _open_target(target):
+    if not target:
+        return
+    text = str(target)
+    if text.startswith("https://") or text.startswith("http://"):
+        import webbrowser
+
+        webbrowser.open(text)
+        return
+    from pathlib import Path
     import os
 
-    os.startfile(str(path))
+    if Path(text).exists():
+        os.startfile(text)
 
 
 def _show_open_eto(lines, folders):
@@ -622,10 +632,9 @@ def _show_open_eto(lines, folders):
     box.Text = "\n".join(lines)
     box.Height = 180
 
-    def make_open(folder):
+    def make_open(target):
         def handler(sender, args):
-            if folder and __import__("pathlib").Path(folder).exists():
-                _open_path(folder)
+            _open_target(target)
 
         return handler
 
@@ -670,6 +679,6 @@ def _show_open_cli(lines, folders):
         "docs": folders.get("docs"),
     }
     if key in mapping and mapping[key]:
-        _open_path(mapping[key])
+        _open_target(mapping[key])
     return True
 

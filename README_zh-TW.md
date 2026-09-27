@@ -4,9 +4,11 @@
 
 Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把 MEP 幾何 IFC 送回 Rhino，當 Worksession 外參。**設計判斷只在 Rhino。** 交換只使用 IFC。BIM 端沒有 LoopFlow 外掛。
 
-[▶ 使用說明](./docs/README.md) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
+Rhino 端裝一份 `.yak`。
 
-指令名已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。正式套件尚未上架。開發期可開啟工具列 `wip/docs/toolbar/LoopFlow_R2M.rui`（按鈕跑這四個指令名）。畫面為英文；本說明為正體中文。
+[▶ 使用說明](./docs/README.md) · [▶ Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
+
+畫面為英文；本說明為正體中文。
 
 ## 主要功能
 
@@ -27,13 +29,19 @@ Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把 MEP
 
 Archicad、Revit 收殼與牆回檔（含高度校正）已通過。真實風管／水管尚未測。
 
-## 目前怎麼跑
+## 快速開始
 
-請開啟開發工具列，或把 [指令逐項說明](./docs/COMMANDS_zh-TW.md) 裡的指令名貼到 Rhino **指令列**。開始前先把 `.3dm` 存檔（Inbound 可用空白新檔）。`.3dm` 所在資料夾就是作業資料夾；設定與 IFC 在同層 `_LoopFlow_Config/loopflow_R2M/`。
+### 安裝
+
+1. 開啟 Rhino 8，命令列執行 `PackageManager`
+2. 搜尋畫面名 **`loopflow Rhino to MEP Sync`** 並安裝
+3. 或從 [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) 下載 `loopflow-rhino-to-mep-sync-1.0.0-rh8_0-win.yak`，在 Package Manager 選擇從檔案安裝
+4. **完全關掉 Rhino 再開**
+5. 使用工具列 **LoopFlow R2M**。若沒出現：**Tools → Options → Plug-ins**，勾選 **LoopFlow_R2M**。仍沒有就打一次 `RMOpen`
+
+指令名：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。開始前先把 `.3dm` 存檔（Inbound 可用空白新檔）。`.3dm` 所在資料夾就是作業資料夾；設定與 IFC 在同層 `_LoopFlow_Config/loopflow_R2M/`。
 
 同一資料夾的整棟與單層共用一份 `config.json`。要對單層做 Inbound，請先對單層跑過 `RMModels`，校正值才會是單層的。
-
-## 快速開始
 
 1. 畫各樓層高程框，跑 `RMStorey`。
 2. 跑 `RMModels`，寫出 `models/R2M.ifc`。整棟與單層要留兩份時，發布後立刻改名。

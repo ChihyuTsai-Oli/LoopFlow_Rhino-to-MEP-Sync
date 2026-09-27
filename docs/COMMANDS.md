@@ -1,6 +1,6 @@
 # LoopFlow R2M Commands
 
-> Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. A local development package can register them; it is not on Package Manager yet. Open the development toolbar; buttons run those command names.
+> Command names: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. Install from the [homepage](../README.md).
 >
 > Overview: [User guide](./USER_GUIDE.md).
 >
@@ -8,17 +8,7 @@
 
 ## How to run for now
 
-A local development package `loopflow-r2m` 0.1.0 can be installed (not published). Restart Rhino after installing. Both computers use `E:\_GitHub` as the Git root. Run on an isolated file; do not touch the live working document.
-
-**Open the toolbar (preferred)**
-
-1. Rhino: **Options → Toolbars**.
-2. **File → Open** `E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\docs\toolbar\LoopFlow_R2M.rui`.
-3. You should see a **LoopFlow R2M** tab: Open / Storey / Models / Inbound.
-
-The buttons use the same registered names as the paste lines below. Each run drops the already-loaded module, so re-running in the same Rhino window picks up new code from disk.
-
-You can still paste one full line into the Rhino **command prompt** and press Enter.
+Install from the [homepage](../README.md). Quit Rhino completely and reopen it. Use the **LoopFlow R2M** toolbar, or paste a line below into the Rhino **command prompt**. Run on an isolated file; do not touch the live working document.
 
 ## Quick index
 
@@ -49,7 +39,7 @@ Buttons:
 
 - **Open Config** — `_LoopFlow_Config/loopflow_R2M/`
 - **Open models** — folder that holds `R2M.ifc`
-- **Open Docs** — currently the local `docs/` folder (entry: [docs/README.md](./README.md)). After this guide is on GitHub, the button will open that page.
+- **Open Docs** — the [GitHub project page](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
 
 ---
 

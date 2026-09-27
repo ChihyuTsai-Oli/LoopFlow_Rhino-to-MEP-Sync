@@ -80,6 +80,16 @@ class ToolbarRuiTests(unittest.TestCase):
         ]
         self.assertEqual(leftover, [])
 
+    def test_package_icon_png(self):
+        import struct
+
+        icon = RUI.parent / "icon.png"
+        self.assertTrue(icon.is_file(), icon)
+        data = icon.read_bytes()
+        self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
+        width, height = struct.unpack(">II", data[16:24])
+        self.assertEqual((width, height), (800, 800))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -5,7 +5,7 @@ from __future__ import annotations
 from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.health import health_lines
 from loopflow_r2m.logutil import append_log
-from loopflow_r2m.paths import config_paths, public_docs_dir
+from loopflow_r2m.paths import PUBLIC_DOCS_URL, config_paths
 from loopflow_r2m.rhino.dialogs import show_open_health
 
 
@@ -38,7 +38,7 @@ def _run(doc):
     folders = {
         "config": str(paths["root"]),
         "models": str(paths["models"]),
-        "docs": str(public_docs_dir(__file__)),
+        "docs": PUBLIC_DOCS_URL,
     }
     paths["root"].mkdir(parents=True, exist_ok=True)
     paths["models"].mkdir(parents=True, exist_ok=True)

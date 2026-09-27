@@ -1,6 +1,6 @@
 # LoopFlow R2M 指令逐項說明
 
-> 指令名稱已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。本機可裝開發套件；尚未上架 Package Manager。開發期開工具列，按鈕跑這四個指令名。
+> 指令名稱：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。安裝見 [專案主頁](../README_zh-TW.md)。
 >
 > 整體流程見 [使用說明總覽](./USER_GUIDE_zh-TW.md)。
 >
@@ -8,17 +8,7 @@
 
 ## 目前怎麼跑
 
-本機可裝開發套件 `loopflow-r2m` 0.1.0（非正式上架）。裝完請重開 Rhino。兩台電腦的 Git 根目錄都是 `E:\_GitHub`。請開隔離檔再跑，不要動正在編輯的工作檔。
-
-**開工具列（建議）**
-
-1. Rhino：**Options → Toolbars**。
-2. **File → Open**，選 `E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\docs\toolbar\LoopFlow_R2M.rui`。
-3. 應出現分頁 **LoopFlow R2M**：Open／Storey／Models／Inbound。
-
-按鈕與指令列打的名字相同。每次執行會丟掉已載入的模組，同一 Rhino 視窗重跑就會用磁碟上的新碼。
-
-也可把下面那一行貼到 **指令列** 再按 Enter。
+安裝見 [專案主頁](../README_zh-TW.md)。裝完請完全關掉 Rhino 再開。使用工具列 **LoopFlow R2M**，或把下面那一行貼到 **指令列** 再按 Enter。請開隔離檔再跑，不要動正在編輯的工作檔。
 
 ## 快速索引
 
@@ -49,7 +39,7 @@
 
 - **Open Config** — 開啟 `_LoopFlow_Config/loopflow_R2M/`
 - **Open models** — `R2M.ifc` 所在資料夾
-- **Open Docs** — 目前開本機 `docs/`（本說明的入口是 [docs/README.md](./README.md)）。上 GitHub 之後會改開該頁
+- **Open Docs** — 開啟 [GitHub 專案頁](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
 
 ---
 

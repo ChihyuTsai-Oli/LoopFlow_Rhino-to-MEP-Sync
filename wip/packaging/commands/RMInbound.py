@@ -9,7 +9,7 @@ from pathlib import Path
 
 PLUGIN_ID = "814a8439-9948-530a-ad43-69048e85ec1e"
 PLUGIN_NAME = "LoopFlow_R2M"
-YAK_PACKAGE = "loopflow-r2m"
+YAK_PACKAGE = "loopflow-rhino-to-mep-sync"
 DEV_SRC = Path(r"E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync") / "wip" / "src"
 
 

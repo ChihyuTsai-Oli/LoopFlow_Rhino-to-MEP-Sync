@@ -1,14 +1,18 @@
 ---
-name: loopflow-r2m
-version: 0.1.0
+name: loopflow-rhino-to-mep-sync
+version: 1.0.0
 authors:
 - Chihyu Tsai
 description: >
-  LoopFlow R2M: publish an architectural-shell IFC from Rhino and bring BIM
-  geometry back with height correction.
+  loopflow Rhino to MEP Sync.
+  Publish an architectural-shell IFC from Rhino 8 and bring BIM geometry
+  back with height correction.
+  https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync
 url: https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync
 keywords:
 - rhino
 - ifc
 - loopflow
 - guid:814a8439-9948-530a-ad43-69048e85ec1e
+platform: win
+icon: icon.png

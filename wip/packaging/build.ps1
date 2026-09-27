@@ -8,11 +8,13 @@ $Prepared = Join-Path $Build "LoopFlow_R2M.prepared.rhproj"
 $RhinoCode = "C:\Program Files\Rhino 8\System\RhinoCode.exe"
 $Yak = "C:\Program Files\Rhino 8\System\Yak.exe"
 $ProductRui = Join-Path $Wip "docs\toolbar\LoopFlow_R2M.rui"
-$Version = "0.1.0"
+$IconSrc = Join-Path $Wip "docs\toolbar\icon.png"
+$Version = "1.0.0"
 
 if (-not (Test-Path $RhinoCode)) { throw "RhinoCode.exe not found" }
 if (-not (Test-Path $Yak)) { throw "Yak.exe not found" }
 if (-not (Test-Path $ProductRui)) { throw "LoopFlow_R2M.rui not found" }
+if (-not (Test-Path $IconSrc)) { throw "icon.png not found" }
 
 Set-Location $Here
 python generate_commands.py
@@ -63,6 +65,7 @@ $DocsDst = Join-Path $StageDir "docs"
 if (Test-Path $DocsDst) { Remove-Item $DocsDst -Recurse -Force }
 Copy-Item (Join-Path $Repo "docs") $DocsDst -Recurse -Force
 Copy-Item (Join-Path $Repo "LICENSE") (Join-Path $StageDir "LICENSE") -Force
+Copy-Item -Force $IconSrc (Join-Path $StageDir "icon.png")
 Copy-Item -Force (Join-Path $Here "manifest.yml") (Join-Path $StageDir "manifest.yml")
 
 $notice = Join-Path $StageDir "THIRD_PARTY_IFCOPENSHELL.txt"

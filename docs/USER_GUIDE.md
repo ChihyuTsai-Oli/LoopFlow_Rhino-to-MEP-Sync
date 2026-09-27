@@ -1,6 +1,6 @@
 # LoopFlow R2M User Guide
 
-> Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. A local development package can register them; it is not on Package Manager yet. Open the development toolbar for now. Dialogs are in English.
+> Command names: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. Install from the [homepage](../README.md). Dialogs are in English.
 >
 > One minute on how it works. Buttons and steps: [Commands](./COMMANDS.md). Product intro: [homepage](../README.md).
 

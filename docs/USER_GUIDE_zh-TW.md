@@ -1,6 +1,6 @@
 # LoopFlow R2M 使用說明總覽
 
-> 指令名稱已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。本機可裝開發套件；尚未上架 Package Manager。開發期可開工具列。畫面為英文。
+> 指令名稱：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。安裝見 [專案主頁](../README_zh-TW.md)。畫面為英文。
 >
 > 一分鐘理解怎麼運作。按鈕與逐步操作見 [指令逐項說明](./COMMANDS_zh-TW.md)。產品介紹見 [專案主頁](../README_zh-TW.md)。
 
