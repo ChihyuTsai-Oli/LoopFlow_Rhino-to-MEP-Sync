@@ -1,6 +1,6 @@
 """把三角網面產品寫成 IFC4 Tessellation。不 import Rhino。
 
-XY 維持 Rhino 世界座標。樓層 ObjectPlacement 的 Z 用 FL（公尺）；
+XY 維持 Rhino 世界座標。樓層 ObjectPlacement 的 Z 用 FL（IFC 公分）；
 網面頂點 Z 改成相對該層框的幾何高度，BIM 合成後＝FL + (世界Z − 框Z)。
 """
 
@@ -11,9 +11,12 @@ from collections import namedtuple
 from .guid import compress_guid
 from .names import PRODUCER
 
+# 與舊約 1.0E-5 公尺同級（檔內單位是公分）。
+IFC_LENGTH_PRECISION_CM = 1.0e-3
+
 
 class ExportStorey(namedtuple("_ExportStorey", "name elevation_m frame_z_m")):
-    """elevation_m 是 FL；frame_z_m 是框的幾何高度（皆公尺）。省略框高則視為等於 FL。"""
+    """elevation_m 是 FL；frame_z_m 是框的幾何高度（皆 IFC 公分）。省略框高則視為等於 FL。"""
 
     def __new__(cls, name, elevation_m, frame_z_m=None):
         fl = float(elevation_m)
@@ -66,6 +69,16 @@ def _stable_guid(seed):
 
     digest = hashlib.md5(seed.encode("utf-8")).hexdigest()
     return compress_guid(digest)
+
+
+def _set_length_centimetres(ifc):
+    """Models 出去的 IFC 長度單位是公分。面積／體積維持範本公尺系。"""
+    for unit in ifc.by_type("IfcSIUnit"):
+        if unit.UnitType == "LENGTHUNIT":
+            unit.Prefix = "CENTI"
+            unit.Name = "METRE"
+    for context in ifc.by_type("IfcGeometricRepresentationContext"):
+        context.Precision = IFC_LENGTH_PRECISION_CM
 
 
 def relative_vertices(vertices, frame_z_m):
@@ -165,7 +178,7 @@ def _tessellation(ifc, context, vertices, faces):
 
 
 def write_models_ifc(path, meta, storeys, products):
-    """寫出建築殼 IFC。長度已是公尺。XY 世界座標；Z 相對樓層框。"""
+    """寫出建築殼 IFC。長度已是公分。XY 世界座標；Z 相對樓層框。"""
     import ifcopenshell
     import ifcopenshell.template
 
@@ -183,6 +196,7 @@ def write_models_ifc(path, meta, storeys, products):
         application_version=meta.product_version,
         schema_identifier="IFC4",
     )
+    _set_length_centimetres(ifc)
     owner, context, storey_map = _spatial(ifc, ifcopenshell, meta, storeys)
     frames = {item.name: item for item in storeys}
     grouped = {}

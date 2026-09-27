@@ -2,7 +2,12 @@ import unittest
 
 from tests import SRC  # noqa: F401  先插入 path
 
-from loopflow_r2m.units import inbound_vertex_z, meters_to_rhino, rhino_to_meters
+from loopflow_r2m.units import (
+    inbound_vertex_z,
+    meters_to_rhino,
+    rhino_to_ifc,
+    rhino_to_meters,
+)
 
 
 class UnitsTests(unittest.TestCase):
@@ -11,6 +16,18 @@ class UnitsTests(unittest.TestCase):
         metres = rhino_to_meters(280, scale)
         self.assertAlmostEqual(metres, 2.8)
         self.assertAlmostEqual(meters_to_rhino(metres, scale), 280)
+
+    def test_centimetre_file_to_ifc(self):
+        scale_to_cm = 1.0
+        self.assertAlmostEqual(rhino_to_ifc(755, scale_to_cm), 755)
+
+    def test_millimetre_file_to_ifc(self):
+        scale_to_cm = 0.1
+        self.assertAlmostEqual(rhino_to_ifc(7550, scale_to_cm), 755)
+
+    def test_metre_file_to_ifc(self):
+        scale_to_cm = 100.0
+        self.assertAlmostEqual(rhino_to_ifc(7.55, scale_to_cm), 755)
 
     def test_metre_identity(self):
         self.assertEqual(rhino_to_meters(2.8, 1.0), 2.8)

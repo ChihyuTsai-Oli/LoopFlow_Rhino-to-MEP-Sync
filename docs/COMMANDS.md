@@ -151,9 +151,15 @@ There is no LoopFlow on the BIM side. The shell is a **reference**, not a model 
 
 For a partial file, include every extra frame that spanning objects reach, then publish again.
 
-**Revit (untested)**
+**Revit (tested, 2026-09-27)**
 
-Expected: **Link IFC**, not Open or Import, so Rhino can overwrite the same `R2M.ifc` and the link can reload. Do not treat this as verified until it has been tested.
+1. Rhino `RMModels` writes the IFC.
+2. Revit **Link IFC** (not Open, not Import).
+3. Manually create Levels at the same elevations as the IFC storey frames (template Level 0 / 1 stay).
+4. **View → Plan Views → Floor Plan** so the Level appears under Project Browser → Floor Plans.
+5. Current test: a wall on 3F and a wall on 4F (not ducts or pipes).
+6. Select those objects, **File → Export → IFC (IFC4)**. Fixture: `wip/fixtures/spike/revit_wall.ifc`.
+7. Run `RMInbound` in a blank Rhino file: import succeeds and height is corrected.
 
 Ceilings should be `IfcCovering` in Rhino. Unchanged dropdowns write `IfcPlate`. Proxy objects are often invisible in Archicad.
 
@@ -175,6 +181,10 @@ BIM should export **3D pipes only** (clash segments or checked systems; not the 
 2. Draw a few **3D** ducts or pipes that cross the ceiling height.
 3. Use Archicad’s **built-in** IFC export: **IFC4**; 3D pipes only; no whole building, no 2D, no extra coordinate offset. Keep storeys as they are.
 4. Name the file with the source (Archicad) and the date.
+
+**Exporting from Revit (tested; walls, not ducts/pipes)**
+
+See the seven steps in the previous section. Fixture: `wip/fixtures/spike/revit_wall.ifc`.
 
 **Rhino**
 

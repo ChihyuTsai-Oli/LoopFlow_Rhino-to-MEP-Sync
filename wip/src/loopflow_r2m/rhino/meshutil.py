@@ -1,11 +1,11 @@
-"""Rhino 幾何轉三角網面，頂點換成公尺。"""
+"""Rhino 幾何轉三角網面，頂點換成 IFC 公分。"""
 
 from __future__ import annotations
 
 import math
 
 from loopflow_r2m.names import MESH_MIN_EDGE_METERS, MESH_RELATIVE_TOLERANCE
-from loopflow_r2m.units import meters_to_rhino, rhino_to_meters
+from loopflow_r2m.units import meters_to_rhino, rhino_to_ifc
 
 
 def meshing_parameters(density, scale_to_meters):
@@ -68,14 +68,14 @@ def geometry_to_mesh(geom, mp):
     return mesh
 
 
-def mesh_to_meters(mesh, scale_to_meters):
+def mesh_to_ifc(mesh, scale_to_cm):
     vertices = []
     for point in mesh.Vertices:
         vertices.append(
             (
-                rhino_to_meters(point.X, scale_to_meters),
-                rhino_to_meters(point.Y, scale_to_meters),
-                rhino_to_meters(point.Z, scale_to_meters),
+                rhino_to_ifc(point.X, scale_to_cm),
+                rhino_to_ifc(point.Y, scale_to_cm),
+                rhino_to_ifc(point.Z, scale_to_cm),
             )
         )
     faces = []

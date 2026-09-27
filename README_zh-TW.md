@@ -22,7 +22,7 @@ Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把管�
 - **Rhino 8**（Windows）
 - **Archicad**、**Revit** 或 **Blender Bonsai**（必須是 3D BIM）。沒有 3D 就不做
 
-交換只使用 **IFC**。測試暫以 Archicad 為準。Archicad 用「檔案 → 開啟」把 IFC 當新檔，整棟與單層已通過。Revit 尚未測。**不測 Bonsai**——只在說明裡把它與 Revit、Archicad 並列為 IFC 作業環境。從 BIM 匯出真實管線 IFC 尚未測過。
+交換只使用 **IFC**。Archicad 用「檔案 → 開啟」把 IFC 當新檔，整棟與單層已通過。Revit 用「連結 IFC」，再自建同高 Level 並開 Floor Plan，已通過（2026-09-27）。**不測 Bonsai**——只在說明裡把它與 Revit、Archicad 並列為 IFC 作業環境。從 BIM 匯出真實風管／水管尚未測過（Archicad Morph、Revit 牆回檔高度已過）。
 
 Rhino 對話框為英文；本說明為正體中文。
 
@@ -36,7 +36,7 @@ Rhino 對話框為英文；本說明為正體中文。
 
 1. 畫各樓層高程框，跑 `RMStorey`。
 2. 跑 `RMModels`，寫出 `models/R2M.ifc`。
-3. Archicad：**檔案 → 開啟**，把該 IFC 當新檔。不要 Merge。
+3. Archicad：**檔案 → 開啟**，把該 IFC 當新檔。不要 Merge。Revit：**連結 IFC**，再依框線高程自建 Level 並開 Floor Plan。
 4. 在該檔畫幾段跨越天花的 **3D** 風管或水管，再用內建功能匯出 **IFC4**（只出 3D 管線）。
 5. Rhino 開空白檔跑 `RMInbound`，手動另存，再掛進工作檔的 Worksession。
 

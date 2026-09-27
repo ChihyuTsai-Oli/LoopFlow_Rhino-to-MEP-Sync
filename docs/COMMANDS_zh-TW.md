@@ -151,9 +151,15 @@ BIM 端沒有 LoopFlow。建築殼是**參考**，不是給對方接手編輯的
 
 單層檔請連跨層物件碰到的那一層框一起畫進去再發布，開啟才完整。
 
-**Revit（尚未測）**
+**Revit（已測，2026-09-27）**
 
-預期用「連結 IFC」，不要用「開啟」或「匯入」，這樣 Rhino 覆寫同一個 `R2M.ifc` 之後才能重新載入。在實機測過之前，不要把這段當成已驗證。
+1. Rhino `RMModels` 匯出 IFC。
+2. Revit **Link IFC**（不要 Open、不要 Import）。
+3. 依 IFC 框線高程，手動建立同高 Level（範本 Level 0／1 會留下）。
+4. **View → Plan Views → Floor Plan**，讓該 Level 出現在 Project Browser → Floor Plans。
+5. 目前測試：在 3F、4F 各建 wall（不是風管／水管）。
+6. 選取要匯出的物件，**File → Export → IFC (IFC4)**。測檔：`wip/fixtures/spike/revit_wall.ifc`。
+7. Rhino 空白檔跑 `RMInbound`：匯入成功、高度有校正。
 
 天花在 Rhino 請選 `IfcCovering`。未改下拉會寫成 `IfcPlate`。仍選 Proxy 的件 Archicad 常不顯示。
 
@@ -175,6 +181,10 @@ BIM 只出 **3D 管線**（衝突段或勾選系統；不要整棟、不要 2D�
 2. 在該檔畫幾段 **3D** 風管或水管，跨越天花高度。
 3. 用 Archicad **內建** IFC 匯出：**IFC4**；只出 3D 管線；不要整棟建築、不要 2D、座標不要另做偏移。標高與樓層維持原樣。
 4. 檔名標來源（Archicad）與日期。
+
+**從 Revit 出牆（已測；不是風管／水管）**
+
+見上一節七步。測檔 `wip/fixtures/spike/revit_wall.ifc`。
 
 **Rhino**
 

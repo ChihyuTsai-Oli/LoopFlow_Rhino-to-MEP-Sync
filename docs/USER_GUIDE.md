@@ -10,7 +10,7 @@
 
 1. **Save the `.3dm` first.** Unpublished files cannot publish. Settings and exchange files sit next to that file.
 2. **Register storeys, then publish the shell.** `RMStorey` names the frames; `RMModels` writes `models/R2M.ifc`.
-3. **Open that IFC as a new file in BIM** (Archicad: File → Open; do not Merge) and draw 3D pipes there. Heights in BIM follow the FL numbers you typed on the storey frames. Bonsai is another IFC working environment, like Revit and Archicad; this product **does not test Bonsai**.
+3. **Receive that IFC in BIM** (Archicad: File → Open as a new file; do not Merge. Revit: Link IFC, then create matching Levels and Floor Plans) and draw 3D pipes there. Heights in BIM follow the FL numbers you typed on the storey frames. Bonsai is another IFC working environment, like Revit and Archicad; this product **does not test Bonsai**.
 4. **Bring the pipe IFC back.** `RMInbound` shifts Z back onto the Rhino model (not the building-elevation numbers). You save and attach the Worksession yourself.
 5. **Edit the original ceiling / wall / slab against the reference, then run Models again.**
 
@@ -35,8 +35,8 @@ Move the whole project folder when you change computers. The Worksession `.rws` 
 | You want to | Rhino | BIM |
 |---|---|---|
 | Register storeys | `RMStorey` | — |
-| Architectural shell | `RMModels` | **Open the IFC as a new file** (Archicad, tested). Revit is expected to **Link IFC**; untested. Bonsai is an IFC working environment; **not tested** |
-| Pipe reference | `RMInbound` → save by hand → attach Worksession by hand | BIM **IFC4** export, 3D pipes only. Real pipe export is untested. Inbound puts Z back on the Rhino model |
+| Architectural shell | `RMModels` | Archicad: **Open the IFC as a new file** (tested). Revit: **Link IFC**, then create matching Levels and Floor Plans (tested). Bonsai is an IFC working environment; **not tested** |
+| Pipe reference | `RMInbound` → save by hand → attach Worksession by hand | BIM **IFC4** export, 3D only. Archicad Morph and Revit wall inbound heights have passed; real ducts/pipes are untested. Inbound puts Z back on the Rhino model |
 | Settings and docs | `RMOpen` | — |
 
 BIM has no LoopFlow buttons.

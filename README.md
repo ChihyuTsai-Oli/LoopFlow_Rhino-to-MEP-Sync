@@ -22,7 +22,7 @@ No camera, lights, or live link. Do not use inbound geometry for drawings or as 
 - **Rhino 8** (Windows)
 - **Archicad**, **Revit**, or **Blender Bonsai** (3D BIM is required)
 
-Exchange format is **IFC only**. Testing uses Archicad. Opening the IFC as a new file (File → Open) has passed for whole-building and partial-storey files. Revit is untested. **Bonsai is not tested** — it is listed only as another IFC working environment, like Revit and Archicad. Exporting a real pipe IFC is also untested.
+Exchange format is **IFC only**. Archicad: File → Open as a new file has passed for whole-building and partial-storey files. Revit: Link IFC, then create matching Levels and Floor Plans (tested 2026-09-27). **Bonsai is not tested** — it is listed only as another IFC working environment, like Revit and Archicad. Real duct/pipe IFC export is still untested (Archicad Morph and Revit wall inbound heights have passed).
 
 Rhino dialogs are English. Traditional Chinese is the source of truth for this draft.
 
@@ -36,7 +36,7 @@ Save the `.3dm` first (Inbound may use an unsaved blank file). The folder that h
 
 1. Draw storey frames and run `RMStorey`.
 2. Run `RMModels` to write `models/R2M.ifc`.
-3. Archicad: **File → Open** the IFC as a new file. Do not Merge.
+3. Archicad: **File → Open** the IFC as a new file. Do not Merge. Revit: **Link IFC**, then create matching Levels and Floor Plans.
 4. Draw a few **3D** ducts or pipes that cross the ceiling, then export **IFC4** with the built-in exporter (3D pipes only).
 5. In a blank Rhino file, run `RMInbound`, save by hand, then attach that `.3dm` as a Worksession in the working file.
 

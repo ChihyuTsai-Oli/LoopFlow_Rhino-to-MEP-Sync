@@ -12,6 +12,7 @@ from loopflow_r2m.ifc_write import (
     ExportStorey,
     ordered_storeys,
     relative_vertices,
+    write_models_ifc,
 )
 from loopflow_r2m.publish import publish_models
 from loopflow_r2m.vendor import ensure_vendor
@@ -191,6 +192,48 @@ class StoreyPlacementTests(unittest.TestCase):
             ]
             self.assertAlmostEqual(min(zs), 2.98)
             self.assertAlmostEqual(min(zs) + z11, 38.18)
+
+
+def _length_si_unit(ifc):
+    for unit in ifc.by_type("IfcSIUnit"):
+        if unit.UnitType == "LENGTHUNIT":
+            return unit
+    return None
+
+
+class LengthUnitTests(unittest.TestCase):
+    @unittest.skipIf(SKIP_IFC, SKIP_REASON)
+    def test_models_ifc_length_is_centimetre(self):
+        verts, faces = _triangle(755.0)
+        products = [
+            ExportProduct(
+                "IfcWall",
+                compress_guid("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"),
+                "wall",
+                "3F",
+                verts,
+                faces,
+            )
+        ]
+        meta = ExportMeta("R2M.ifc", "Tower", "Site", "Building", "0.0.0-dev")
+        storeys = [ExportStorey("3F", 755.0, 755.0)]
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "R2M.ifc"
+            write_models_ifc(str(path), meta, storeys, products)
+            import ifcopenshell
+
+            ifc = ifcopenshell.open(str(path))
+            unit = _length_si_unit(ifc)
+            self.assertIsNotNone(unit)
+            self.assertEqual(unit.Prefix, "CENTI")
+            self.assertEqual(unit.Name, "METRE")
+            storey = ifc.by_type("IfcBuildingStorey")[0]
+            z = float(storey.ObjectPlacement.RelativePlacement.Location.Coordinates[2])
+            self.assertAlmostEqual(z, 755.0)
+            self.assertAlmostEqual(float(storey.Elevation), 755.0)
+            contexts = ifc.by_type("IfcGeometricRepresentationContext")
+            self.assertTrue(contexts)
+            self.assertAlmostEqual(float(contexts[0].Precision), 1.0e-3)
 
 
 if __name__ == "__main__":

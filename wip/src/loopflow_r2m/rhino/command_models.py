@@ -25,7 +25,7 @@ from loopflow_r2m.paths import config_paths
 from loopflow_r2m.publish import publish_models
 from loopflow_r2m.rhino.collect import collect_objects, default_geom_enabled, layer_rows
 from loopflow_r2m.rhino.dialogs import confirm_yes, show_models_dialog
-from loopflow_r2m.rhino.meshutil import geometry_to_mesh, mesh_to_meters, meshing_parameters
+from loopflow_r2m.rhino.meshutil import geometry_to_mesh, mesh_to_ifc, meshing_parameters
 from loopflow_r2m.rhino.storeys import read_storeys
 from loopflow_r2m.storey import (
     STATUS_BELOW,
@@ -38,7 +38,7 @@ from loopflow_r2m.storey import (
     classify_bbox_xy,
     elevation_shift,
 )
-from loopflow_r2m.units import rhino_to_meters
+from loopflow_r2m.units import rhino_to_ifc
 
 
 COMMAND = "RMModels"
@@ -211,8 +211,13 @@ def _run(doc, restore, ctx):
     for obj in objects:
         restore.reveal(obj)
 
-    scale = Rhino.RhinoMath.UnitScale(doc.ModelUnitSystem, Rhino.UnitSystem.Meters)
-    mp = meshing_parameters(density, scale)
+    scale_to_m = Rhino.RhinoMath.UnitScale(
+        doc.ModelUnitSystem, Rhino.UnitSystem.Meters
+    )
+    scale_to_cm = Rhino.RhinoMath.UnitScale(
+        doc.ModelUnitSystem, Rhino.UnitSystem.Centimeters
+    )
+    mp = meshing_parameters(density, scale_to_m)
     products = []
     problems = []
     per_storey = {}
@@ -251,7 +256,7 @@ def _run(doc, restore, ctx):
         if highest_z is None or bbox.Max.Z > highest_z:
             highest_z = bbox.Max.Z
         layer = doc.Layers[obj.Attributes.LayerIndex]
-        vertices, faces = mesh_to_meters(mesh, scale)
+        vertices, faces = mesh_to_ifc(mesh, scale_to_cm)
         products.append(
             ExportProduct(
                 ifc_type=types[layer.FullPath],
@@ -306,8 +311,8 @@ def _run(doc, restore, ctx):
     export_storeys = [
         ExportStorey(
             item.name,
-            rhino_to_meters(item.fl, scale),
-            rhino_to_meters(item.frame_z, scale),
+            rhino_to_ifc(item.fl, scale_to_cm),
+            rhino_to_ifc(item.frame_z, scale_to_cm),
         )
         for item in storeys
     ]
