@@ -6,7 +6,7 @@ Rhino publishes an architectural-shell IFC for Revit, Archicad, and Blender Bons
 
 [▶ Documentation](./docs/README.md) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
 
-Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no Package Manager package or toolbar yet. For now, paste a ScriptEditor line into the Rhino command prompt. Dialogs are in English; Traditional Chinese is the source of truth for this guide.
+Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no Package Manager package yet. For now, open the development toolbar `wip/docs/toolbar/LoopFlow_R2M.rui` (buttons still run ScriptEditor). Dialogs are in English; Traditional Chinese is the source of truth for this guide.
 
 ## Features
 
@@ -29,7 +29,7 @@ Receiving the shell and bringing walls back (including height correction) has pa
 
 ## How to run for now
 
-Paste the ScriptEditor line from [Commands](./docs/COMMANDS.md) into the Rhino **command prompt**. Save the `.3dm` first (Inbound may use a blank new file). The folder that holds the `.3dm` is the work folder. Settings and IFC live next to it in `_LoopFlow_Config/loopflow_R2M/`.
+Open the development toolbar, or paste the ScriptEditor line from [Commands](./docs/COMMANDS.md) into the Rhino **command prompt**. Save the `.3dm` first (Inbound may use a blank new file). The folder that holds the `.3dm` is the work folder. Settings and IFC live next to it in `_LoopFlow_Config/loopflow_R2M/`.
 
 A whole-building file and a partial-storey file in the same folder share one `config.json`. To inbound against the partial file, run `RMModels` on that file first so the correction value matches it.
 

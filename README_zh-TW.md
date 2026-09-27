@@ -6,7 +6,7 @@ Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把 MEP
 
 [▶ 使用說明](./docs/README.md) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
 
-指令名已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。正式套件與工具列尚未上架；目前在 Rhino 指令列貼 ScriptEditor 那一行執行。畫面為英文；本說明為正體中文。
+指令名已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。正式套件尚未上架。開發期可開啟工具列 `wip/docs/toolbar/LoopFlow_R2M.rui`（按鈕仍跑 ScriptEditor）。畫面為英文；本說明為正體中文。
 
 ## 主要功能
 
@@ -29,7 +29,7 @@ Archicad、Revit 收殼與牆回檔（含高度校正）已通過。真實風管
 
 ## 目前怎麼跑
 
-請把 [指令逐項說明](./docs/COMMANDS_zh-TW.md) 裡的那一行貼到 Rhino **指令列**。開始前先把 `.3dm` 存檔（Inbound 可用空白新檔）。`.3dm` 所在資料夾就是作業資料夾；設定與 IFC 在同層 `_LoopFlow_Config/loopflow_R2M/`。
+請開啟開發工具列，或把 [指令逐項說明](./docs/COMMANDS_zh-TW.md) 裡的那一行貼到 Rhino **指令列**。開始前先把 `.3dm` 存檔（Inbound 可用空白新檔）。`.3dm` 所在資料夾就是作業資料夾；設定與 IFC 在同層 `_LoopFlow_Config/loopflow_R2M/`。
 
 同一資料夾的整棟與單層共用一份 `config.json`。要對單層做 Inbound，請先對單層跑過 `RMModels`，校正值才會是單層的。
 

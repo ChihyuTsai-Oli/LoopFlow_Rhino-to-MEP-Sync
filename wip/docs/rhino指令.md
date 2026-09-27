@@ -1,6 +1,6 @@
 # R2M 開發期 Rhino 指令
 
-名稱 **已凍結**（2026-09-28）：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。尚未註冊成 Rhino 產品指令。工具列與 yak 等公開說明定稿後再做。公開說明在 `docs/USER_GUIDE_zh-TW.md`／`docs/COMMANDS_zh-TW.md`（英文已對齊）。
+名稱 **已凍結**（2026-09-28）：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。尚未註冊成 Rhino 產品指令。開發工具列：`wip/docs/toolbar/LoopFlow_R2M.rui`（按鈕跑 ScriptEditor）。正式 yak 之後改成 `! _RMOpen` 等。公開說明在 `docs/USER_GUIDE_zh-TW.md`／`docs/COMMANDS_zh-TW.md`（英文已對齊）。
 
 | 指令 | 角色 |
 |---|---|
@@ -11,7 +11,11 @@
 
 介面英文。`RMModels`／`RMOpen` 未存檔則停；`RMStorey`／`RMInbound` 不要求已存檔（未存檔只是不寫 log）。`RMModels` 只發布嚴格落在該層高程框內的勾選圖層物件；碰到框線則停。發布前會再列出圖層→類型對照。未選類型的勾選圖層寫成 `IfcPlate`；天花請選 `IfcCovering`。
 
-對照 R2B `RB*`、R2O `RO*`；本產品前綴 `RM`。正式 yak 裝好前，**不要**在指令列打這四個名字（尚未註冊）。開發期從 ScriptEditor 跑時，每次會丟掉已載入的 `loopflow_r2m`，不必為了換程式碼而重開 Rhino。
+對照 R2B `RB*`、R2O `RO*`；本產品前綴 `RM`。正式 yak 裝好前，**不要**在指令列打這四個名字（尚未註冊）。請開工具列或貼下面那一行。開發期從 ScriptEditor 跑時，每次會丟掉已載入的 `loopflow_r2m`，不必為了換程式碼而重開 Rhino。
+
+## 開發工具列
+
+Rhino：**Options → Toolbars → File → Open** `E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\docs\toolbar\LoopFlow_R2M.rui`。分頁名 **LoopFlow R2M**。圖示由 `wip/tools/build_toolbar_rui.py` 產生，不要手改 GUID。
 
 ## 可複製貼上（開發期）
 

@@ -2,6 +2,4 @@
 
 ## Toolbar Icons
 
-Icons used in the LoopFlow Rhino toolbar are licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) from [The Noun Project](https://thenounproject.com/).
-
-*(To be updated as icons are added.)*
+`wip/docs/toolbar/LoopFlow_R2M.rui` 裡的四顆圖示是本產品原創線稿（Open／Storey／Models／Inbound），不是 Noun Project。由 `wip/tools/build_toolbar_rui.py` 寫入。

@@ -1,6 +1,6 @@
 # LoopFlow R2M Commands
 
-> Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no package or toolbar yet; paste a ScriptEditor line for now.
+> Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no package yet; open the development toolbar for now. Buttons still run ScriptEditor.
 >
 > Overview: [User guide](./USER_GUIDE.md).
 >
@@ -8,9 +8,17 @@
 
 ## How to run for now
 
-A formal yak is not installed. Paste one full line into the Rhino **command prompt** and press Enter. Both computers use `E:\_GitHub` as the Git root. Run on an isolated file; do not touch the live working document.
+A formal yak is not installed. Both computers use `E:\_GitHub` as the Git root. Run on an isolated file; do not touch the live working document.
 
-Each ScriptEditor run drops the already-loaded module, so re-running in the same Rhino window picks up new code from disk.
+**Open the toolbar (preferred)**
+
+1. Rhino: **Options → Toolbars**.
+2. **File → Open** `E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\docs\toolbar\LoopFlow_R2M.rui`.
+3. You should see a **LoopFlow R2M** tab: Open / Storey / Models / Inbound.
+
+The buttons run the same scripts as the paste lines below. Each ScriptEditor run drops the already-loaded module, so re-running in the same Rhino window picks up new code from disk.
+
+You can still paste one full line into the Rhino **command prompt** and press Enter.
 
 ## Quick index
 
@@ -215,7 +223,7 @@ Version 1 has **no** clash check and does not draw BIM clash points in Rhino. Lo
 
 ## 06　Do not
 
-- Do not type `RMOpen` and the others as registered commands; they are not registered yet. Paste the ScriptEditor line.
+- Do not type `RMOpen` and the others as registered commands; they are not registered yet. Use the toolbar or paste the ScriptEditor line.
 - Do not use inbound geometry for drawings or as a Tag source.
 - Do not hand-edit `R2M_FL`.
 - Do not insert a 0 m empty IFC storey to please Merge or a template.

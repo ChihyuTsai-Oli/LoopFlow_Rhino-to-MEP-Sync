@@ -1,6 +1,6 @@
 # LoopFlow R2M 指令逐項說明
 
-> 指令名稱已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。還沒有套件或工具列；目前貼 ScriptEditor 那一行執行。
+> 指令名稱已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。還沒有套件；開發期可開工具列，按鈕仍跑 ScriptEditor。
 >
 > 整體流程見 [使用說明總覽](./USER_GUIDE_zh-TW.md)。
 >
@@ -8,9 +8,17 @@
 
 ## 目前怎麼跑
 
-正式 yak 還沒裝。請在 Rhino **指令列**貼上一整行再按 Enter。兩台電腦的 Git 根目錄都是 `E:\_GitHub`。請開隔離檔再跑，不要動正在編輯的工作檔。
+正式 yak 還沒裝。兩台電腦的 Git 根目錄都是 `E:\_GitHub`。請開隔離檔再跑，不要動正在編輯的工作檔。
 
-每次從 ScriptEditor 跑都會丟掉已載入的程式，同一 Rhino 視窗重跑就會用磁碟上的新碼。
+**開工具列（建議）**
+
+1. Rhino：**Options → Toolbars**。
+2. **File → Open**，選 `E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\docs\toolbar\LoopFlow_R2M.rui`。
+3. 應出現分頁 **LoopFlow R2M**：Open／Storey／Models／Inbound。
+
+按鈕與貼上那一行是同一支程式。每次從 ScriptEditor 跑都會丟掉已載入的模組，同一 Rhino 視窗重跑就會用磁碟上的新碼。
+
+仍可把下面那一行貼到 **指令列** 再按 Enter。
 
 ## 快速索引
 
@@ -215,7 +223,7 @@ Archicad 牆與 Revit 牆回檔，高度校正都已通過。真實風管／水�
 
 ## 06　不要做的事
 
-- 不要在指令列直接打 `RMOpen` 這幾個名字（尚未註冊成 Rhino 指令）；請貼 ScriptEditor 那一行。
+- 不要在指令列直接打 `RMOpen` 這幾個名字（尚未註冊成 Rhino 指令）；請按工具列或貼 ScriptEditor 那一行。
 - 不要把外參幾何拿去出圖或當 Tag 來源。
 - 不要用手改 `R2M_FL`。
 - 不要為了迎合 Merge／範本而在 IFC 裡補一層 0 m 空樓層。
