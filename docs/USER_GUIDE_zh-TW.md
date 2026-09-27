@@ -49,7 +49,7 @@ BIM 端沒有 LoopFlow 按鈕。
 | **FL** | 結構面高程。不要填 FFL 完成面。LoopFlow 出圖記的是 FFL，混用會差一層面材厚度。 |
 | **整棟／非整棟** | `RMStorey` 選 WholeBuilding 或 PartialStoreys。只畫其中幾層時不要硬找 1F、RF。 |
 | **IfcPlate／IfcCovering** | 未改類型的圖層寫成 Plate。天花請改 Covering。仍用 Proxy 的件在 Archicad 常看不見。 |
-| **Worksession 外參** | 管線 `.3dm` 掛進工作檔後不能編輯，但可以抓點、當對圖依據。發布建築殼時會自動排除外參，避免把管線送回 BIM。 |
+| **Worksession 外參** | 管線 `.3dm` 掛進工作檔後是外參，可以抓點、當對圖依據。`RMInbound` **不鎖定**網面。發布建築殼時會自動排除外參，避免把管線送回 BIM。 |
 
 ## 失敗時會停在哪
 

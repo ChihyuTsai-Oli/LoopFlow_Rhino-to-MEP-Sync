@@ -1,4 +1,4 @@
-"""把 IFC 產品建成鎖定網面，依類型分層上色。"""
+"""把 IFC 產品建成網面，依類型分層上色。不鎖定物件。"""
 
 from __future__ import annotations
 
@@ -56,7 +56,6 @@ def tessellate_inbound(doc, ifc_path, metres_to_doc, elevation_shift):
             attr.LayerIndex = layer_index
             attr.Name = inbound_object_name(ifc_type, guid)
             oid = doc.Objects.AddMesh(mesh, attr)
-            doc.Objects.Lock(oid, True)
             added.append(str(oid))
             success += 1
         except Exception:

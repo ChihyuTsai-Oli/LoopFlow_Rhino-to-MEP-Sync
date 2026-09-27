@@ -19,7 +19,7 @@ Each ScriptEditor run drops the already-loaded module, so re-running in the same
 | Open | `RMOpen` | — | Config root, last-good time, folders or this guide |
 | Storeys | `RMStorey` | — | Name frames and FL |
 | Shell | `RMModels` | Open IFC as a new file | Selected layers → `R2M.ifc` |
-| Pipes | `RMInbound` | Built-in IFC4 export | Locked meshes in a blank file; save and attach by hand |
+| Pipes | `RMInbound` | Built-in IFC4 export | Meshes in a blank file (not locked); save and attach by hand |
 
 ## Contents
 
@@ -193,7 +193,7 @@ See the seven steps in the previous section. Fixture: `wip/fixtures/spike/revit_
 3. **Save** the `.3dm` yourself (suggested: `_LoopFlow_Config/loopflow_R2M/inbound/` next to the working file; keep a stable name).
 4. Back in the working file, **attach** that `.3dm` as a Worksession yourself.
 
-The command does **not** write, save, or attach. Reference objects cannot be edited; you can snap to them.
+The command does **not** write, save, attach, or lock the meshes. After you attach them as a Worksession, they stay reference objects in the working file; you can snap to them.
 
 To update pipes: repeat Rhino steps 1–3 over the same `.3dm`, then Refresh in the Worksession manager. A stable filename is what makes that work.
 

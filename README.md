@@ -12,7 +12,7 @@ Rhino publishes an architectural-shell IFC for Revit / Archicad / Blender Bonsai
 
 - **Architectural shell** — Write selected layers to one shell IFC, hung on storey frames
 - **Storey frames** — Draw a closed horizontal curve per storey; register names and FL (structural floor) elevations
-- **MEP inbound** — Convert a BIM 3D-pipe IFC into locked meshes, then attach them by hand as a Worksession
+- **MEP inbound** — Convert a BIM 3D-pipe IFC into meshes, then attach them by hand as a Worksession
 - **Open / Health** — Config folder and last-good timestamps
 
 No camera, lights, or live link. Do not use inbound geometry for drawings or as a Tag source.

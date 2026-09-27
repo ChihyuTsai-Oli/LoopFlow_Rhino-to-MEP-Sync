@@ -1,4 +1,4 @@
-"""RMInbound：把管線 IFC 建成鎖定網面。不寫檔、不掛載。"""
+"""RMInbound：把管線 IFC 建成網面。不鎖定、不寫檔、不掛載。"""
 
 from __future__ import annotations
 

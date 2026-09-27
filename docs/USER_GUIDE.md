@@ -49,7 +49,7 @@ BIM has no LoopFlow buttons.
 | **FL** | Structural-floor elevation. Do not enter FFL (finished floor). LoopFlow drawings use FFL; mixing them is about one finish thickness off. |
 | **Whole / partial** | `RMStorey` WholeBuilding or PartialStoreys. If you only modelled a few floors, do not invent 1F or RF. |
 | **IfcPlate / IfcCovering** | Unset types write as Plate. Ceilings should be Covering. Proxy objects are often invisible in Archicad. |
-| **Worksession reference** | After attach, inbound meshes cannot be edited, but you can snap to them. Models skips reference objects so pipes are not sent back to BIM. |
+| **Worksession reference** | After attach, inbound meshes are a reference you can snap to. `RMInbound` does **not** lock them. Models skips reference objects so pipes are not sent back to BIM. |
 
 ## Where it stops
 
