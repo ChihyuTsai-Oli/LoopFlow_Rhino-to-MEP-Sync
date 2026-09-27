@@ -21,14 +21,12 @@
       <tool_bar_item guid="be62701b-580f-5465-8e03-de730ecf663a">
         <left_macro_id>4754a16c-667c-5e2d-acd1-fb161d4c5e9e</left_macro_id>
       </tool_bar_item>
-      <tool_bar_item guid="dd88e7d8-0ce8-513c-991d-45dbef21ec1a" button_style="spacer" />
       <tool_bar_item guid="803d92c8-fd37-5b72-acf4-e776f6afe55a">
         <left_macro_id>d2f431e2-63b9-591d-8d5d-55e25b6e82ac</left_macro_id>
       </tool_bar_item>
       <tool_bar_item guid="89c9cd5e-b1cc-5bfc-8111-913d67e26e3f">
         <left_macro_id>3daa5c03-c65a-50d3-be13-e52bc6f86549</left_macro_id>
       </tool_bar_item>
-      <tool_bar_item guid="5bb9b2ec-08fe-5010-9a96-711c6d170666" button_style="spacer" />
       <tool_bar_item guid="08b6fd1a-07ac-58e2-8134-ee175d7032b7">
         <left_macro_id>804afd79-b9ec-5169-b72d-27e364acbcc1</left_macro_id>
       </tool_bar_item>

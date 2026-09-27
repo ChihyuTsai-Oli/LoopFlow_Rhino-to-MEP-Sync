@@ -63,6 +63,12 @@ class ToolbarRuiTests(unittest.TestCase):
         bar = self.root.find("tool_bars").find("tool_bar")
         self.assertTrue((bar.get("bitmap_id") or "").strip())
 
+    def test_no_spacers(self):
+        items = list(self.root.find("tool_bars").find("tool_bar"))
+        buttons = [el for el in items if el.tag == "tool_bar_item"]
+        self.assertEqual(len(buttons), 4)
+        self.assertFalse(any(el.get("button_style") == "spacer" for el in buttons))
+
     def test_group_title(self):
         text = self.root.find("tool_bar_groups").find("tool_bar_group").find("text")
         self.assertEqual(text.find("locale_1033").text, "LoopFlow R2M")

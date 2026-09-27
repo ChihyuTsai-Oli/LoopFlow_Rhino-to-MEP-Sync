@@ -92,19 +92,13 @@ def main() -> int:
     bar = gid("bar")
     bar_bitmap = gid("icon.bar")
     items = []
-    spacer_n = 0
     order = ["open", "storey", "models", "inbound"]
-    for i, key in enumerate(order):
+    for key in order:
         items.append(
             f'      <tool_bar_item guid="{gid(f"item.{key}")}">\n'
             f'        <left_macro_id>{gid(f"macro.{key}")}</left_macro_id>\n'
             f"      </tool_bar_item>"
         )
-        if i in (0, 2):
-            spacer_n += 1
-            items.append(
-                f'      <tool_bar_item guid="{gid(f"spacer.{spacer_n}")}" button_style="spacer" />'
-            )
 
     macros = "\n".join(
         macro_xml(key, title, help_text, script)
