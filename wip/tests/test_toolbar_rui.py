@@ -1,4 +1,4 @@
-"""開發期 LoopFlow_R2M.rui 契約：有分組、四顆按鈕、腳本路徑存在。"""
+"""開發期 LoopFlow_R2M.rui 契約：有分組、四顆按鈕、已登錄指令名。"""
 from __future__ import annotations
 
 import unittest
@@ -7,12 +7,11 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 RUI = REPO / "wip" / "docs" / "toolbar" / "LoopFlow_R2M.rui"
-COMMANDS = REPO / "wip" / "commands"
-EXPECTED = (
-    "RMOpen.py",
-    "RMStorey.py",
-    "RMModels.py",
-    "RMInbound.py",
+COMMANDS = (
+    "! _RMOpen",
+    "! _RMStorey",
+    "! _RMModels",
+    "! _RMInbound",
 )
 
 
@@ -33,24 +32,17 @@ class ToolbarRuiTests(unittest.TestCase):
         self.assertNotIn("<tool_bar_groups />", xml.replace(" ", ""))
         self.assertIn("tool_bar_group", xml)
 
-    def test_four_command_scripts(self):
+    def test_registered_command_macros(self):
         scripts = [
             (m.find("script").text or "")
             for m in self.root.find("macros")
         ]
         self.assertEqual(len(scripts), 4)
         joined = "\n".join(scripts)
-        for name in EXPECTED:
+        self.assertNotIn("ScriptEditor", joined)
+        self.assertNotIn(".py", joined)
+        for name in COMMANDS:
             self.assertIn(name, joined)
-            self.assertTrue((COMMANDS / name).is_file(), name)
-            self.assertIn("ScriptEditor", joined)
-
-    def test_product_command_names_not_registered_yet(self):
-        scripts = "\n".join(
-            (m.find("script").text or "") for m in self.root.find("macros")
-        )
-        self.assertNotIn("_RMOpen", scripts)
-        self.assertIn("RMOpen.py", scripts)
 
     def test_user_icons_embedded(self):
         xml = ET.tostring(self.root.find("icons"), encoding="unicode")

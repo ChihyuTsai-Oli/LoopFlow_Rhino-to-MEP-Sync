@@ -7,7 +7,15 @@ from pathlib import Path
 
 
 def vendor_dir():
-    return Path(__file__).resolve().parents[2] / ".vendor" / "py39"
+    """開發期在 `wip/.vendor/py39`；yak 在套件根 `vendor/py39`。"""
+    package_root = Path(__file__).resolve().parents[2]
+    for candidate in (
+        package_root / "vendor" / "py39",
+        package_root / ".vendor" / "py39",
+    ):
+        if candidate.is_dir():
+            return candidate
+    return package_root / ".vendor" / "py39"
 
 
 def ensure_vendor():

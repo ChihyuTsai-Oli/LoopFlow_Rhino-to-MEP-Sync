@@ -1,6 +1,6 @@
 # LoopFlow R2M 指令逐項說明
 
-> 指令名稱已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。還沒有套件；開發期可開工具列，按鈕仍跑 ScriptEditor。
+> 指令名稱已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。本機可裝開發套件；尚未上架 Package Manager。開發期開工具列，按鈕跑這四個指令名。
 >
 > 整體流程見 [使用說明總覽](./USER_GUIDE_zh-TW.md)。
 >
@@ -8,7 +8,7 @@
 
 ## 目前怎麼跑
 
-正式 yak 還沒裝。兩台電腦的 Git 根目錄都是 `E:\_GitHub`。請開隔離檔再跑，不要動正在編輯的工作檔。
+本機可裝開發套件 `loopflow-r2m` 0.1.0（非正式上架）。裝完請重開 Rhino。兩台電腦的 Git 根目錄都是 `E:\_GitHub`。請開隔離檔再跑，不要動正在編輯的工作檔。
 
 **開工具列（建議）**
 
@@ -16,9 +16,9 @@
 2. **File → Open**，選 `E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\docs\toolbar\LoopFlow_R2M.rui`。
 3. 應出現分頁 **LoopFlow R2M**：Open／Storey／Models／Inbound。
 
-按鈕與貼上那一行是同一支程式。每次從 ScriptEditor 跑都會丟掉已載入的模組，同一 Rhino 視窗重跑就會用磁碟上的新碼。
+按鈕與指令列打的名字相同。每次執行會丟掉已載入的模組，同一 Rhino 視窗重跑就會用磁碟上的新碼。
 
-仍可把下面那一行貼到 **指令列** 再按 Enter。
+也可把下面那一行貼到 **指令列** 再按 Enter。
 
 ## 快速索引
 
@@ -40,7 +40,7 @@
 **指令**：`RMOpen`（先存檔）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMOpen.py"
+! _RMOpen
 ```
 
 跳出英文 Health 視窗。摘要列出設定根路徑，以及上次成功寫出的時間。未存檔會被擋住。
@@ -58,7 +58,7 @@
 **指令**：`RMStorey`（不要求已存檔；未存檔只是不寫 log）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMStorey.py"
+! _RMStorey
 ```
 
 Models 之前必須先有 **R2M 高程框**。沒有就擋住，不發布。
@@ -116,7 +116,7 @@ Models 之前必須先有 **R2M 高程框**。沒有就擋住，不發布。
 **指令**：`RMModels`（先存檔，且已跑過 `RMStorey`）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMModels.py"
+! _RMModels
 ```
 
 英文對話框一次問完：
@@ -177,7 +177,7 @@ BIM 端沒有 LoopFlow。建築殼是**參考**，不是給對方接手編輯的
 **指令**：`RMInbound`（空白檔即可，不要求已存檔）
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMInbound.py"
+! _RMInbound
 ```
 
 ### 高度校正是什麼
@@ -223,7 +223,6 @@ Archicad 牆與 Revit 牆回檔，高度校正都已通過。真實風管／水�
 
 ## 06　不要做的事
 
-- 不要在指令列直接打 `RMOpen` 這幾個名字（尚未註冊成 Rhino 指令）；請按工具列或貼 ScriptEditor 那一行。
 - 不要把外參幾何拿去出圖或當 Tag 來源。
 - 不要用手改 `R2M_FL`。
 - 不要為了迎合 Merge／範本而在 IFC 裡補一層 0 m 空樓層。

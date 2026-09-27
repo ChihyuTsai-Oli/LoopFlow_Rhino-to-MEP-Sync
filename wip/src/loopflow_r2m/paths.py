@@ -20,6 +20,22 @@ def config_root(document_path):
     return parent / CONFIG_FOLDER / CONFIG_PRODUCT
 
 
+def public_docs_dir(anchor):
+    """公開說明資料夾。開發期是 repo 根 `docs/`；yak 是套件內 `docs/`。"""
+    here = Path(anchor).resolve()
+    candidates = []
+    if len(here.parents) > 3:
+        candidates.append(here.parents[3] / "docs")
+    if len(here.parents) > 4:
+        candidates.append(here.parents[4] / "docs")
+    for folder in candidates:
+        if (folder / "README.md").is_file():
+            return folder
+    if len(here.parents) > 4:
+        return here.parents[4] / "docs"
+    raise RuntimeError("找不到公開 docs/")
+
+
 def config_paths(document_path):
     root = config_root(document_path)
     models = root / "models"

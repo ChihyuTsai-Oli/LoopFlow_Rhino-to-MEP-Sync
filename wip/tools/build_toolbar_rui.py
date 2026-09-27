@@ -1,4 +1,4 @@
-"""產生開發期 LoopFlow_R2M.rui（按鈕跑 ScriptEditor 入口）。
+"""產生開發期 LoopFlow_R2M.rui（按鈕跑已登錄的 `RMOpen` 等指令）。
 
 圖示從同資料夾的五個 SVG 寫入：`LoopFlow_R2M.svg` 是工具列分頁圖，其餘四個是按鈕。
 成功寫出 rui 後會刪掉這五個 SVG。重跑前再放回。GUID 由名稱穩定產生。
@@ -15,13 +15,12 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 COMMANDS = REPO_ROOT / "wip" / "commands"
 TOOLBAR = REPO_ROOT / "wip" / "docs" / "toolbar"
 OUT = TOOLBAR / "LoopFlow_R2M.rui"
-SCRIPT_ROOT = r"E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands"
 
 BUTTONS = (
-    ("open", "Open", "Config folder and last publish", "RMOpen.py", "R2M_Open.svg"),
-    ("storey", "Storey", "Register storey frames and FL", "RMStorey.py", "R2M_Storey.svg"),
-    ("models", "Models", "Publish architectural-shell IFC", "RMModels.py", "R2M_Models.svg"),
-    ("inbound", "Inbound", "Import BIM geometry with height correction", "RMInbound.py", "R2M_Inbound.svg"),
+    ("open", "Open", "Config folder and last publish", "RMOpen", "R2M_Open.svg"),
+    ("storey", "Storey", "Register storey frames and FL", "RMStorey", "R2M_Storey.svg"),
+    ("models", "Models", "Publish architectural-shell IFC", "RMModels", "R2M_Models.svg"),
+    ("inbound", "Inbound", "Import BIM geometry with height correction", "RMInbound", "R2M_Inbound.svg"),
 )
 BAR_SVG = "LoopFlow_R2M.svg"
 SVG_FILES = (BAR_SVG,) + tuple(item[-1] for item in BUTTONS)
@@ -62,11 +61,10 @@ def icon_xml(key: str, svg_name: str) -> str:
     )
 
 
-def macro_xml(key: str, title: str, help_text: str, script_file: str) -> str:
+def macro_xml(key: str, title: str, help_text: str, command: str) -> str:
     guid = gid(f"macro.{key}")
     bitmap = gid(f"icon.{key}")
-    path = f"{SCRIPT_ROOT}\\{script_file}"
-    script = f'! _-ScriptEditor _Run "{path}"'
+    script = f"! _{command}"
     loc = escape(title)
     help_ = escape(help_text)
     return f"""    <macro_item guid="{guid}" bitmap_id="{bitmap}">
@@ -101,8 +99,8 @@ def main() -> int:
         )
 
     macros = "\n".join(
-        macro_xml(key, title, help_text, script)
-        for key, title, help_text, script, _svg in BUTTONS
+        macro_xml(key, title, help_text, command)
+        for key, title, help_text, command, _svg in BUTTONS
     )
     icons = "\n".join(
         [icon_xml("bar", BAR_SVG)]
@@ -145,7 +143,11 @@ def main() -> int:
   </bitmaps>
 </RhinoUI>
 """
-    missing = [name for _k, _t, _h, name, _svg in BUTTONS if not (COMMANDS / name).is_file()]
+    missing = [
+        name
+        for _k, _t, _h, name, _svg in BUTTONS
+        if not (COMMANDS / f"{name}.py").is_file()
+    ]
     if missing:
         raise SystemExit("missing command scripts: " + ", ".join(missing))
     OUT.parent.mkdir(parents=True, exist_ok=True)

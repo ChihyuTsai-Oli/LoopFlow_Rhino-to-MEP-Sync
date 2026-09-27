@@ -2,19 +2,14 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 from loopflow_r2m.exceptions import R2MStop
 from loopflow_r2m.health import health_lines
 from loopflow_r2m.logutil import append_log
-from loopflow_r2m.paths import config_paths
+from loopflow_r2m.paths import config_paths, public_docs_dir
 from loopflow_r2m.rhino.dialogs import show_open_health
 
 
 COMMAND = "RMOpen"
-# Open Docs 開 repo 根公開 docs/（入口 docs/README.md）。合入後有穩定 GitHub 頁再改開該 URL。
-# __file__ = wip/src/loopflow_r2m/rhino/command_open.py → parents[4] = repo 根
-REPO_DOCS = Path(__file__).resolve().parents[4] / "docs"
 
 
 def _print(message):
@@ -43,7 +38,7 @@ def _run(doc):
     folders = {
         "config": str(paths["root"]),
         "models": str(paths["models"]),
-        "docs": str(REPO_DOCS),
+        "docs": str(public_docs_dir(__file__)),
     }
     paths["root"].mkdir(parents=True, exist_ok=True)
     paths["models"].mkdir(parents=True, exist_ok=True)

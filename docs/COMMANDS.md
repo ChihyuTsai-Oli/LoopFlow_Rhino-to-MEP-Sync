@@ -1,6 +1,6 @@
 # LoopFlow R2M Commands
 
-> Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no package yet; open the development toolbar for now. Buttons still run ScriptEditor.
+> Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. A local development package can register them; it is not on Package Manager yet. Open the development toolbar; buttons run those command names.
 >
 > Overview: [User guide](./USER_GUIDE.md).
 >
@@ -8,7 +8,7 @@
 
 ## How to run for now
 
-A formal yak is not installed. Both computers use `E:\_GitHub` as the Git root. Run on an isolated file; do not touch the live working document.
+A local development package `loopflow-r2m` 0.1.0 can be installed (not published). Restart Rhino after installing. Both computers use `E:\_GitHub` as the Git root. Run on an isolated file; do not touch the live working document.
 
 **Open the toolbar (preferred)**
 
@@ -16,7 +16,7 @@ A formal yak is not installed. Both computers use `E:\_GitHub` as the Git root. 
 2. **File → Open** `E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\docs\toolbar\LoopFlow_R2M.rui`.
 3. You should see a **LoopFlow R2M** tab: Open / Storey / Models / Inbound.
 
-The buttons run the same scripts as the paste lines below. Each ScriptEditor run drops the already-loaded module, so re-running in the same Rhino window picks up new code from disk.
+The buttons use the same registered names as the paste lines below. Each run drops the already-loaded module, so re-running in the same Rhino window picks up new code from disk.
 
 You can still paste one full line into the Rhino **command prompt** and press Enter.
 
@@ -40,7 +40,7 @@ You can still paste one full line into the Rhino **command prompt** and press En
 **Command:** `RMOpen` (save first)
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMOpen.py"
+! _RMOpen
 ```
 
 An English Health window lists the config root and last-good timestamps. An unsaved file is blocked.
@@ -58,7 +58,7 @@ Buttons:
 **Command:** `RMStorey` (a saved file is not required; without one there is simply no log)
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMStorey.py"
+! _RMStorey
 ```
 
 Models will not publish until **R2M storey frames** exist.
@@ -116,7 +116,7 @@ Both modes move frames to layer `R2M::Storey` and write UserText `R2M_StoreyName
 **Command:** `RMModels` (save first; `RMStorey` must already have run)
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMModels.py"
+! _RMModels
 ```
 
 One English dialog:
@@ -177,7 +177,7 @@ Ceilings should be `IfcCovering` in Rhino. Unchanged dropdowns write `IfcPlate`.
 **Command:** `RMInbound` (a blank file is enough; a saved file is not required)
 
 ```
-! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMInbound.py"
+! _RMInbound
 ```
 
 ### What height correction does
@@ -223,7 +223,6 @@ Version 1 has **no** clash check and does not draw BIM clash points in Rhino. Lo
 
 ## 06　Do not
 
-- Do not type `RMOpen` and the others as registered commands; they are not registered yet. Use the toolbar or paste the ScriptEditor line.
 - Do not use inbound geometry for drawings or as a Tag source.
 - Do not hand-edit `R2M_FL`.
 - Do not insert a 0 m empty IFC storey to please Merge or a template.

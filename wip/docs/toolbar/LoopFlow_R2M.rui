@@ -46,7 +46,7 @@
       <menu_text>
         <locale_1033>Open</locale_1033>
       </menu_text>
-      <script>! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMOpen.py"</script>
+      <script>! _RMOpen</script>
     </macro_item>
     <macro_item guid="d2f431e2-63b9-591d-8d5d-55e25b6e82ac" bitmap_id="02fea9df-1844-5ba8-a222-63b5a68d10c0">
       <tooltip>
@@ -61,7 +61,7 @@
       <menu_text>
         <locale_1033>Storey</locale_1033>
       </menu_text>
-      <script>! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMStorey.py"</script>
+      <script>! _RMStorey</script>
     </macro_item>
     <macro_item guid="3daa5c03-c65a-50d3-be13-e52bc6f86549" bitmap_id="afe783be-2f32-5c1f-ae8f-9792bb48ce51">
       <tooltip>
@@ -76,7 +76,7 @@
       <menu_text>
         <locale_1033>Models</locale_1033>
       </menu_text>
-      <script>! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMModels.py"</script>
+      <script>! _RMModels</script>
     </macro_item>
     <macro_item guid="804afd79-b9ec-5169-b72d-27e364acbcc1" bitmap_id="5a5758a4-3810-5982-97f7-6b74fb13e40a">
       <tooltip>
@@ -91,7 +91,7 @@
       <menu_text>
         <locale_1033>Inbound</locale_1033>
       </menu_text>
-      <script>! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMInbound.py"</script>
+      <script>! _RMInbound</script>
     </macro_item>
   </macros>
   <icons>
