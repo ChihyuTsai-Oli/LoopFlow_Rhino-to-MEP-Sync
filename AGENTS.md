@@ -15,7 +15,7 @@ AI 必須依序完整讀取：
 
 契約細節未盤完或需追溯決策時另讀：`wip/docs/前期規劃/資料生態決策表.md`（寬版閱讀用 `資料生態決策表.html`）、`wip/docs/rhino指令.md`。`前期規劃/` 其餘檔是原則／過程，不是日常實作規格；與六份實作文件衝突時以六份為準。
 
-公開的 `README*.md`、`docs/USER_GUIDE*.md` 與 `docs/COMMANDS*.md` 是使用者入口（繁中為準；英文待譯），不是實作權威。重構中的文件、原始碼、fixtures 與測試統一放在 `wip/`。Dropbox 工作檔路徑依上一層 `工作檔路徑.md` 解析，不得寫死單一電腦的絕對路徑。
+公開的 `README*.md`、`docs/USER_GUIDE*.md` 與 `docs/COMMANDS*.md` 是使用者入口（繁中為準），不是實作權威。重構中的文件、原始碼、fixtures 與測試統一放在 `wip/`。Dropbox 工作檔路徑依上一層 `工作檔路徑.md` 解析，不得寫死單一電腦的絕對路徑。
 
 ## 產品定位
 

@@ -1,6 +1,6 @@
 # R2M 開發期 Rhino 指令
 
-名稱 **已凍結**（2026-09-28）：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。尚未註冊成 Rhino 產品指令。工具列與 yak 等繁中公開說明定稿後再做。公開說明在 `docs/USER_GUIDE_zh-TW.md`／`docs/COMMANDS_zh-TW.md`（英文尚未改寫）。
+名稱 **已凍結**（2026-09-28）：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。尚未註冊成 Rhino 產品指令。工具列與 yak 等公開說明定稿後再做。公開說明在 `docs/USER_GUIDE_zh-TW.md`／`docs/COMMANDS_zh-TW.md`（英文已對齊）。
 
 | 指令 | 角色 |
 |---|---|

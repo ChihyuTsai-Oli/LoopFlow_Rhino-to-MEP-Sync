@@ -1,6 +1,6 @@
 # LoopFlow R2M Documentation
 
-> Traditional Chinese is the source of truth. English pages below are **not yet updated** (command names, height correction, unlocked inbound). Please read the 繁體中文 section until the translation is rewritten.
+Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no yak or toolbar yet.
 
 This page is the **documentation entry** that Rhino `RMOpen` → **Open Docs** should open. It currently opens the local `docs/` folder; after this guide is on GitHub, Open Docs will point here. It is not the project homepage. For the product overview, see the [project homepage](../README.md).
 

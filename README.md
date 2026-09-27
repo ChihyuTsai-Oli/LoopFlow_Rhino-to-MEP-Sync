@@ -2,18 +2,19 @@
 
 [繁體中文](./README_zh-TW.md)
 
-> **English not yet rewritten.** Command names are frozen (`RMOpen`, `RMStorey`, `RMModels`, `RMInbound`). Height correction is a first-class feature. Inbound meshes are **not** locked. Please read [繁體中文](./README_zh-TW.md) until this page is translated. There is no Package Manager package or toolbar yet.
-
-Rhino publishes an architectural-shell IFC for Revit / Archicad / Blender Bonsai. Those tools publish MEP IFC back as **locked Worksession reference geometry** in Rhino. Design changes stay in Rhino. Exchange format is **IFC only**. There is no LoopFlow plug-in on the BIM side.
+Rhino publishes an architectural-shell IFC for Revit, Archicad, and Blender Bonsai. BIM sends MEP geometry back as IFC, which Rhino attaches as a Worksession reference. **Design stays in Rhino.** Exchange is IFC only. There is no LoopFlow plug-in on the BIM side.
 
 [▶ Documentation](./docs/README.md) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
 
+Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no Package Manager package or toolbar yet. For now, paste a ScriptEditor line into the Rhino command prompt. Dialogs are in English; Traditional Chinese is the source of truth for this guide.
+
 ## Features
 
-- **Architectural shell** — Write selected layers to one shell IFC, hung on storey frames
-- **Storey frames** — Draw a closed horizontal curve per storey; register names and FL (structural floor) elevations
-- **MEP inbound** — Convert a BIM 3D-pipe IFC into meshes, then attach them by hand as a Worksession
-- **Open / Health** — Config folder and last-good timestamps
+- **Storey registration** — Draw a closed horizontal curve on each floor by hand, then register its name and FL (structural floor elevation)
+- **Architectural shell** — Write the selected layers to one IFC, hung on those frames (length unit: centimetres)
+- **Height correction** — Heights in BIM follow FL. `RMInbound` shifts inbound geometry back onto the Rhino model’s Z, so it does not sit at the building-elevation numbers
+- **Pipe / wall reference** — BIM IFC becomes unlocked meshes. Save by hand, then attach as a Worksession to overlay against the model
+- **Open / Health** — Config folder and last successful publish time
 
 No camera, lights, or live link. Do not use inbound geometry for drawings or as a Tag source.
 
@@ -22,26 +23,26 @@ No camera, lights, or live link. Do not use inbound geometry for drawings or as 
 - **Rhino 8** (Windows)
 - **Archicad**, **Revit**, or **Blender Bonsai** (3D BIM is required)
 
-Exchange format is **IFC only**. Archicad: File → Open as a new file has passed for whole-building and partial-storey files. Revit: Link IFC, then create matching Levels and Floor Plans (tested 2026-09-27). **Bonsai is not tested** — it is listed only as another IFC working environment, like Revit and Archicad. Real duct/pipe IFC export is still untested (Archicad Morph and Revit wall inbound heights have passed).
+Exchange is **IFC only**. Archicad: File → Open as a new file (do not Merge). Revit: Link IFC, then create Levels at the frame elevations and open Floor Plans. Bonsai is listed as another IFC working environment; **this product does not test it**.
 
-Rhino dialogs are English. Traditional Chinese is the source of truth for this draft.
+Receiving the shell and bringing walls back (including height correction) has passed in Archicad and Revit. Real ducts and pipes have not been tested.
 
-## How to run during development
+## How to run for now
 
-A formal yak is not packed yet. Paste the ScriptEditor line from [Commands](./docs/COMMANDS.md) into the Rhino **command line**. Names (`RMOpen`, `RMStorey`, `RMModels`, `RMInbound`) are provisional and not registered as product commands.
+Paste the ScriptEditor line from [Commands](./docs/COMMANDS.md) into the Rhino **command prompt**. Save the `.3dm` first (Inbound may use a blank new file). The folder that holds the `.3dm` is the work folder. Settings and IFC live next to it in `_LoopFlow_Config/loopflow_R2M/`.
 
-Save the `.3dm` first (Inbound may use an unsaved blank file). The folder that holds the `.3dm` is the work folder. Settings and IFC live next to it in `_LoopFlow_Config/loopflow_R2M/`.
+A whole-building file and a partial-storey file in the same folder share one `config.json`. To inbound against the partial file, run `RMModels` on that file first so the correction value matches it.
 
 ## Quick start
 
 1. Draw storey frames and run `RMStorey`.
-2. Run `RMModels` to write `models/R2M.ifc`.
-3. Archicad: **File → Open** the IFC as a new file. Do not Merge. Revit: **Link IFC**, then create matching Levels and Floor Plans.
-4. Draw a few **3D** ducts or pipes that cross the ceiling, then export **IFC4** with the built-in exporter (3D pipes only).
-5. In a blank Rhino file, run `RMInbound`, save by hand, then attach that `.3dm` as a Worksession in the working file.
+2. Run `RMModels` to write `models/R2M.ifc`. If you need both a whole-building and a partial copy, rename immediately after publish.
+3. Archicad: **File → Open** the IFC as a new file. Revit: **Link IFC**, then create matching Levels and Floor Plans.
+4. Draw 3D geometry (walls are fine for a test), export **IFC4** with the built-in exporter, selected objects only, no extra coordinate offset.
+5. In a blank Rhino file, run `RMInbound` (pick the working file’s `config.json`), save by hand, then attach that `.3dm` as a Worksession. Inbound height should match the Rhino model.
 
-See the [overview](./docs/USER_GUIDE.md) and [commands](./docs/COMMANDS.md) for the buttons and stops.
+Step-by-step: [overview](./docs/USER_GUIDE.md) and [commands](./docs/COMMANDS.md).
 
 ## License and credits
 
-Released under the [MIT License](./LICENSE). See [CREDITS](./CREDITS.md).
+MIT. See [LICENSE](./LICENSE). Icon credits: [CREDITS](./CREDITS.md).

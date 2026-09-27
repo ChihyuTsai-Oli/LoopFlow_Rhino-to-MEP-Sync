@@ -2,7 +2,7 @@
 
 [English](./README.md)
 
-Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把幾何 IFC 送回 Rhino，當 Worksession 外參。**設計判斷只在 Rhino。** 交換只使用 IFC。BIM 端沒有 LoopFlow 外掛。
+Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把 MEP 幾何 IFC 送回 Rhino，當 Worksession 外參。**設計判斷只在 Rhino。** 交換只使用 IFC。BIM 端沒有 LoopFlow 外掛。
 
 [▶ 使用說明](./docs/README.md) · [▶ GitHub](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync)
 
@@ -10,7 +10,7 @@ Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把幾�
 
 ## 主要功能
 
-- **樓層登記** — 自己畫各層水平封閉曲線，登記名稱與 FL 結構面高程
+- **樓層登記** — 手動建立各層水平封閉曲線，登記名稱與 FL 結構面高程
 - **建築殼發布** — 依高程框把選取圖層寫成一份 IFC（長度單位公分）
 - **高度校正** — BIM 裡的高度跟著 FL；`RMInbound` 把回來的幾何扣回 Rhino 模型 Z（不是停在建築標高數字上）
 - **管線／牆外參** — BIM 匯出的 IFC 建成網面（不鎖定），手動另存後掛進工作檔對照

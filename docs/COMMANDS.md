@@ -1,14 +1,14 @@
 # LoopFlow R2M Commands
 
-> **English not yet rewritten.** Command names are frozen. Height correction is documented in Traditional Chinese. Please read [指令逐項說明](./COMMANDS_zh-TW.md) until this page is translated. There is no package or toolbar yet.
+> Command names are frozen: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. There is no package or toolbar yet; paste a ScriptEditor line for now.
 >
-> Overview: [User guide](./USER_GUIDE.md). Names below are provisional (joined, e.g. `RMModels`) and are **not** registered Rhino product commands yet.
+> Overview: [User guide](./USER_GUIDE.md).
 >
 > Rhino dialogs are English.
 
-## How to run during development
+## How to run for now
 
-A formal yak is not installed. Paste one full line into the Rhino **command line** and press Enter. Both computers use `E:\_GitHub` as the Git root. Run on an isolated file; do not touch the live working document.
+A formal yak is not installed. Paste one full line into the Rhino **command prompt** and press Enter. Both computers use `E:\_GitHub` as the Git root. Run on an isolated file; do not touch the live working document.
 
 Each ScriptEditor run drops the already-loaded module, so re-running in the same Rhino window picks up new code from disk.
 
@@ -18,12 +18,12 @@ Each ScriptEditor run drops the already-loaded module, so re-running in the same
 |---|---|---|---|
 | Open | `RMOpen` | — | Config root, last-good time, folders or this guide |
 | Storeys | `RMStorey` | — | Name frames and FL |
-| Shell | `RMModels` | Open IFC as a new file | Selected layers → `R2M.ifc` |
-| Pipes | `RMInbound` | Built-in IFC4 export | Meshes in a blank file (not locked); save and attach by hand |
+| Shell | `RMModels` | Open or Link IFC | Selected layers → `R2M.ifc` (centimetres) |
+| Geometry inbound | `RMInbound` | Built-in IFC4 export | Meshes in a blank file (unlocked); **height correction**, then save and attach by hand |
 
 ## Contents
 
-[01 Open and docs](#01-open-and-docs) · [02 Storey frames](#02-storey-frames) · [03 Architectural shell](#03-architectural-shell) · [04 BIM receive](#04-bim-receive) · [05 Pipe inbound](#05-pipe-inbound) · [06 Do not](#06-do-not)
+[01 Open and docs](#01-open-and-docs) · [02 Storey frames](#02-storey-frames) · [03 Architectural shell](#03-architectural-shell) · [04 BIM receive](#04-bim-receive) · [05 Geometry inbound and height correction](#05-geometry-inbound-and-height-correction) · [06 Do not](#06-do-not)
 
 ---
 
@@ -135,6 +135,8 @@ On publish:
 - Worksession references are not packed into the shell IFC.
 - If more than half the objects are still Proxy, the command line warns that Archicad may hide them.
 - The product filename is always `R2M.ifc`. Keep your own renamed copies if you need both a whole-building and a partial file.
+- IFC length unit is **centimetres**. Revit still often shows storey elevations in metres (755 cm as 8 m). That is Revit rounding, not a bad file.
+- Each successful publish writes the **height-correction value** into the same `config.json` (shared by whole-building and partial files; the last publish overwrites the previous one).
 
 ---
 
@@ -151,21 +153,18 @@ There is no LoopFlow on the BIM side. The shell is a **reference**, not a model 
 
 For a partial file, include every extra frame that spanning objects reach, then publish again.
 
-**Revit (tested, 2026-09-27)**
+**Revit (tested)**
 
 1. Rhino `RMModels` writes the IFC.
 2. Revit **Link IFC** (not Open, not Import).
 3. Manually create Levels at the same elevations as the IFC storey frames (template Level 0 / 1 stay).
 4. **View → Plan Views → Floor Plan** so the Level appears under Project Browser → Floor Plans.
-5. Current test: a wall on 3F and a wall on 4F (not ducts or pipes).
-6. Select those objects, **File → Export → IFC (IFC4)**. Fixture: `wip/fixtures/spike/revit_wall.ifc`.
-7. Run `RMInbound` in a blank Rhino file: import succeeds and height is corrected.
 
 Ceilings should be `IfcCovering` in Rhino. Unchanged dropdowns write `IfcPlate`. Proxy objects are often invisible in Archicad.
 
 ---
 
-## 05　Pipe inbound
+## 05　Geometry inbound and height correction
 
 **Command:** `RMInbound` (a blank file is enough; a saved file is not required)
 
@@ -173,27 +172,40 @@ Ceilings should be `IfcCovering` in Rhino. Unchanged dropdowns write `IfcPlate`.
 ! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMInbound.py"
 ```
 
-BIM should export **3D pipes only** (clash segments or checked systems; not the whole building, not 2D). Insulation / outer envelope is useful. No specific library parts — a few 3D ducts or pipes that cross the ceiling are enough.
+### What height correction does
 
-**Drawing pipes in Archicad (real export untested; menu labels not recorded)**
+In BIM, storey height is FL (for example 3F = 1060 cm). The Rhino working file often draws that floor at its own Z (for example the frame at 0). The two differ by a fixed amount.
 
-1. Open the shell IFC **as a new file** (a 2F / 3F / 4F file is easier against the ceiling).
-2. Draw a few **3D** ducts or pipes that cross the ceiling height.
-3. Use Archicad’s **built-in** IFC export: **IFC4**; 3D pipes only; no whole building, no 2D, no extra coordinate offset. Keep storeys as they are.
-4. Name the file with the source (Archicad) and the date.
+`RMModels` writes that amount to `elevation_shift` in `config.json`. `RMInbound` rewrites every inbound vertex as “IFC world Z minus that amount”, so walls and pipes line up with the Rhino ceiling instead of sitting at the building-elevation numbers.
 
-**Exporting from Revit (tested; walls, not ducts/pipes)**
+- A whole-building file and a partial-storey file in the same folder **share** this value. To inbound against the partial file, run `RMModels` on that file first.
+- If the field is missing, the command stops; it does not guess 0.
+- XY is not shifted.
 
-See the seven steps in the previous section. Fixture: `wip/fixtures/spike/revit_wall.ifc`.
+Archicad and Revit wall inbound, with height correction, have both passed. Real ducts and pipes have not been tested.
 
-**Rhino**
+### Exporting walls from Archicad (tested; not ducts/pipes)
+
+1. Open the shell IFC **as a new file**, as in the previous section.
+2. Draw walls there (this is the test; real work draws 3D ducts or pipes).
+3. Use Archicad’s **built-in** IFC export: **IFC4**; selected objects only; no extra coordinate offset.
+4. Fixture: `wip/fixtures/spike/ac_wall.ifc`.
+
+### Exporting walls from Revit (tested; not ducts/pipes)
+
+1. Link the shell IFC as in the previous section, create Levels, and open Floor Plans.
+2. Place a wall on 3F and a wall on 4F.
+3. Select those objects, **File → Export → IFC (IFC4)**.
+4. Fixture: `wip/fixtures/spike/revit_wall.ifc`.
+
+### Rhino
 
 1. Open a **blank `.3dm`** with the same units as the working file.
-2. Paste the `RMInbound` line above and pick the IFC. Confirm the document units. A blank file will also ask for the working file’s `config.json` (`elevation_shift` written by `RMModels`). Pipe Z is shifted back onto the Rhino model, aligned with the ceiling, not left at the building-elevation numbers.
+2. Paste the `RMInbound` line above and pick the IFC. Confirm the document units. A blank file will also ask for the working file’s `config.json`.
 3. **Save** the `.3dm` yourself (suggested: `_LoopFlow_Config/loopflow_R2M/inbound/` next to the working file; keep a stable name).
 4. Back in the working file, **attach** that `.3dm` as a Worksession yourself.
 
-The command does **not** write, save, attach, or lock the meshes. After you attach them as a Worksession, they stay reference objects in the working file; you can snap to them.
+The command does **not** write, save, or attach. Imported meshes are **not locked**. After you attach them as a Worksession, they stay reference objects in the working file; snap to them, use them as overlay, do not use them as drawing source.
 
 To update pipes: repeat Rhino steps 1–3 over the same `.3dm`, then Refresh in the Worksession manager. A stable filename is what makes that work.
 
@@ -203,9 +215,10 @@ Version 1 has **no** clash check and does not draw BIM clash points in Rhino. Lo
 
 ## 06　Do not
 
-- Do not type `RMOpen` and the others as registered commands; paste the ScriptEditor line.
+- Do not type `RMOpen` and the others as registered commands; they are not registered yet. Paste the ScriptEditor line.
 - Do not use inbound geometry for drawings or as a Tag source.
 - Do not hand-edit `R2M_FL`.
 - Do not insert a 0 m empty IFC storey to please Merge or a template.
 - Do not convert the shell to native BIM elements and edit it there; design changes go back to Rhino.
-- Do not send a whole-building or 2D IFC back as the pipe file.
+- Do not send a whole-building or 2D IFC back as the inbound file.
+- Do not inbound against the partial file right after a whole-building publish, when the correction value has already been overwritten to 0.
