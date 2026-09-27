@@ -1,6 +1,6 @@
 # LoopFlow R2M User Guide
 
-> **Development draft.** Command names are not frozen. There is no package or toolbar yet.
+> **English not yet rewritten.** Command names are frozen. Height correction is documented in Traditional Chinese. Please read [使用說明總覽](./USER_GUIDE_zh-TW.md) until this page is translated. There is no package or toolbar yet.
 >
 > One minute on how it works. Buttons and steps: [Commands](./COMMANDS.md). Product intro: [homepage](../README.md).
 

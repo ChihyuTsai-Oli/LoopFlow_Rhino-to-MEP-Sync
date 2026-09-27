@@ -15,7 +15,7 @@ AI 必須依序完整讀取：
 
 契約細節未盤完或需追溯決策時另讀：`wip/docs/前期規劃/資料生態決策表.md`（寬版閱讀用 `資料生態決策表.html`）、`wip/docs/rhino指令.md`。`前期規劃/` 其餘檔是原則／過程，不是日常實作規格；與六份實作文件衝突時以六份為準。
 
-公開的 `README*.md`、`docs/USER_GUIDE*.md` 與 `docs/COMMANDS*.md` 是使用者入口（目前為開發草稿），不是實作權威。重構中的文件、原始碼、fixtures 與測試統一放在 `wip/`。Dropbox 工作檔路徑依上一層 `工作檔路徑.md` 解析，不得寫死單一電腦的絕對路徑。
+公開的 `README*.md`、`docs/USER_GUIDE*.md` 與 `docs/COMMANDS*.md` 是使用者入口（繁中為準；英文待譯），不是實作權威。重構中的文件、原始碼、fixtures 與測試統一放在 `wip/`。Dropbox 工作檔路徑依上一層 `工作檔路徑.md` 解析，不得寫死單一電腦的絕對路徑。
 
 ## 產品定位
 
@@ -29,7 +29,7 @@ AI 必須依序完整讀取：
 
 ## 分支與版本
 
-- `main` 與 `v1-development` 已對齊目前開發（2026-09-23 短分支 `codex/v1-inbound-z-bonsai` fast-forward 合入）。**尚無發布 tag**，指令名未凍。
+- `main` 與 `v1-development` 已對齊 2026-09-23 合入點。後續工作在短分支 `codex/v1-ifc-cm-revit`。**尚無發布 tag**。指令名／磁碟檔名已凍（`RMOpen`／`RMStorey`／`RMModels`／`RMInbound`；`R2M.ifc`／`config.json`）。
 - 每批從 `v1-development` 開 `codex/v1-<scope>`，合入後再依授權合入 `main`；不要把 R2M 合進 LoopFlow／R2B／R2O 的整合分支。
 - 日後 tag／Release 永不移動或覆寫。
 

@@ -1,12 +1,12 @@
 # LoopFlow R2M 指令逐項說明
 
-> **開發草稿。** 指令名稱尚未凍結。還沒有套件或工具列。
+> 指令名稱已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。還沒有套件或工具列；目前貼 ScriptEditor 那一行執行。
 >
-> 整體流程見 [使用說明總覽](./USER_GUIDE_zh-TW.md)。下面的名稱是開發暫定（連寫，例如 `RMModels`），**尚未**註冊成 Rhino 正式指令。
+> 整體流程見 [使用說明總覽](./USER_GUIDE_zh-TW.md)。
 >
 > Rhino 對話框為英文。
 
-## 開發期怎麼跑
+## 目前怎麼跑
 
 正式 yak 還沒裝。請在 Rhino **指令列**貼上一整行再按 Enter。兩台電腦的 Git 根目錄都是 `E:\_GitHub`。請開隔離檔再跑，不要動正在編輯的工作檔。
 
@@ -18,12 +18,12 @@
 |---|---|---|---|
 | 開案 | `RMOpen` | — | 看設定根與上次成功時間；開資料夾或本說明 |
 | 樓層 | `RMStorey` | — | 選高程框，編成樓層名與 FL |
-| 建築殼 | `RMModels` | 開啟 IFC 當新檔 | 選圖層寫出 `R2M.ifc` |
-| 管線外參 | `RMInbound` | 內建匯出 IFC4 | 空白檔建網面（不鎖定）；另存與掛載手動 |
+| 建築殼 | `RMModels` | 開啟／連結 IFC | 選圖層寫出 `R2M.ifc`（公分） |
+| 幾何外參 | `RMInbound` | 內建匯出 IFC4 | 空白檔建網面（不鎖定）；**高度校正**後手動另存與掛載 |
 
 ## 目錄
 
-[01 開啟設定與說明](#01-開啟設定與說明) · [02 樓層高程框](#02-樓層高程框) · [03 建築殼](#03-建築殼) · [04 BIM 收檔](#04-bim-收檔) · [05 管線外參](#05-管線外參) · [06 不要做的事](#06-不要做的事)
+[01 開啟設定與說明](#01-開啟設定與說明) · [02 樓層高程框](#02-樓層高程框) · [03 建築殼](#03-建築殼) · [04 BIM 收檔](#04-bim-收檔) · [05 幾何外參與高度校正](#05-幾何外參與高度校正) · [06 不要做的事](#06-不要做的事)
 
 ---
 
@@ -135,6 +135,8 @@ Models 之前必須先有 **R2M 高程框**。沒有就擋住，不發布。
 - Worksession 外參不會被包進建築 IFC。
 - 過半物件仍是 Proxy 時，指令列會警告：Archicad 可能不顯示這些件。
 - 產品預設檔名永遠是 `R2M.ifc`。若同一專案要留整棟與單層兩份，請自己另存複本改名。
+- IFC 長度單位是**公分**。Revit 畫面仍常以公尺顯示樓層標高（例如 755 公分顯示成 8 公尺），這是 Revit 進位，不是檔寫錯。
+- 每次成功發布會把**高度校正值**寫進同一份 `config.json`（整棟與單層共用；最後一次發布的那份會蓋掉前一次）。
 
 ---
 
@@ -151,21 +153,18 @@ BIM 端沒有 LoopFlow。建築殼是**參考**，不是給對方接手編輯的
 
 單層檔請連跨層物件碰到的那一層框一起畫進去再發布，開啟才完整。
 
-**Revit（已測，2026-09-27）**
+**Revit（已測）**
 
 1. Rhino `RMModels` 匯出 IFC。
 2. Revit **Link IFC**（不要 Open、不要 Import）。
 3. 依 IFC 框線高程，手動建立同高 Level（範本 Level 0／1 會留下）。
 4. **View → Plan Views → Floor Plan**，讓該 Level 出現在 Project Browser → Floor Plans。
-5. 目前測試：在 3F、4F 各建 wall（不是風管／水管）。
-6. 選取要匯出的物件，**File → Export → IFC (IFC4)**。測檔：`wip/fixtures/spike/revit_wall.ifc`。
-7. Rhino 空白檔跑 `RMInbound`：匯入成功、高度有校正。
 
 天花在 Rhino 請選 `IfcCovering`。未改下拉會寫成 `IfcPlate`。仍選 Proxy 的件 Archicad 常不顯示。
 
 ---
 
-## 05　管線外參
+## 05　幾何外參與高度校正
 
 **指令**：`RMInbound`（空白檔即可，不要求已存檔）
 
@@ -173,23 +172,36 @@ BIM 端沒有 LoopFlow。建築殼是**參考**，不是給對方接手編輯的
 ! _-ScriptEditor _Run "E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync\wip\commands\RMInbound.py"
 ```
 
-BIM 只出 **3D 管線**（衝突段或勾選系統；不要整棟、不要 2D）。含保溫／外包絡較好。沒有指定的庫元件——幾段跨越天花高度的 3D 風管或水管即可。
+### 高度校正是什麼
 
-**從 Archicad 畫管（真實匯出尚未測；選單名稱未記錄）**
+BIM 裡的樓層高度是 FL（例如 3F＝1060 公分）。Rhino 工作檔常把那一層畫在模型自己的 Z（例如框在 0）。兩邊差一個固定值。
 
-1. 依上一節把建築殼 IFC **當新檔開啟**（單層 2F／3F／4F 方便對天花）。
-2. 在該檔畫幾段 **3D** 風管或水管，跨越天花高度。
-3. 用 Archicad **內建** IFC 匯出：**IFC4**；只出 3D 管線；不要整棟建築、不要 2D、座標不要另做偏移。標高與樓層維持原樣。
-4. 檔名標來源（Archicad）與日期。
+`RMModels` 把這個差值寫進 `config.json` 的 `elevation_shift`。`RMInbound` 把回來的每個頂點改成「IFC 世界 Z − 這個差值」，讓牆／管對上 Rhino 天花，而不是停在建築標高數字上。
 
-**從 Revit 出牆（已測；不是風管／水管）**
+- 同一資料夾的整棟與單層**共用**這份校正值。要對單層做 Inbound，請先對單層跑過 `RMModels`。
+- 沒有這個欄位就停，不猜 0。
+- XY 不平移。
 
-見上一節七步。測檔 `wip/fixtures/spike/revit_wall.ifc`。
+Archicad 牆與 Revit 牆回檔，高度校正都已通過。真實風管／水管尚未測。
 
-**Rhino**
+### 從 Archicad 出牆（已測；不是風管／水管）
+
+1. 依上一節把建築殼 IFC **當新檔開啟**。
+2. 在該檔畫牆（測試用；真實作業畫 3D 風管或水管）。
+3. 用 Archicad **內建** IFC 匯出：**IFC4**；只出選取物件；座標不要另做偏移。
+4. 測檔：`wip/fixtures/spike/ac_wall.ifc`。
+
+### 從 Revit 出牆（已測；不是風管／水管）
+
+1. 依上一節連結建築殼 IFC，自建 Level 並開 Floor Plan。
+2. 在 3F、4F 各建 wall。
+3. 選取要匯出的物件，**File → Export → IFC (IFC4)**。
+4. 測檔：`wip/fixtures/spike/revit_wall.ifc`。
+
+### Rhino
 
 1. 開一個**空白 `.3dm`**，單位設成與工作檔相同。
-2. 貼上上面的 `RMInbound` 那一行，選剛匯出的 IFC。確認文件單位。空白檔還會請你選工作檔旁的 `config.json`（`RMModels` 寫入的 `elevation_shift`）。管線高度會扣回 Rhino 模型，對上天花，而不是停在建築標高數字上。
+2. 貼上上面的 `RMInbound` 那一行，選剛匯出的 IFC。確認文件單位。空白檔還會請你選工作檔旁的 `config.json`。
 3. **手動**另存成 `.3dm`（建議工作檔旁 `_LoopFlow_Config/loopflow_R2M/inbound/`，固定檔名）。
 4. 回工作檔**手動**用 Worksession 掛上該 `.3dm`。
 
@@ -203,9 +215,10 @@ BIM 只出 **3D 管線**（衝突段或勾選系統；不要整棟、不要 2D�
 
 ## 06　不要做的事
 
-- 不要在指令列直接打 `RMOpen` 這幾個名字（尚未註冊）；請貼 ScriptEditor 那一行。
+- 不要在指令列直接打 `RMOpen` 這幾個名字（尚未註冊成 Rhino 指令）；請貼 ScriptEditor 那一行。
 - 不要把外參幾何拿去出圖或當 Tag 來源。
 - 不要用手改 `R2M_FL`。
 - 不要為了迎合 Merge／範本而在 IFC 裡補一層 0 m 空樓層。
 - 不要把建築殼轉成 BIM 原生元素再各自修改；設計變更一律回 Rhino。
-- 不要把整棟建築或 2D 圖一併當成管線 IFC 送回 Rhino。
+- 不要把整棟建築或 2D 圖一併當成外參 IFC 送回 Rhino。
+- 不要在整棟剛發布完、校正值已變成 0 時，直接對單層做 Inbound。

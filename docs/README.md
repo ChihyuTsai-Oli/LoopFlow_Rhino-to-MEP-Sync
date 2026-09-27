@@ -1,6 +1,6 @@
 # LoopFlow R2M Documentation
 
-> **Development draft.** Command names are not frozen. There is no yak or toolbar yet.
+> Traditional Chinese is the source of truth. English pages below are **not yet updated** (command names, height correction, unlocked inbound). Please read the 繁體中文 section until the translation is rewritten.
 
 This page is the **documentation entry** that Rhino `RMOpen` → **Open Docs** should open. It currently opens the local `docs/` folder; after this guide is on GitHub, Open Docs will point here. It is not the project homepage. For the product overview, see the [project homepage](../README.md).
 
@@ -15,7 +15,7 @@ The six Traditional Chinese files that used to sit in this folder (`實作總覽
 
 # LoopFlow R2M 使用說明
 
-> **開發草稿。** 指令名稱尚未凍結。還沒有 yak 或工具列。
+> 指令名稱已凍結：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。還沒有 yak 或工具列。
 
 此頁是 Rhino 指令 `RMOpen` → **Open Docs** 應開啟的**文件入口**。目前 Open Docs 開本機 `docs/` 資料夾；這份說明上 GitHub 之後會改開此頁。不是專案首頁。產品介紹見 [專案主頁](../README_zh-TW.md)。
 

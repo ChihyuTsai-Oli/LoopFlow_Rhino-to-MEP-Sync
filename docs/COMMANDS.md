@@ -1,6 +1,6 @@
 # LoopFlow R2M Commands
 
-> **Development draft.** Command names are not frozen. There is no package or toolbar yet.
+> **English not yet rewritten.** Command names are frozen. Height correction is documented in Traditional Chinese. Please read [指令逐項說明](./COMMANDS_zh-TW.md) until this page is translated. There is no package or toolbar yet.
 >
 > Overview: [User guide](./USER_GUIDE.md). Names below are provisional (joined, e.g. `RMModels`) and are **not** registered Rhino product commands yet.
 >

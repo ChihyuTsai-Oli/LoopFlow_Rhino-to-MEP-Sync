@@ -2,7 +2,7 @@
 
 [繁體中文](./README_zh-TW.md)
 
-> **Development draft.** Command names, screen names, and install method are not frozen. There is no Package Manager package or toolbar yet. Do not treat this page as a published install guide.
+> **English not yet rewritten.** Command names are frozen (`RMOpen`, `RMStorey`, `RMModels`, `RMInbound`). Height correction is a first-class feature. Inbound meshes are **not** locked. Please read [繁體中文](./README_zh-TW.md) until this page is translated. There is no Package Manager package or toolbar yet.
 
 Rhino publishes an architectural-shell IFC for Revit / Archicad / Blender Bonsai. Those tools publish MEP IFC back as **locked Worksession reference geometry** in Rhino. Design changes stay in Rhino. Exchange format is **IFC only**. There is no LoopFlow plug-in on the BIM side.
 
