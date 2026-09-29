@@ -7,8 +7,8 @@
 | `R2M_spike_shell.ifc` | 建築殼：IfcWall + IfcCovering（天花） | `IfcExtrudedAreaSolid`（參數化量體） |
 | `R2M_spike_shell_mesh.ifc` | 同上，幾何等價 | `IfcTriangulatedFaceSet`（**產品實際會用**） |
 | `R2M_spike_pipe.ifc` | 管線外參：IfcPipeSegment | `IfcExtrudedAreaSolid` |
-| `ac_wall.ifc` | 家中 Archicad 29 牆匯出（IFC4）。**不是**真實風管／水管 | `IfcWall`；3F／4F |
-| `revit_wall.ifc` | 家中 Revit 3F／4F 牆匯出（IFC4）。**不是**真實風管／水管 | Revit 牆 |
+| `ac_wall.ifc` | 家中 Archicad 29 牆匯出（IFC4） | `IfcWall`；3F／4F |
+| `revit_wall.ifc` | 家中 Revit 3F／4F 牆匯出（IFC4） | Revit 牆 |
 
 幾何尺寸（公尺，針刺檔）：牆 4 × 0.2 × 2.8，貼在 Y=0 側；天花 4 × 4，底在 2.8、頂在 2.9。管頂在 2.575，與天花底淨空 0.225。`ac_wall.ifc`／`revit_wall.ifc` 尺寸以現場為準。
 

@@ -180,16 +180,14 @@ BIM 裡的樓層高度是 FL（例如 3F＝1060 公分）。Rhino 工作檔常�
 - 沒有這個欄位就停，不猜 0。
 - XY 不平移。
 
-Archicad 牆與 Revit 牆回檔，高度校正都已通過。真實風管／水管尚未測。
-
-### 從 Archicad 出牆（已測；不是風管／水管）
+### 從 Archicad 出牆
 
 1. 依上一節把建築殼 IFC **當新檔開啟**。
-2. 在該檔畫牆（測試用；真實作業畫 3D 風管或水管）。
+2. 在該檔畫牆。
 3. 用 Archicad **內建** IFC 匯出：**IFC4**；只出選取物件；座標不要另做偏移。
 4. 測檔：`wip/fixtures/spike/ac_wall.ifc`。
 
-### 從 Revit 出牆（已測；不是風管／水管）
+### 從 Revit 出牆
 
 1. 依上一節連結建築殼 IFC，自建 Level 並開 Floor Plan。
 2. 在 3F、4F 各建 wall。

@@ -10,7 +10,7 @@
 
 1. **Save the `.3dm` first.** Unpublished files cannot publish. Settings and exchange files sit next to that file.
 2. **Register storeys, then publish the shell.** `RMStorey` names the frames; `RMModels` writes `models/R2M.ifc` (length unit: centimetres).
-3. **Receive that IFC in BIM** (Archicad: File → Open as a new file; do not Merge. Revit: Link IFC, then create matching Levels and Floor Plans) and draw 3D geometry there. Heights in BIM follow the FL numbers you typed on the storey frames. Bonsai is another IFC working environment, like Revit and Archicad; this product **does not test Bonsai**.
+3. **Receive that IFC in BIM** (Archicad: File → Open as a new file; do not Merge. Revit: Link IFC, then create matching Levels and Floor Plans) and draw 3D geometry there. Heights in BIM follow the FL numbers you typed on the storey frames.
 4. **Bring the geometry IFC back (height correction).** BIM world coordinates are still building elevations. `RMInbound` shifts every vertex back onto the Rhino model — not onto the FL numbers — so inbound walls and pipes line up with the ceiling. You save and attach the Worksession yourself.
 5. **Edit the original ceiling / wall / slab against the reference, then run Models again.**
 
@@ -37,8 +37,8 @@ Move the whole project folder when you change computers. The Worksession `.rws` 
 | You want to | Rhino | BIM |
 |---|---|---|
 | Register storeys | `RMStorey` | — |
-| Architectural shell | `RMModels` | Archicad: **Open the IFC as a new file** (tested). Revit: **Link IFC**, then create matching Levels and Floor Plans (tested). Bonsai is an IFC working environment; **not tested** |
-| Geometry reference (with height correction) | `RMInbound` → save by hand → attach Worksession by hand | BIM **IFC4** export, selected objects only. Archicad and Revit wall inbound heights have passed; real ducts/pipes are untested |
+| Architectural shell | `RMModels` | Archicad: **Open the IFC as a new file**. Revit: **Link IFC**, then create matching Levels and Floor Plans |
+| Geometry reference (with height correction) | `RMInbound` → save by hand → attach Worksession by hand | BIM **IFC4** export, selected objects only |
 | Settings and docs | `RMOpen` | — |
 
 BIM has no LoopFlow buttons.

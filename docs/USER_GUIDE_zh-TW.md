@@ -10,7 +10,7 @@
 
 1. **先把 `.3dm` 存檔。** 未存檔就不能發布。設定與交換檔都放在這份檔案旁邊。
 2. **先登記樓層，再發布建築殼。** `RMStorey` 把高程框編成樓層；`RMModels` 寫出 `models/R2M.ifc`（長度單位公分）。
-3. **BIM 收這份 IFC**（Archicad：檔案 → 開啟當新檔，不要 Merge。Revit：連結 IFC，再依框線高程自建 Level 並開 Floor Plan），在裡面畫 3D 幾何。BIM 裡的高度跟著高程框填的 FL。Bonsai 與 Revit、Archicad 一樣用 IFC 作業，本產品**不測 Bonsai**。
+3. **BIM 收這份 IFC**（Archicad：檔案 → 開啟當新檔，不要 Merge。Revit：連結 IFC，再依框線高程自建 Level 並開 Floor Plan），在裡面畫 3D 幾何。BIM 裡的高度跟著高程框填的 FL。
 4. **幾何 IFC 回到 Rhino（高度校正）。** BIM 世界座標仍是建築標高。`RMInbound` 會把每個頂點的高度扣回 Rhino 模型（不是停在 FL 數字上），讓回來的牆／管對上天花。另存與掛 Worksession 都手動。
 5. **看著外參改原天花／牆／板，再跑 Models。**
 
@@ -37,8 +37,8 @@ _LoopFlow_Config/loopflow_R2M/
 | 你要做的事 | Rhino | BIM |
 |---|---|---|
 | 登記樓層 | `RMStorey` | — |
-| 建築殼 | `RMModels` | Archicad：**開啟 IFC 當新檔**（已測）。Revit：**連結 IFC**，再自建同高 Level 並開 Floor Plan（已測）。Bonsai 同為 IFC 作業環境，**不測** |
-| 幾何外參（含高度校正） | `RMInbound` → 手動另存 → 手動掛 Worksession | BIM 匯出 **IFC4**、只出選取物件。Archicad 牆與 Revit 牆回檔高度已過；真實風管／水管尚未測 |
+| 建築殼 | `RMModels` | Archicad：**開啟 IFC 當新檔**。Revit：**連結 IFC**，再自建同高 Level 並開 Floor Plan |
+| 幾何外參（含高度校正） | `RMInbound` → 手動另存 → 手動掛 Worksession | BIM 匯出 **IFC4**、只出選取物件 |
 | 看設定與說明 | `RMOpen` | — |
 
 BIM 端沒有 LoopFlow 按鈕。

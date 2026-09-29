@@ -19,11 +19,11 @@ AI 必須依序完整讀取：
 
 ## 產品定位
 
-獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad／Blender Bonsai 用 IFC 作業（管線 IFC 回 Rhino 當 Worksession 外參）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。**不測 Bonsai**（只在說明裡列為作業環境）。
+獨立產品：**Rhino 發布建築殼 IFC ↔ Revit／Archicad 用 IFC 作業（BIM 幾何 IFC 回 Rhino 當 Worksession 外參）**。不是 LoopFlow 2.0 出圖、不是 R2B、不是 R2O。沒有 3D BIM 對口就不做。BIM 端不寫外掛。
 
 跨產品順序：R2B／R2O 主鏈已發布；本產品 IfcOpenShell **Rhino 端針刺已過、實作前規格已補齊**，C01 核心已開工。家中 Archicad 已能匯入針刺測檔；Revit Link IFC 已過。**Archicad 只有家中電腦。** 公司日只做 Rhino／單元測試。功能碼須兩端能測再寫（Models 的消費＝BIM 能連結；連結驗收放家中）。
 
-**C01 的 ED-07、ED-13、ED-29 已採用。** `RMModels`／`RMInbound`／`RMOpen` 已寫。B03 真實 MEP 只在家中做。
+**C01 的 ED-07、ED-13、ED-29 已採用。** `RMModels`／`RMInbound`／`RMOpen` 已寫。B03 牆 inbound 已過；不再測真實風管／水管。
 
 決策表 16 列待決已於 2026-09-21 採用（三欄字母全數一致，非盲填；使用者授權兩家以上相同即採用）。HTML 由 `wip/tools/fill_decision_table.py` 產生，不要手動編輯。改口先改已決列與契約，再 `--html-only` 重產 HTML。
 

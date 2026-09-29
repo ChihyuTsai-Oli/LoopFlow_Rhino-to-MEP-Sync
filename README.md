@@ -2,7 +2,7 @@
 
 [繁體中文](./README_zh-TW.md)
 
-Rhino publishes an architectural-shell IFC for Revit, Archicad, and Blender Bonsai. BIM sends MEP geometry back as IFC, which Rhino attaches as a Worksession reference. **Design stays in Rhino.** Exchange is IFC only. There is no LoopFlow plug-in on the BIM side.
+Rhino publishes an architectural-shell IFC for Revit and Archicad. BIM sends geometry back as IFC, which Rhino attaches as a Worksession reference. **Design stays in Rhino.** Exchange is IFC only. There is no LoopFlow plug-in on the BIM side.
 
 Rhino installs as a single `.yak`.
 
@@ -23,11 +23,9 @@ No camera, lights, or live link. Do not use inbound geometry for drawings or as 
 ## Requirements
 
 - **Rhino 8** (Windows)
-- **Archicad**, **Revit**, or **Blender Bonsai** (3D BIM is required)
+- **Archicad** or **Revit** (3D BIM is required)
 
-Exchange is **IFC only**. Archicad: File → Open as a new file (do not Merge). Revit: Link IFC, then create Levels at the frame elevations and open Floor Plans. Bonsai is listed as another IFC working environment; **this product does not test it**.
-
-Receiving the shell and bringing walls back (including height correction) has passed in Archicad and Revit. Real ducts and pipes have not been tested.
+Exchange is **IFC only**. Archicad: File → Open as a new file (do not Merge). Revit: Link IFC, then create Levels at the frame elevations and open Floor Plans.
 
 ## Quick start
 

@@ -2,7 +2,7 @@
 
 [English](./README.md)
 
-Rhino 發布建築殼 IFC 給 Revit／Archicad／Blender Bonsai；BIM 端把 MEP 幾何 IFC 送回 Rhino，當 Worksession 外參。**設計判斷只在 Rhino。** 交換只使用 IFC。BIM 端沒有 LoopFlow 外掛。
+Rhino 發布建築殼 IFC 給 Revit 與 Archicad；BIM 端把幾何 IFC 送回 Rhino，當 Worksession 外參。**設計判斷只在 Rhino。** 交換只使用 IFC。BIM 端沒有 LoopFlow 外掛。
 
 Rhino 端裝一份 `.yak`。
 
@@ -23,11 +23,9 @@ Rhino 端裝一份 `.yak`。
 ## 系統需求
 
 - **Rhino 8**（Windows）
-- **Archicad**、**Revit** 或 **Blender Bonsai**（必須是 3D BIM）
+- **Archicad** 或 **Revit**（必須是 3D BIM）
 
-交換只使用 **IFC**。Archicad：檔案 → 開啟當新檔（不要 Merge）。Revit：連結 IFC，再依框線高程自建 Level 並開 Floor Plan。Bonsai 只列為作業環境，**本產品不測**。
-
-Archicad、Revit 收殼與牆回檔（含高度校正）已通過。真實風管／水管尚未測。
+交換只使用 **IFC**。Archicad：檔案 → 開啟當新檔（不要 Merge）。Revit：連結 IFC，再依框線高程自建 Level 並開 Floor Plan。
 
 ## 快速開始
 

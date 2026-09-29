@@ -180,16 +180,14 @@ In BIM, storey height is FL (for example 3F = 1060 cm). The Rhino working file o
 - If the field is missing, the command stops; it does not guess 0.
 - XY is not shifted.
 
-Archicad and Revit wall inbound, with height correction, have both passed. Real ducts and pipes have not been tested.
-
-### Exporting walls from Archicad (tested; not ducts/pipes)
+### Exporting walls from Archicad
 
 1. Open the shell IFC **as a new file**, as in the previous section.
-2. Draw walls there (this is the test; real work draws 3D ducts or pipes).
+2. Draw walls there.
 3. Use Archicad’s **built-in** IFC export: **IFC4**; selected objects only; no extra coordinate offset.
 4. Fixture: `wip/fixtures/spike/ac_wall.ifc`.
 
-### Exporting walls from Revit (tested; not ducts/pipes)
+### Exporting walls from Revit
 
 1. Link the shell IFC as in the previous section, create Levels, and open Floor Plans.
 2. Place a wall on 3F and a wall on 4F.
