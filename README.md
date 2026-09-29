@@ -1,10 +1,10 @@
-# LoopFlow｜Rhino to MEP Sync
+[繁體中文版](./README_zh-TW.md)
 
-[繁體中文](./README_zh-TW.md)
-
-> An open-source workflow automation tool developed by **蔡智聿 (Chihyu Tsai)**. [https://chihyu-tsai.com](https://chihyu-tsai.com)
+An open-source workflow automation tool developed by **蔡智聿 (Chihyu Tsai)**. [https://chihyu-tsai.com](https://chihyu-tsai.com)
 
 ---
+
+# LoopFlow｜Rhino to MEP Sync
 
 Rhino publishes an architectural-shell IFC for Revit and Archicad. BIM sends geometry back as IFC, which Rhino attaches as a Worksession reference. **Design stays in Rhino.** Exchange is IFC only. There is no LoopFlow plug-in on the BIM side.
 
