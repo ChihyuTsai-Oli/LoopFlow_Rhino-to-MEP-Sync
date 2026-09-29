@@ -52,3 +52,8 @@ Step-by-step: [overview](./docs/USER_GUIDE.md) and [commands](./docs/COMMANDS.md
 ## License and credits
 
 MIT. See [LICENSE](./LICENSE). Icon credits: [CREDITS](./CREDITS.md).
+
+## Author
+
+蔡智聿, Chihyu Tsai
+https://chihyu-tsai.com/

@@ -52,3 +52,8 @@ Rhino 端裝一份 `.yak`。
 ## 授權與出處
 
 MIT。見 [LICENSE](./LICENSE)。圖示出處見 [CREDITS](./CREDITS.md)。
+
+## 作者
+
+蔡智聿, Chihyu Tsai
+https://chihyu-tsai.com/
