@@ -2,6 +2,10 @@
 
 [English](./README.md)
 
+> An open-source workflow automation tool developed by **蔡智聿 (Chihyu Tsai)**. [https://chihyu-tsai.com](https://chihyu-tsai.com)
+
+---
+
 Rhino 發布建築殼 IFC 給 Revit 與 Archicad；BIM 端把幾何 IFC 送回 Rhino，當 Worksession 外參。**設計判斷只在 Rhino。** 交換只使用 IFC。BIM 端沒有 LoopFlow 外掛。
 
 Rhino 端裝一份 `.yak`。
@@ -52,8 +56,3 @@ Rhino 端裝一份 `.yak`。
 ## 授權與出處
 
 MIT。見 [LICENSE](./LICENSE)。圖示出處見 [CREDITS](./CREDITS.md)。
-
-## 作者
-
-蔡智聿, Chihyu Tsai
-https://chihyu-tsai.com/

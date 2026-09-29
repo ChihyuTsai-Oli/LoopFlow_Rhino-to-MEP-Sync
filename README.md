@@ -2,6 +2,10 @@
 
 [繁體中文](./README_zh-TW.md)
 
+> An open-source workflow automation tool developed by **蔡智聿 (Chihyu Tsai)**. [https://chihyu-tsai.com](https://chihyu-tsai.com)
+
+---
+
 Rhino publishes an architectural-shell IFC for Revit and Archicad. BIM sends geometry back as IFC, which Rhino attaches as a Worksession reference. **Design stays in Rhino.** Exchange is IFC only. There is no LoopFlow plug-in on the BIM side.
 
 Rhino installs as a single `.yak`.
@@ -52,8 +56,3 @@ Step-by-step: [overview](./docs/USER_GUIDE.md) and [commands](./docs/COMMANDS.md
 ## License and credits
 
 MIT. See [LICENSE](./LICENSE). Icon credits: [CREDITS](./CREDITS.md).
-
-## Author
-
-蔡智聿, Chihyu Tsai
-https://chihyu-tsai.com/
