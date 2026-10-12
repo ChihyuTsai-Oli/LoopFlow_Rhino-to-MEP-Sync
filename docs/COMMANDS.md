@@ -8,7 +8,7 @@
 
 ## How to run for now
 
-Install from the [homepage](../README.md). Quit Rhino completely and reopen it. The buttons are on the shared **LoopFlow R2X** tab (`loopflow-R2X-Toolbar`). This package does not open its own tab. You can also paste a line below into the Rhino **command prompt**. Run on an isolated file; do not touch the live working document.
+Install from the [homepage](../README.md). Quit Rhino completely and reopen it. Use the **LoopFlow R2M** toolbar, or paste a line below into the Rhino **command prompt**. Run on an isolated file; do not touch the live working document.
 
 ## Quick index
 

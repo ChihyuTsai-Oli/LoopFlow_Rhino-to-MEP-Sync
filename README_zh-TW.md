@@ -37,9 +37,9 @@ Rhino 端裝一份 `.yak`。
 
 1. 開啟 Rhino 8，命令列執行 `PackageManager`
 2. 搜尋畫面名 **`loopflow Rhino to MEP Sync`** 並安裝
-3. 或從 [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) 下載 `loopflow-rhino-to-mep-sync-1.0.1-rh8_0-win.yak`，在 Package Manager 選擇從檔案安裝
+3. 或從 [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) 下載 `loopflow-rhino-to-mep-sync-1.0.2-rh8_0-win.yak`，在 Package Manager 選擇從檔案安裝
 4. **完全關掉 Rhino 再開**
-5. 按鈕在分頁 **LoopFlow R2X**。請一併安裝 `loopflow-R2X-Toolbar`。這個套件不再自己開分頁。若舊的 **LoopFlow R2M** 分頁還開著，把它關掉。指令找不到時：**Tools → Options → Plug-ins**，勾選 **LoopFlow_R2M**，再打一次 `RMOpen`
+5. 使用工具列 **LoopFlow R2M**。若沒出現：**Tools → Options → Plug-ins**，勾選 **LoopFlow_R2M**。仍沒有就打一次 `RMOpen`
 
 指令名：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。開始前先把 `.3dm` 存檔（Inbound 可用空白新檔）。`.3dm` 所在資料夾就是作業資料夾；設定與 IFC 在同層 `_LoopFlow_Config/loopflow_R2M/`。
 
