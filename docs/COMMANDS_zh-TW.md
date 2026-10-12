@@ -8,7 +8,7 @@
 
 ## 目前怎麼跑
 
-安裝見 [專案主頁](../README_zh-TW.md)。裝完請完全關掉 Rhino 再開。使用工具列 **LoopFlow R2M**，或把下面那一行貼到 **指令列** 再按 Enter。請開隔離檔再跑，不要動正在編輯的工作檔。
+安裝見 [專案主頁](../README_zh-TW.md)。裝完請完全關掉 Rhino 再開。使用工具列 **LoopFlow R2M**。懸停名稱是 **R2M Open**、**R2M Storey**、**R2M Models**、**R2M Inbound**。或把下面那一行貼到 **指令列** 再按 Enter。請開隔離檔再跑，不要動正在編輯的工作檔。
 
 ## 快速索引
 

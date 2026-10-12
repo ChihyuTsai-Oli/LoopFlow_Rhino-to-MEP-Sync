@@ -8,7 +8,7 @@
 
 ## How to run for now
 
-Install from the [homepage](../README.md). Quit Rhino completely and reopen it. Use the **LoopFlow R2M** toolbar, or paste a line below into the Rhino **command prompt**. Run on an isolated file; do not touch the live working document.
+Install from the [homepage](../README.md). Quit Rhino completely and reopen it. Use the **LoopFlow R2M** toolbar. Hover names are **R2M Open**, **R2M Storey**, **R2M Models**, and **R2M Inbound**. Or paste a line below into the Rhino **command prompt**. Run on an isolated file; do not touch the live working document.
 
 ## Quick index
 
