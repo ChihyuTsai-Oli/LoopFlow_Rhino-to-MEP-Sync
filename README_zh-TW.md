@@ -53,6 +53,12 @@ Rhino 端裝一份 `.yak`。
 
 逐步見 [使用說明總覽](./docs/USER_GUIDE_zh-TW.md) 與 [指令逐項說明](./docs/COMMANDS_zh-TW.md)。
 
+## 相關專案
+
+- [LoopFlow｜Half-automatic 2D/3D Sync](https://github.com/ChihyuTsai-Oli/LoopFlow/blob/main/README_zh-TW.md)
+- [LoopFlow｜Rhino to Blender Sync](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-Blender-Sync/blob/main/README_zh-TW.md)
+- [LoopFlow｜Rhino to Octane Sync](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-Octane-Sync/blob/main/README_zh-TW.md)
+
 ## 授權與出處
 
 MIT。見 [LICENSE](./LICENSE)。圖示出處見 [CREDITS](./CREDITS.md)。

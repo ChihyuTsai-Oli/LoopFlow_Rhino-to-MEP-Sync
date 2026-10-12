@@ -53,6 +53,12 @@ A whole-building file and a partial-storey file in the same folder share one `co
 
 Step-by-step: [overview](./docs/USER_GUIDE.md) and [commands](./docs/COMMANDS.md).
 
+## Related projects
+
+- [LoopFlow｜Half-automatic 2D/3D Sync](https://github.com/ChihyuTsai-Oli/LoopFlow)
+- [LoopFlow｜Rhino to Blender Sync](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-Blender-Sync)
+- [LoopFlow｜Rhino to Octane Sync](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-Octane-Sync)
+
 ## License and credits
 
 MIT. See [LICENSE](./LICENSE). Icon credits: [CREDITS](./CREDITS.md).
