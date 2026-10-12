@@ -1,6 +1,6 @@
 # R2M 開發期 Rhino 指令
 
-名稱 **已凍結**（2026-09-28）：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。公開套件 `loopflow-rhino-to-mep-sync` **1.0.0**。開發工具列：`wip/docs/toolbar/LoopFlow_R2M.rui`（按鈕跑 `! _RMOpen` 等）。公開說明在 `docs/USER_GUIDE_zh-TW.md`／`docs/COMMANDS_zh-TW.md`（英文已對齊）。
+名稱 **已凍結**（2026-09-28）：`RMOpen`、`RMStorey`、`RMModels`、`RMInbound`。公開套件 `loopflow-rhino-to-mep-sync` **1.0.1**。不再自己開分頁；按鈕在 **LoopFlow R2X**。開發工具列：`wip/docs/toolbar/LoopFlow_R2M.rui`（按鈕跑 `! _RMOpen` 等）。公開說明在 `docs/USER_GUIDE_zh-TW.md`／`docs/COMMANDS_zh-TW.md`（英文已對齊）。
 
 | 指令 | 角色 |
 |---|---|

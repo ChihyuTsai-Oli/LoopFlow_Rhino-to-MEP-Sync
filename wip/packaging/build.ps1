@@ -9,7 +9,7 @@ $RhinoCode = "C:\Program Files\Rhino 8\System\RhinoCode.exe"
 $Yak = "C:\Program Files\Rhino 8\System\Yak.exe"
 $ProductRui = Join-Path $Wip "docs\toolbar\LoopFlow_R2M.rui"
 $IconSrc = Join-Path $Wip "docs\toolbar\icon.png"
-$Version = "1.0.0"
+$Version = "1.0.1"
 
 if (-not (Test-Path $RhinoCode)) { throw "RhinoCode.exe not found" }
 if (-not (Test-Path $Yak)) { throw "Yak.exe not found" }
@@ -54,12 +54,14 @@ $robo = $LASTEXITCODE
 $ErrorActionPreference = $prevEap
 if ($robo -ge 8) { throw "robocopy vendor failed: $robo" }
 
+# Shared tab is package loopflow-R2X-Toolbar. Do not ship LoopFlow_R2M.rui
+# next to LoopFlow_R2M.rhp, or Rhino opens a second tab.
+Get-ChildItem -LiteralPath $StageDir -Filter "*.rui" -File -ErrorAction SilentlyContinue | Remove-Item -Force
 $RuiPath = Join-Path $StageDir "LoopFlow_R2M.rui"
-if (Test-Path $RuiPath) { Remove-Item $RuiPath -Force }
-Copy-Item -Force $ProductRui $RuiPath
-$ruiText = Get-Content $RuiPath -Raw -Encoding UTF8
-if ($ruiText -notmatch "_RMOpen") { throw "RUI missing ! _RMOpen" }
-if ($ruiText -notmatch "tool_bar_group") { throw "RUI missing tool_bar_group" }
+if (Test-Path -LiteralPath $RuiPath) {
+    throw "refusing to ship an auto-loaded toolbar: LoopFlow_R2M.rui"
+}
+Write-Host "No auto-loaded toolbar in this package"
 
 $DocsDst = Join-Path $StageDir "docs"
 if (Test-Path $DocsDst) { Remove-Item $DocsDst -Recurse -Force }
