@@ -17,10 +17,10 @@ TOOLBAR = REPO_ROOT / "wip" / "docs" / "toolbar"
 OUT = TOOLBAR / "LoopFlow_R2M.rui"
 
 BUTTONS = (
-    ("open", "Open", "Config folder and last publish", "RMOpen", "R2M_Open.svg"),
-    ("storey", "Storey", "Register storey frames and FL", "RMStorey", "R2M_Storey.svg"),
-    ("models", "Models", "Publish architectural-shell IFC", "RMModels", "R2M_Models.svg"),
-    ("inbound", "Inbound", "Import BIM geometry with height correction", "RMInbound", "R2M_Inbound.svg"),
+    ("open", "R2M Open", "Config folder and last publish", "RMOpen", "R2M_Open.svg"),
+    ("storey", "R2M Storey", "Register storey frames and FL", "RMStorey", "R2M_Storey.svg"),
+    ("models", "R2M Models", "Publish architectural-shell IFC", "RMModels", "R2M_Models.svg"),
+    ("inbound", "R2M Inbound", "Import BIM geometry with height correction", "RMInbound", "R2M_Inbound.svg"),
 )
 BAR_SVG = "LoopFlow_R2M.svg"
 SVG_FILES = (BAR_SVG,) + tuple(item[-1] for item in BUTTONS)

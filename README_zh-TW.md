@@ -37,7 +37,7 @@ Rhino 端裝一份 `.yak`。
 
 1. 開啟 Rhino 8，命令列執行 `PackageManager`
 2. 搜尋畫面名 **`loopflow Rhino to MEP Sync`** 並安裝
-3. 或從 [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) 下載 `loopflow-rhino-to-mep-sync-1.0.3-rh8_0-win.yak`，在 Package Manager 選擇從檔案安裝
+3. 或從 [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) 下載 `loopflow-rhino-to-mep-sync-1.0.4-rh8_0-win.yak`，在 Package Manager 選擇從檔案安裝
 4. **完全關掉 Rhino 再開**
 5. 使用工具列 **LoopFlow R2M**。若沒出現：**Tools → Options → Plug-ins**，勾選 **LoopFlow R2M**。仍沒有就打一次 `RMOpen`
 

@@ -9,7 +9,7 @@ $RhinoCode = "C:\Program Files\Rhino 8\System\RhinoCode.exe"
 $Yak = "C:\Program Files\Rhino 8\System\Yak.exe"
 $ProductRui = Join-Path $Wip "docs\toolbar\LoopFlow_R2M.rui"
 $IconSrc = Join-Path $Wip "docs\toolbar\icon.png"
-$Version = "1.0.3"
+$Version = "1.0.4"
 
 if (-not (Test-Path $RhinoCode)) { throw "RhinoCode.exe not found" }
 if (-not (Test-Path $Yak)) { throw "Yak.exe not found" }

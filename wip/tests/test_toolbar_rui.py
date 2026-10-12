@@ -43,6 +43,14 @@ class ToolbarRuiTests(unittest.TestCase):
         self.assertNotIn(".py", joined)
         for name in COMMANDS:
             self.assertIn(name, joined)
+        tips = [
+            (m.find("tooltip").find("locale_1033").text or "")
+            for m in self.root.find("macros")
+        ]
+        self.assertEqual(
+            tips,
+            ["R2M Open", "R2M Storey", "R2M Models", "R2M Inbound"],
+        )
 
     def test_user_icons_embedded(self):
         xml = ET.tostring(self.root.find("icons"), encoding="unicode")

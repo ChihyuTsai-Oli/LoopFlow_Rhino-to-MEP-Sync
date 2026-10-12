@@ -29,7 +29,7 @@ AI 必須依序完整讀取：
 
 ## 分支與版本
 
-- `main` 與 `v1-development` 對齊。現行公開 yak `loopflow-rhino-to-mep-sync` **1.0.3**。`v1.0.0`、`v1.0.1` 與 `v1.0.2` 永不移動或覆寫。指令名／磁碟檔名已凍（`RMOpen`／`RMStorey`／`RMModels`／`RMInbound`；`R2M.ifc`／`config.json`）。工具列清單與外掛勾選名是 **LoopFlow R2M**。
+- `main` 與 `v1-development` 對齊。現行公開 yak `loopflow-rhino-to-mep-sync` **1.0.4**。`v1.0.0`、`v1.0.1`、`v1.0.2` 與 `v1.0.3` 永不移動或覆寫。指令名／磁碟檔名已凍（`RMOpen`／`RMStorey`／`RMModels`／`RMInbound`；`R2M.ifc`／`config.json`）。工具列清單與外掛勾選名是 **LoopFlow R2M**。按鈕名稱帶 **R2M** 前綴。
 - 每批從 `v1-development` 開 `codex/v1-<scope>`，合入後再依授權合入 `main`；不要把 R2M 合進 LoopFlow／R2B／R2O 的整合分支。
 - 日後 tag／Release 永不移動或覆寫。
 

@@ -35,61 +35,61 @@
   <macros>
     <macro_item guid="4754a16c-667c-5e2d-acd1-fb161d4c5e9e" bitmap_id="dd1b9a9c-3b92-53b3-b987-96782192aec3">
       <tooltip>
-        <locale_1033>Open</locale_1033>
+        <locale_1033>R2M Open</locale_1033>
       </tooltip>
       <help_text>
         <locale_1033>Config folder and last publish</locale_1033>
       </help_text>
       <button_text>
-        <locale_1033>Open</locale_1033>
+        <locale_1033>R2M Open</locale_1033>
       </button_text>
       <menu_text>
-        <locale_1033>Open</locale_1033>
+        <locale_1033>R2M Open</locale_1033>
       </menu_text>
       <script>! _RMOpen</script>
     </macro_item>
     <macro_item guid="d2f431e2-63b9-591d-8d5d-55e25b6e82ac" bitmap_id="02fea9df-1844-5ba8-a222-63b5a68d10c0">
       <tooltip>
-        <locale_1033>Storey</locale_1033>
+        <locale_1033>R2M Storey</locale_1033>
       </tooltip>
       <help_text>
         <locale_1033>Register storey frames and FL</locale_1033>
       </help_text>
       <button_text>
-        <locale_1033>Storey</locale_1033>
+        <locale_1033>R2M Storey</locale_1033>
       </button_text>
       <menu_text>
-        <locale_1033>Storey</locale_1033>
+        <locale_1033>R2M Storey</locale_1033>
       </menu_text>
       <script>! _RMStorey</script>
     </macro_item>
     <macro_item guid="3daa5c03-c65a-50d3-be13-e52bc6f86549" bitmap_id="afe783be-2f32-5c1f-ae8f-9792bb48ce51">
       <tooltip>
-        <locale_1033>Models</locale_1033>
+        <locale_1033>R2M Models</locale_1033>
       </tooltip>
       <help_text>
         <locale_1033>Publish architectural-shell IFC</locale_1033>
       </help_text>
       <button_text>
-        <locale_1033>Models</locale_1033>
+        <locale_1033>R2M Models</locale_1033>
       </button_text>
       <menu_text>
-        <locale_1033>Models</locale_1033>
+        <locale_1033>R2M Models</locale_1033>
       </menu_text>
       <script>! _RMModels</script>
     </macro_item>
     <macro_item guid="804afd79-b9ec-5169-b72d-27e364acbcc1" bitmap_id="5a5758a4-3810-5982-97f7-6b74fb13e40a">
       <tooltip>
-        <locale_1033>Inbound</locale_1033>
+        <locale_1033>R2M Inbound</locale_1033>
       </tooltip>
       <help_text>
         <locale_1033>Import BIM geometry with height correction</locale_1033>
       </help_text>
       <button_text>
-        <locale_1033>Inbound</locale_1033>
+        <locale_1033>R2M Inbound</locale_1033>
       </button_text>
       <menu_text>
-        <locale_1033>Inbound</locale_1033>
+        <locale_1033>R2M Inbound</locale_1033>
       </menu_text>
       <script>! _RMInbound</script>
     </macro_item>
