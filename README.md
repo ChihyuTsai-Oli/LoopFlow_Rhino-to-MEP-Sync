@@ -58,6 +58,7 @@ Step-by-step: [overview](./docs/USER_GUIDE.md) and [commands](./docs/COMMANDS.md
 - [LoopFlow｜Half-automatic 2D/3D Sync](https://github.com/ChihyuTsai-Oli/LoopFlow)
 - [LoopFlow｜Rhino to Blender Sync](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-Blender-Sync)
 - [LoopFlow｜Rhino to Octane Sync](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-Octane-Sync)
+- [LoopFlow｜R2X Toolbar](https://github.com/ChihyuTsai-Oli/LoopFlow_R2X)
 
 ## License and credits
 

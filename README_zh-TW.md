@@ -58,6 +58,7 @@ Rhino 端裝一份 `.yak`。
 - [LoopFlow｜Half-automatic 2D/3D Sync](https://github.com/ChihyuTsai-Oli/LoopFlow/blob/main/README_zh-TW.md)
 - [LoopFlow｜Rhino to Blender Sync](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-Blender-Sync/blob/main/README_zh-TW.md)
 - [LoopFlow｜Rhino to Octane Sync](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-Octane-Sync/blob/main/README_zh-TW.md)
+- [LoopFlow｜R2X Toolbar](https://github.com/ChihyuTsai-Oli/LoopFlow_R2X/blob/main/README_zh-TW.md)
 
 ## 授權與出處
 
