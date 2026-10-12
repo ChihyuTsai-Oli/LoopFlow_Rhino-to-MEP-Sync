@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Iterable, Mapping, Optional
 
 PLUGIN_ID = "814a8439-9948-530a-ad43-69048e85ec1e"
-PLUGIN_NAME = "LoopFlow_R2M"
+PLUGIN_NAME = "LoopFlow R2M"
 YAK_PACKAGE = "loopflow-rhino-to-mep-sync"
 DEV_SRC = Path(r"E:\_GitHub\LoopFlow_Rhino-to-MEP-Sync") / "wip" / "src"
 
@@ -154,7 +154,7 @@ import sys
 from pathlib import Path
 
 PLUGIN_ID = "814a8439-9948-530a-ad43-69048e85ec1e"
-PLUGIN_NAME = "LoopFlow_R2M"
+PLUGIN_NAME = "LoopFlow R2M"
 YAK_PACKAGE = "loopflow-rhino-to-mep-sync"
 DEV_SRC = Path(r"E:\\_GitHub\\LoopFlow_Rhino-to-MEP-Sync") / "wip" / "src"
 

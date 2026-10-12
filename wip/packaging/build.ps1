@@ -9,7 +9,7 @@ $RhinoCode = "C:\Program Files\Rhino 8\System\RhinoCode.exe"
 $Yak = "C:\Program Files\Rhino 8\System\Yak.exe"
 $ProductRui = Join-Path $Wip "docs\toolbar\LoopFlow_R2M.rui"
 $IconSrc = Join-Path $Wip "docs\toolbar\icon.png"
-$Version = "1.0.2"
+$Version = "1.0.3"
 
 if (-not (Test-Path $RhinoCode)) { throw "RhinoCode.exe not found" }
 if (-not (Test-Path $Yak)) { throw "Yak.exe not found" }
@@ -27,9 +27,10 @@ if ($LASTEXITCODE -ne 0) { throw "prepare_rhproj.py failed" }
 & $RhinoCode project build $Prepared --buildversion $Version --buildtarget 8.* --buildpath $Build
 if ($LASTEXITCODE -ne 0) { throw "RhinoCode project build failed" }
 
-$Stage = Get-ChildItem -Path $Build -Recurse -Filter "LoopFlow_R2M.rhp" | Select-Object -First 1
-if (-not $Stage) { throw "RhinoCode did not produce LoopFlow_R2M.rhp" }
+$Stage = Get-ChildItem -Path $Build -Recurse -Filter "*.rhp" -File | Where-Object { $_.Name -eq "LoopFlow R2M.rhp" } | Select-Object -First 1
+if ($null -eq $Stage) { throw "RhinoCode did not produce LoopFlow R2M.rhp" }
 $StageDir = $Stage.Directory.FullName
+Get-ChildItem -LiteralPath $StageDir -Filter "*.rhp" -File | Where-Object { $_.Name -ne "LoopFlow R2M.rhp" } | Remove-Item -Force
 
 $Lib = Join-Path $StageDir "lib"
 if (Test-Path $Lib) { Remove-Item $Lib -Recurse -Force }
@@ -54,9 +55,11 @@ $robo = $LASTEXITCODE
 $ErrorActionPreference = $prevEap
 if ($robo -ge 8) { throw "robocopy vendor failed: $robo" }
 
-$RuiPath = Join-Path $StageDir "LoopFlow_R2M.rui"
-if (Test-Path $RuiPath) { Remove-Item $RuiPath -Force }
-Copy-Item -Force $ProductRui $RuiPath
+$RuiName = "$($Stage.Name)".Replace(".rhp", ".rui")
+if ($RuiName -ne "LoopFlow R2M.rui") { throw "product RUI name is [$RuiName]" }
+Get-ChildItem -LiteralPath $StageDir -Filter "*.rui" -File | Remove-Item -Force
+$RuiPath = Join-Path $StageDir $RuiName
+Copy-Item -LiteralPath $ProductRui -Destination $RuiPath -Force
 $ruiText = Get-Content $RuiPath -Raw -Encoding UTF8
 if ($ruiText -notmatch "_RMOpen") { throw "RUI missing ! _RMOpen" }
 if ($ruiText -notmatch "tool_bar_group") { throw "RUI missing tool_bar_group" }

@@ -37,9 +37,9 @@ Exchange is **IFC only**. Archicad: File → Open as a new file (do not Merge). 
 
 1. Open Rhino 8 and run `PackageManager`.
 2. Search for **`loopflow Rhino to MEP Sync`** and install.
-3. Or download `loopflow-rhino-to-mep-sync-1.0.2-rh8_0-win.yak` from [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) and install from file.
+3. Or download `loopflow-rhino-to-mep-sync-1.0.3-rh8_0-win.yak` from [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) and install from file.
 4. **Quit Rhino completely and reopen it.**
-5. Use the **LoopFlow R2M** toolbar. If it does not appear: **Tools → Options → Plug-ins**, enable **LoopFlow_R2M**. If it still does not show, type `RMOpen` once.
+5. Use the **LoopFlow R2M** toolbar. If it does not appear: **Tools → Options → Plug-ins**, enable **LoopFlow R2M**. If it still does not show, type `RMOpen` once.
 
 Commands: `RMOpen`, `RMStorey`, `RMModels`, `RMInbound`. Save the `.3dm` first (Inbound may use a blank new file). The folder that holds the `.3dm` is the work folder. Settings and IFC live next to it in `_LoopFlow_Config/loopflow_R2M/`.
 
