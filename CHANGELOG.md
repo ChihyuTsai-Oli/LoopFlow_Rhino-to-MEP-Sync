@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.5] - 2026-11-10
+
+Toolbar buttons now have dedicated light and dark SVG artwork for Rhino 8 themes. Do not overwrite `v1.0.4`. Quit Rhino completely after install.
+
 ## [1.0.4] - 2026-10-12
 
 Toolbar button names are **R2M Open**, **R2M Storey**, **R2M Models**, and **R2M Inbound**. Do not overwrite `v1.0.3`.
