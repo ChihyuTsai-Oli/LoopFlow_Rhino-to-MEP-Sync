@@ -63,6 +63,35 @@ class ToolbarRuiTests(unittest.TestCase):
         bar = self.root.find("tool_bars").find("tool_bar")
         self.assertTrue((bar.get("bitmap_id") or "").strip())
 
+    def test_product_command_icons_have_light_and_dark(self):
+        import re
+
+        text = RUI.read_bytes().decode("utf-8-sig")
+        bitmaps = {}
+        for match in re.finditer(
+            r'<macro_item\b([^>]*)>.*?<script>(.*?)</script>',
+            text,
+            re.DOTALL,
+        ):
+            script = re.sub(r"\s+", " ", match.group(2)).strip()
+            if script not in COMMANDS:
+                continue
+            bitmap = re.search(r'\bbitmap_id="([^"]+)"', match.group(1))
+            self.assertIsNotNone(bitmap, script)
+            bitmaps[script] = bitmap.group(1)
+        self.assertEqual(set(bitmaps), set(COMMANDS))
+        icons = {
+            match.group(1): match.group(2)
+            for match in re.finditer(
+                r'<icon guid="([^"]+)"[^>]*>(.*?)</icon>', text, re.DOTALL
+            )
+        }
+        for script, guid in bitmaps.items():
+            body = icons[guid]
+            self.assertIn("<light>", body, script)
+            self.assertIn("<dark>", body, script)
+            self.assertNotIn("fill-dark=", body, script)
+
     def test_no_spacers(self):
         items = list(self.root.find("tool_bars").find("tool_bar"))
         buttons = [el for el in items if el.tag == "tool_bar_item"]
