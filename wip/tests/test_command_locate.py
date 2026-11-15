@@ -21,6 +21,8 @@ from command_locate import (  # noqa: E402
     YAK_PACKAGE,
     from_dev_repo,
     from_package_dir,
+    from_yak_install,
+    package_folders,
     resolve_r2m_src,
     wrapper_source,
 )
@@ -54,6 +56,32 @@ class LocateTests(unittest.TestCase):
         self.assertIn("run_rmopen", text)
         self.assertIn("#! python 3", text)
         self.assertIn(YAK_PACKAGE, text)
+        self.assertIn("_rhino_major", text)
+        self.assertIn('"9.0"', text)
+        self.assertNotIn('packages" / "8.0"', text)
+
+    def _installed_src(self, version_dir: Path) -> Path:
+        src = version_dir / "src"
+        pkg = src / "loopflow_r2m"
+        pkg.mkdir(parents=True)
+        (pkg / "__init__.py").write_text("", encoding="utf-8")
+        return src
+
+    def test_package_folders_prefer_running_major(self):
+        self.assertEqual(package_folders(9), ("9.0", "8.0"))
+        self.assertEqual(package_folders(8), ("8.0", "9.0"))
+
+    def test_yak_install_prefers_running_rhino(self):
+        with tempfile.TemporaryDirectory() as raw:
+            tmp = Path(raw)
+            env = {"APPDATA": str(tmp), "LOCALAPPDATA": str(tmp)}
+            base = tmp / "McNeel" / "Rhinoceros" / "packages"
+            src8 = self._installed_src(base / "8.0" / YAK_PACKAGE / "1.1.0")
+            src9 = self._installed_src(base / "9.0" / YAK_PACKAGE / "1.1.0")
+            hit9 = from_yak_install(env, preferred_major=9)
+            hit8 = from_yak_install(env, preferred_major=8)
+            self.assertEqual(hit9.resolve(), src9.resolve())
+            self.assertEqual(hit8.resolve(), src8.resolve())
 
 
 class VendorTests(unittest.TestCase):

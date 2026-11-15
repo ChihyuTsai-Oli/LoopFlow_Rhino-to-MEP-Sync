@@ -26,7 +26,7 @@ No camera, lights, or live link. Do not use inbound geometry for drawings or as 
 
 ## Requirements
 
-- **Rhino 8** (Windows)
+- **Rhino 8 and Rhino 9** (Windows). Both use the same package.
 - **Archicad** or **Revit** (3D BIM is required)
 
 Exchange is **IFC only**. Archicad: File → Open as a new file (do not Merge). Revit: Link IFC, then create Levels at the frame elevations and open Floor Plans.
@@ -35,9 +35,9 @@ Exchange is **IFC only**. Archicad: File → Open as a new file (do not Merge). 
 
 ### Installation
 
-1. Open Rhino 8 and run `PackageManager`.
+1. Open Rhino 8 or Rhino 9 and run `PackageManager`.
 2. Search for **`loopflow Rhino to MEP Sync`** and install.
-3. Or download `loopflow-rhino-to-mep-sync-1.0.5-rh8_0-win.yak` from [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) and install from file.
+3. Or download `loopflow-rhino-to-mep-sync-1.1.0-rh8_0-win.yak` from [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) and install from file.
 4. **Quit Rhino completely and reopen it.**
 5. Use the **LoopFlow R2M** toolbar. Hover names are **R2M Open**, **R2M Storey**, **R2M Models**, and **R2M Inbound**. If it does not appear: **Tools → Options → Plug-ins**, enable **LoopFlow R2M**. If it still does not show, type `RMOpen` once.
 

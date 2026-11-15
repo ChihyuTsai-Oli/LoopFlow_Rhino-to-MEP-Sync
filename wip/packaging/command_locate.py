@@ -93,15 +93,22 @@ def _version_key(name: str):
     return parts
 
 
-def from_yak_install(environ: Optional[Mapping[str, str]] = None) -> Optional[Path]:
-    env = environ if environ is not None else os.environ
-    roots = []
-    for key in ("APPDATA", "LOCALAPPDATA"):
-        base = str(env.get(key) or "").strip()
-        if base:
-            roots.append(
-                Path(base) / "McNeel" / "Rhinoceros" / "packages" / "8.0" / YAK_PACKAGE
-            )
+def package_folders(preferred_major: Optional[int] = None) -> tuple:
+    """先看正在跑的 Rhino 主版，再看另一版。Rhino 9 的套件在 packages\\9.0。"""
+    ordered = []
+    try:
+        major = int(preferred_major or 0)
+    except (TypeError, ValueError):
+        major = 0
+    if major >= 8:
+        ordered.append("{}.0".format(major))
+    for extra in ("9.0", "8.0"):
+        if extra not in ordered:
+            ordered.append(extra)
+    return tuple(ordered)
+
+
+def _newest_in_folder(roots) -> Optional[Path]:
     found = []
     for root in roots:
         try:
@@ -119,6 +126,24 @@ def from_yak_install(environ: Optional[Mapping[str, str]] = None) -> Optional[Pa
         return None
     found.sort(key=lambda item: _version_key(item[0]))
     return found[-1][1]
+
+
+def from_yak_install(
+    environ: Optional[Mapping[str, str]] = None,
+    preferred_major: Optional[int] = None,
+) -> Optional[Path]:
+    env = environ if environ is not None else os.environ
+    bases = []
+    for key in ("APPDATA", "LOCALAPPDATA"):
+        base = str(env.get(key) or "").strip()
+        if base:
+            bases.append(Path(base) / "McNeel" / "Rhinoceros" / "packages")
+    for folder in package_folders(preferred_major):
+        roots = [base / folder / YAK_PACKAGE for base in bases]
+        hit = _newest_in_folder(roots)
+        if hit:
+            return hit
+    return None
 
 
 def resolve_r2m_src(
@@ -228,14 +253,30 @@ def _version_key(name):
     return parts
 
 
-def _from_yak_install():
-    roots = []
-    for key in ("APPDATA", "LOCALAPPDATA"):
-        base = str(os.environ.get(key) or "").strip()
-        if base:
-            roots.append(
-                Path(base) / "McNeel" / "Rhinoceros" / "packages" / "8.0" / YAK_PACKAGE
-            )
+def _rhino_major():
+    try:
+        import Rhino
+
+        return int(Rhino.RhinoApp.Version.Major)
+    except Exception:
+        return 0
+
+
+def _package_folders(preferred_major):
+    ordered = []
+    try:
+        major = int(preferred_major or 0)
+    except (TypeError, ValueError):
+        major = 0
+    if major >= 8:
+        ordered.append("{}.0".format(major))
+    for extra in ("9.0", "8.0"):
+        if extra not in ordered:
+            ordered.append(extra)
+    return ordered
+
+
+def _newest_in_folder(roots):
     found = []
     for root in roots:
         try:
@@ -253,6 +294,20 @@ def _from_yak_install():
         return None
     found.sort(key=lambda item: _version_key(item[0]))
     return found[-1][1]
+
+
+def _from_yak_install():
+    bases = []
+    for key in ("APPDATA", "LOCALAPPDATA"):
+        base = str(os.environ.get(key) or "").strip()
+        if base:
+            bases.append(Path(base) / "McNeel" / "Rhinoceros" / "packages")
+    for folder in _package_folders(_rhino_major()):
+        roots = [base / folder / YAK_PACKAGE for base in bases]
+        hit = _newest_in_folder(roots)
+        if hit:
+            return hit
+    return None
 
 
 def _plugin_rhps():

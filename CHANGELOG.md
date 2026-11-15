@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.0] - 2026-11-15
+
+Rhino 8 and Rhino 9 share one package. Rhino 9 loads the Python 3.13 IfcOpenShell wheel and a bundled numpy. The toolbar looks in the running Rhino's package folder first. Do not overwrite `v1.0.5`. Quit Rhino completely after install.
+
 ## [1.0.5] - 2026-11-10
 
 Toolbar buttons now have dedicated light and dark SVG artwork for Rhino 8 themes. Do not overwrite `v1.0.4`. Quit Rhino completely after install.

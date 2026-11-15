@@ -1,11 +1,11 @@
 ---
 name: loopflow-rhino-to-mep-sync
-version: 1.0.5
+version: 1.1.0
 authors:
 - Chihyu Tsai
 description: >
   loopflow Rhino to MEP Sync.
-  Publish an architectural-shell IFC from Rhino 8 and bring BIM geometry
+  Publish an architectural-shell IFC from Rhino 8 and Rhino 9 and bring BIM geometry
   back with height correction.
   https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync
 url: https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync

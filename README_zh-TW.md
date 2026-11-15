@@ -26,7 +26,7 @@ Rhino 端裝一份 `.yak`。
 
 ## 系統需求
 
-- **Rhino 8**（Windows）
+- **Rhino 8 與 Rhino 9**（Windows）。兩邊裝同一份套件。
 - **Archicad** 或 **Revit**（必須是 3D BIM）
 
 交換只使用 **IFC**。Archicad：檔案 → 開啟當新檔（不要 Merge）。Revit：連結 IFC，再依框線高程自建 Level 並開 Floor Plan。
@@ -35,9 +35,9 @@ Rhino 端裝一份 `.yak`。
 
 ### 安裝
 
-1. 開啟 Rhino 8，命令列執行 `PackageManager`
+1. 開啟 Rhino 8 或 Rhino 9，命令列執行 `PackageManager`
 2. 搜尋畫面名 **`loopflow Rhino to MEP Sync`** 並安裝
-3. 或從 [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) 下載 `loopflow-rhino-to-mep-sync-1.0.5-rh8_0-win.yak`，在 Package Manager 選擇從檔案安裝
+3. 或從 [Releases](https://github.com/ChihyuTsai-Oli/LoopFlow_Rhino-to-MEP-Sync/releases) 下載 `loopflow-rhino-to-mep-sync-1.1.0-rh8_0-win.yak`，在 Package Manager 選擇從檔案安裝
 4. **完全關掉 Rhino 再開**
 5. 使用工具列 **LoopFlow R2M**。懸停名稱是 **R2M Open**、**R2M Storey**、**R2M Models**、**R2M Inbound**。若沒出現：**Tools → Options → Plug-ins**，勾選 **LoopFlow R2M**。仍沒有就打一次 `RMOpen`
 
