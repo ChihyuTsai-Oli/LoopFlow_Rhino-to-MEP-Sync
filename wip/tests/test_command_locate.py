@@ -9,7 +9,7 @@ from pathlib import Path
 from tests import SRC  # noqa: F401
 
 from loopflow_r2m.paths import PUBLIC_DOCS_URL
-from loopflow_r2m.vendor import vendor_dir
+from loopflow_r2m.vendor import python_tag, vendor_dir
 
 PACKAGING = Path(__file__).resolve().parents[1] / "packaging"
 if str(PACKAGING) not in sys.path:
@@ -57,10 +57,16 @@ class LocateTests(unittest.TestCase):
 
 
 class VendorTests(unittest.TestCase):
+    def test_python_tag_follows_rhino(self):
+        self.assertEqual(python_tag((3, 9)), "py39")
+        self.assertEqual(python_tag((3, 13)), "py313")
+        self.assertEqual(python_tag((3, 11)), "py39")
+
     def test_vendor_dir_exists_in_dev(self):
-        path = vendor_dir()
+        path = vendor_dir((3, 9))
         self.assertTrue(path.is_dir(), path)
         self.assertEqual(path.name, "py39")
+        self.assertEqual(vendor_dir((3, 13)).name, "py313")
 
 
 class PublicDocsTests(unittest.TestCase):

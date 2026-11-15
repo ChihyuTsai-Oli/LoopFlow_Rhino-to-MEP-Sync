@@ -149,7 +149,8 @@ if _SRC not in sys.path:
     sys.path.insert(0, _SRC)
 
 _pkg = Path(_SRC).parent
-for _vendor in (_pkg / "vendor" / "py39", _pkg / ".vendor" / "py39"):
+_tag = "py313" if sys.version_info[:2] >= (3, 13) else "py39"
+for _vendor in (_pkg / "vendor" / _tag, _pkg / ".vendor" / _tag):
     if _vendor.is_dir():
         _vendor_s = str(_vendor)
         if _vendor_s not in sys.path:

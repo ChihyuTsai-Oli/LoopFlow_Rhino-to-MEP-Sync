@@ -11,12 +11,11 @@ from loopflow_r2m.vendor import ensure_vendor
 
 def tessellate_inbound(doc, ifc_path, metres_to_doc, elevation_shift):
     """回傳 {success, failed, added}。不可初始化幾何迭代則停。Z 扣掉 elevation_shift。"""
+    ensure_vendor()
     import ifcopenshell
     import ifcopenshell.geom
     import Rhino
     import Rhino.Geometry as rg
-
-    ensure_vendor()
     model = ifcopenshell.open(str(ifc_path))
     settings = ifcopenshell.geom.settings()
     settings.set(settings.USE_WORLD_COORDS, True)

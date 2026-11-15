@@ -11,7 +11,8 @@ SRC = ROOT / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-VENDOR = ROOT / ".vendor" / "py39"
+_tag = "py313" if sys.version_info[:2] >= (3, 13) else "py39"
+VENDOR = ROOT / ".vendor" / _tag
 if str(VENDOR) not in sys.path:
     sys.path.insert(0, str(VENDOR))
 

@@ -42,18 +42,21 @@ Get-ChildItem (Join-Path $Lib "loopflow_r2m") -Recurse -Directory -Filter "__pyc
 $GeneratedSrc = Join-Path $StageDir "src"
 if (Test-Path $GeneratedSrc) { Remove-Item $GeneratedSrc -Force -Recurse }
 
-$vendorSrc = Join-Path $Wip ".vendor\py39"
-if (-not (Test-Path $vendorSrc)) { throw "missing vendor cache: $vendorSrc" }
 $vendorRoot = Join-Path $StageDir "vendor"
-$vendorDst = Join-Path $vendorRoot "py39"
 if (Test-Path $vendorRoot) { Remove-Item $vendorRoot -Recurse -Force }
-New-Item -ItemType Directory -Force -Path $vendorDst | Out-Null
-$prevEap = $ErrorActionPreference
-$ErrorActionPreference = "Continue"
-& robocopy.exe $vendorSrc $vendorDst /E /XD __pycache__ /NFL /NDL /NJH /NJS /nc /ns /np | Out-Null
-$robo = $LASTEXITCODE
-$ErrorActionPreference = $prevEap
-if ($robo -ge 8) { throw "robocopy vendor failed: $robo" }
+New-Item -ItemType Directory -Force -Path $vendorRoot | Out-Null
+foreach ($tag in @("py39", "py313")) {
+    $vendorSrc = Join-Path $Wip ".vendor\$tag"
+    if (-not (Test-Path $vendorSrc)) { throw "missing vendor cache: $vendorSrc" }
+    $vendorDst = Join-Path $vendorRoot $tag
+    New-Item -ItemType Directory -Force -Path $vendorDst | Out-Null
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    & robocopy.exe $vendorSrc $vendorDst /E /XD __pycache__ /NFL /NDL /NJH /NJS /nc /ns /np | Out-Null
+    $robo = $LASTEXITCODE
+    $ErrorActionPreference = $prevEap
+    if ($robo -ge 8) { throw "robocopy vendor failed: $robo" }
+}
 
 $RuiName = "$($Stage.Name)".Replace(".rhp", ".rui")
 if ($RuiName -ne "LoopFlow R2M.rui") { throw "product RUI name is [$RuiName]" }
@@ -72,7 +75,7 @@ Copy-Item -Force $IconSrc (Join-Path $StageDir "icon.png")
 Copy-Item -Force (Join-Path $Here "manifest.yml") (Join-Path $StageDir "manifest.yml")
 
 $notice = Join-Path $StageDir "THIRD_PARTY_IFCOPENSHELL.txt"
-Set-Content -Path $notice -Encoding UTF8 -Value "IfcOpenShell 0.8.4.post1 is bundled under vendor/py39 (LGPL)."
+Set-Content -Path $notice -Encoding UTF8 -Value "IfcOpenShell is bundled under vendor/py39 and vendor/py313 (LGPL). Rhino 8 uses py39. Rhino 9 uses py313."
 
 Get-ChildItem $StageDir -Filter "*.yak" | Remove-Item -Force
 
