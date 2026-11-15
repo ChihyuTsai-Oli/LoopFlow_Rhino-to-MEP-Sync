@@ -75,7 +75,7 @@ Copy-Item -Force $IconSrc (Join-Path $StageDir "icon.png")
 Copy-Item -Force (Join-Path $Here "manifest.yml") (Join-Path $StageDir "manifest.yml")
 
 $notice = Join-Path $StageDir "THIRD_PARTY_IFCOPENSHELL.txt"
-Set-Content -Path $notice -Encoding UTF8 -Value "IfcOpenShell is bundled under vendor/py39 and vendor/py313 (LGPL). Rhino 8 uses py39. Rhino 9 uses py313."
+Set-Content -Path $notice -Encoding UTF8 -Value "IfcOpenShell is bundled under vendor/py39 and vendor/py313 (LGPL). Rhino 8 uses py39. Rhino 9 uses py313 and also bundles numpy 2.1.3 (BSD-3-Clause) because that Rhino has no built-in numpy."
 
 Get-ChildItem $StageDir -Filter "*.yak" | Remove-Item -Force
 

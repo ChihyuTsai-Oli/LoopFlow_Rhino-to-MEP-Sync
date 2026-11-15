@@ -66,7 +66,11 @@ class VendorTests(unittest.TestCase):
         path = vendor_dir((3, 9))
         self.assertTrue(path.is_dir(), path)
         self.assertEqual(path.name, "py39")
-        self.assertEqual(vendor_dir((3, 13)).name, "py313")
+        py313 = vendor_dir((3, 13))
+        self.assertEqual(py313.name, "py313")
+        if py313.is_dir():
+            self.assertTrue((py313 / "numpy" / "__init__.py").is_file(), py313)
+            self.assertTrue((py313 / "numpy.libs").is_dir(), py313)
 
 
 class PublicDocsTests(unittest.TestCase):
