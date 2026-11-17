@@ -55,9 +55,9 @@ class ToolbarRuiTests(unittest.TestCase):
     def test_user_icons_embedded(self):
         xml = ET.tostring(self.root.find("icons"), encoding="unicode")
         self.assertEqual(len(list(self.root.find("icons"))), 5)
-        self.assertIn("1769.854,1409.23", xml)
+        self.assertIn("M88.22,50.05", xml)
         self.assertIn("M15,7L4,7C3.451,7", xml)
-        self.assertIn("M17.858,89.747", xml)
+        self.assertIn("M24.332,89.747", xml)
         self.assertIn("M2.292,2.112L4.535,2.112", xml)
         self.assertIn("M5.612,5.687L1.215,5.687", xml)
         bar = self.root.find("tool_bars").find("tool_bar")

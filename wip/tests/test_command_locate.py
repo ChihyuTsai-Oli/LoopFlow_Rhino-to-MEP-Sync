@@ -76,8 +76,8 @@ class LocateTests(unittest.TestCase):
             tmp = Path(raw)
             env = {"APPDATA": str(tmp), "LOCALAPPDATA": str(tmp)}
             base = tmp / "McNeel" / "Rhinoceros" / "packages"
-            src8 = self._installed_src(base / "8.0" / YAK_PACKAGE / "1.1.0")
-            src9 = self._installed_src(base / "9.0" / YAK_PACKAGE / "1.1.0")
+            src8 = self._installed_src(base / "8.0" / YAK_PACKAGE / "1.1.1")
+            src9 = self._installed_src(base / "9.0" / YAK_PACKAGE / "1.1.1")
             hit9 = from_yak_install(env, preferred_major=9)
             hit8 = from_yak_install(env, preferred_major=8)
             self.assertEqual(hit9.resolve(), src9.resolve())
